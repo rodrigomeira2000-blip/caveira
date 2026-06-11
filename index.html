@@ -7,18 +7,17 @@
     
     <style>
         :root {
-            --bg-primary: #090a0f;
-            --bg-secondary: #12141c;
-            --bg-tertiary: #1e2230;
-            --text-main: #f1f5f9;
-            --text-muted: #64748b;
-            --accent: #6366f1; /* Roxo tático moderno */
-            --accent-hover: #4f46e5;
-            --success: #10b981;
+            --bg-primary: #0b0f19; /* O preto profundo que estávamos usando */
+            --bg-secondary: #161c2a; /* O cinza tático escuro para os blocos */
+            --bg-tertiary: #222b3e; /* Cinza intermediário para campos/linhas */
+            --text-main: #ffffff;
+            --text-muted: #94a3b8;
+            --accent: #22c55e; /* Verde operacional padrão de sistema militar */
+            --accent-hover: #16a34a;
+            --success: #22c55e;
             --danger: #ef4444;
             --warning: #f59e0b;
-            --border: #232838;
-            --sidebar-width: 260px;
+            --border: #2d3748;
         }
 
         * {
@@ -37,7 +36,7 @@
 
         .container { max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.25rem; }
 
-        /* NAVEGAÇÃO SUPERIOR (DASHBOARD RESPONSIVO) */
+        /* NAVEGAÇÃO SUPERIOR (ESTILO ÉSTUDEI) */
         .nav-superior {
             display: flex;
             flex-wrap: wrap;
@@ -85,7 +84,7 @@
         .header-brand h1 span { color: var(--accent); }
         .header-quote { font-size: 0.8rem; color: var(--text-muted); font-style: italic; max-width: 300px; text-align: right; }
 
-        /* KPIS - TOPO DA HOME (IGUAL À INTERFACE REFERÊNCIA) */
+        /* CARDS RESUMO (KPIS NO TOPO) */
         .kpi-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -104,9 +103,8 @@
 
         .kpi-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
         .kpi-value { font-size: 1.75rem; font-weight: 700; color: var(--text-main); }
-        .kpi-value span { font-size: 1rem; color: var(--text-muted); font-weight: 400; }
 
-        /* CONSTÂNCIA (GRID DE BOLINHAS) */
+        /* QUADRO DE CONSTÂNCIA */
         .constancia-card {
             background-color: var(--bg-secondary);
             border: 1px solid var(--border);
@@ -115,10 +113,10 @@
         }
         .constancia-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; font-size: 0.85rem; }
         .constancia-grid { display: flex; flex-wrap: wrap; gap: 6px; }
-        .constancia-dot { width: 14px; height: 14px; border-radius: 50%; background-color: var(--bg-tertiary); border: 1px solid var(--border); }
+        .constancia-dot { width: 14px; height: 14px; border-radius: 50%; background-color: var(--bg-primary); border: 1px solid var(--border); }
         .constancia-dot.check { background-color: var(--success); border-color: var(--success); }
 
-        /* LAYOUT PRINCIPAL EM DUAS COLUNAS */
+        /* LAYOUT EM COLUNAS */
         .dashboard-grid {
             display: grid;
             grid-template-columns: 2fr 1fr;
@@ -130,7 +128,7 @@
             .header-quote { display: none; }
         }
 
-        /* ESTILIZAÇÃO DOS CARDS */
+        /* ESTRUTURA DOS ELEMENTOS DA INTERFACE */
         .card {
             background-color: var(--bg-secondary);
             border: 1px solid var(--border);
@@ -150,7 +148,7 @@
             justify-content: space-between;
         }
 
-        /* TABELA DE DISCIPLINAS ESTILO PROFISSIONAL */
+        /* FILTRAGEM DA TABELA DE MATÉRIAS */
         .materia-table-wrapper { overflow-x: auto; }
         .materia-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem; }
         .materia-table th { color: var(--text-muted); padding: 0.75rem; border-bottom: 1px solid var(--border); font-weight: 600; text-transform: uppercase; font-size: 0.75rem; }
@@ -158,28 +156,27 @@
         .materia-table tr:hover td { background-color: rgba(255, 255, 255, 0.02); }
         
         .badge-pct { padding: 0.2rem 0.4rem; border-radius: 4px; font-weight: bold; font-size: 0.75rem; text-align: center; display: inline-block; }
-        .badge-pct.high { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+        .badge-pct.high { background: rgba(34, 197, 94, 0.15); color: var(--success); }
         .badge-pct.mid { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
 
         /* METAS OPERACIONAIS */
         .meta-progress-item { margin-bottom: 1rem; }
         .meta-labels { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.35rem; }
-        .meta-bar-bg { background: var(--bg-tertiary); height: 8px; border-radius: 4px; width: 100%; overflow: hidden; }
+        .meta-bar-bg { background: var(--bg-primary); height: 8px; border-radius: 4px; width: 100%; overflow: hidden; border: 1px solid var(--border); }
         .meta-bar-fill { background: var(--accent); height: 100%; width: 0%; transition: width 0.4s; }
 
-        /* LEMBRETES / EDITAL VERTICAL */
+        /* QUADRO DE CHECKLIST */
         .checklist-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.65rem 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
         .checklist-item:last-child { border-bottom: none; }
         .checklist-checkbox { width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer; }
 
-        /* CRONOMETRO ESTILIZADO */
+        /* PAINEL CRONOMETRO */
         .timer-display { font-size: 3.5rem; font-weight: 700; text-align: center; font-family: monospace; color: var(--text-main); margin: 1rem 0; background: var(--bg-primary); border: 1px solid var(--border); border-radius: 6px; padding: 0.75rem 0; }
         .timer-controls { display: flex; gap: 0.5rem; }
-        .timer-controls button { padding: 0.75rem; border-radius: 6px; font-weight: bold; font-size: 0.85rem; }
-        .btn-success { background: var(--success); color: #fff; }
+        .timer-controls button { padding: 0.75rem; border-radius: 6px; font-weight: bold; font-size: 0.85rem; border: none; cursor: pointer; }
+        .btn-success { background: var(--success); color: var(--bg-primary); }
         .btn-danger { background: rgba(239, 68, 68, 0.1); color: var(--danger); border: 1px solid var(--danger); }
 
-        /* ABAS OCULTAS */
         .aba-conteudo { display: none; }
         .aba-conteudo.aba-ativa { display: block; }
     </style>
@@ -188,6 +185,7 @@
 
     <div class="container">
         
+        <!-- CABEÇALHO PRETO E CINZA -->
         <header>
             <div class="header-brand">
                 <h1>CAVEIRA<span>LABS</span></h1>
@@ -197,6 +195,7 @@
             </div>
         </header>
 
+        <!-- MENU DE ATALHOS -->
         <div class="nav-superior">
             <button class="active-link" id="btn_home" onclick="trocarAba('abaHome', 'btn_home')">🏠 Painel Geral</button>
             <button id="btn_cronometro" onclick="trocarAba('abaCronometro', 'btn_cronometro')">⚡ Cronômetro</button>
@@ -204,8 +203,10 @@
             <button id="btn_revisoes" onclick="trocarAba('abaRevisoes', 'btn_revisoes')">📋 Revisões</button>
         </div>
 
+        <!-- ==================== ABA PRINCIPAL: HOME ==================== -->
         <div id="abaHome" class="aba-conteudo aba-ativa">
             
+            <!-- RESUMO DE MÉTRICAS -->
             <div class="kpi-container">
                 <div class="kpi-card">
                     <span class="kpi-label">Tempo Total de Estudo</span>
@@ -213,7 +214,7 @@
                 </div>
                 <div class="kpi-card">
                     <span class="kpi-label">Desempenho Geral</span>
-                    <span class="kpi-value">80%</span>
+                    <span class="kpi-value" style="color: var(--success);">80%</span>
                 </div>
                 <div class="kpi-card">
                     <span class="kpi-label">Progresso no Edital</span>
@@ -221,17 +222,19 @@
                 </div>
             </div>
 
+            <!-- QUADRO HORIZONTAL DE CONSTÂNCIA -->
             <div class="constancia-card" style="margin-top: 1.25rem;">
                 <div class="constancia-header">
                     <span>Constância nos Estudos (Últimos 30 dias)</span>
                     <strong style="color: var(--success);">Sequência ativa: 6 dias</strong>
                 </div>
-                <div class="constancia-grid" id="gridConstancia">
-                    </div>
+                <div class="constancia-grid" id="gridConstancia"></div>
             </div>
 
+            <!-- GRID PRINCIPAL DE MÓDULOS -->
             <div class="dashboard-grid" style="margin-top: 1.25rem;">
                 
+                <!-- TABELA CENTRAL DE DESEMPENHO -->
                 <div class="left-column">
                     <div class="card">
                         <h2>Quadro Estratégico de Disciplinas</h2>
@@ -245,13 +248,13 @@
                                        <th>Aproveitamento</th>
                                    </tr>
                                </thead>
-                               <tbody id="tabelaMateriasCorpo">
-                                   </tbody>
+                               <tbody id="tabelaMateriasCorpo"></tbody>
                             </table>
                         </div>
                     </div>
                 </div>
 
+                <!-- COLUNA LATERAL DE ALVOS SEMANAIS -->
                 <div class="right-column">
                     <div class="card">
                         <h2>Metas Semanais</h2>
@@ -287,6 +290,7 @@
             </div>
         </div>
 
+        <!-- ==================== ABA 2: CRONÔMETRO ==================== -->
         <div id="abaCronometro" class="aba-conteudo">
             <div class="card" style="max-width: 600px; margin: 0 auto;">
                 <h2>Horas Líquidas de Combate</h2>
@@ -302,11 +306,12 @@
                         <label style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 0.5rem;">Alvo Ativo</label>
                         <select id="sessaoMateria" style="width:100%; padding:0.75rem; background:var(--bg-primary); border:1px solid var(--border); color:#fff; border-radius:6px;"></select>
                     </div>
-                    <button onclick="salvarSessaoEstudo()" style="width:100%; padding:0.75rem; background:var(--accent); border:none; color:#fff; font-weight:bold; border-radius:6px; cursor:pointer;">Registrar Tempo Operacional</button>
+                    <button onclick="salvarSessaoEstudo()" style="width:100%; padding:0.75rem; background:var(--accent); border:none; color:var(--bg-primary); font-weight:bold; border-radius:6px; cursor:pointer;">Registrar Tempo Operacional</button>
                 </div>
             </div>
         </div>
 
+        <!-- ==================== ABA 3: EDITAL VERTICAL ==================== -->
         <div id="abaEdital" class="aba-conteudo">
             <div class="card">
                 <h2>Edital Verticalizado Estratégico</h2>
@@ -314,6 +319,7 @@
             </div>
         </div>
 
+        <!-- ==================== ABA 4: REVISÕES ==================== -->
         <div id="abaRevisoes" class="aba-conteudo">
             <div class="card">
                 <h2>Painel Sistemático de Revisões</h2>
@@ -375,7 +381,6 @@
             atualizarKPIs();
         }
 
-        // ALTERNADOR DE ABAS LÓGICO
         function trocarAba(idAba, idLink) {
             document.querySelectorAll('.aba-conteudo').forEach(aba => aba.classList.remove('aba-ativa'));
             document.querySelectorAll('.nav-superior button').forEach(lnk => lnk.classList.remove('active-link'));
@@ -386,7 +391,6 @@
             if(idAba === 'abaHome') atualizarDashboard();
         }
 
-        // RECONSTRUÇÃO DA TABELA DA HOME ESTILO "ESTUDEI"
         function renderizarTabelaHome() {
             const corpo = document.getElementById('tabelaMateriasCorpo');
             if(!corpo) return;
@@ -398,8 +402,8 @@
 
                 return `
                     <tr>
-                        <td style="font-weight: 600; color: var(--accent);">${m.nome}</td>
-                        <td style="font-family: monospace;">${m.tempo}</td>
+                        <td style="font-weight: 600; color: #fff;">${m.nome}</td>
+                        <td style="font-family: monospace; color: var(--text-muted);">${m.tempo}</td>
                         <td>${concluidos}/${total}</td>
                         <td><span class="badge-pct ${badgeClass}">${pct}%</span></td>
                     </tr>
@@ -407,13 +411,11 @@
             }).join('');
         }
 
-        // GERAR QUADRO DE CONSTÂNCIA (30 DIAS)
         function renderizarConstancia() {
             const grid = document.getElementById('gridConstancia');
             if(!grid) return;
             let html = '';
             for(let i = 0; i < 30; i++) {
-                // Simulação: marca os 6 últimos dias como concluídos
                 let checked = (i >= 24) ? 'check' : '';
                 html += `<div class="constancia-dot ${checked}"></div>`;
             }
@@ -433,7 +435,6 @@
             if(document.getElementById('kpiTempoTotal')) document.getElementById('kpiTempoTotal').innerText = "9h 10min";
         }
 
-        // CRONÔMETRO ENGINE
         function alternarCronometro() {
             const btn = document.getElementById('btnPlayPause');
             if(tRodando) {
@@ -447,6 +448,7 @@
                 }, 1000);
                 btn.innerText = "Pausar Operação";
                 btn.style.backgroundColor = "var(--warning)";
+                btn.style.color = "#000";
             }
             tRodando = !tRodando;
         }
@@ -472,14 +474,13 @@
             if(sel) sel.innerHTML = bancoDados.map(m => `<option value="${m.id}">${m.nome}</option>`).join('');
         }
 
-        // EDITAL ENGINE
         function renderizarEditalGeral() {
             const container = document.getElementById('editalContainer');
             if(!container) return;
             container.innerHTML = bancoDados.map(materia => {
                 return `
                     <div style="margin-bottom:1rem; background:var(--bg-secondary); border:1px solid var(--border); border-radius:6px; padding:1rem;">
-                        <h3 style="font-size:0.95rem; margin-bottom:0.75rem;">${materia.nome}</h3>
+                        <h3 style="font-size:0.95rem; margin-bottom:0.75rem; color:var(--accent);">${materia.nome}</h3>
                         ${materia.topicos.map(topico => `
                             <div class="checklist-item">
                                 <input type="checkbox" class="checklist-checkbox" ${topico.concluido ? 'checked' : ''} 
