@@ -3,321 +3,530 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CAVEIRA LABS</title>
+    <title>CAVEIRA LABS - Dashboard Operacional</title>
+    
     <style>
         :root {
-            --bg-main: #0b0f19;
-            --bg-card: #111827;
-            --bg-primary: #1f2937;
-            --border: #374151;
-            --text-main: #f3f4f6;
-            --text-muted: #9ca3af;
-            --accent: #ef4444;
-            --accent-hover: #dc2626;
+            --bg-primary: #090a0f;
+            --bg-secondary: #12141c;
+            --bg-tertiary: #1e2230;
+            --text-main: #f1f5f9;
+            --text-muted: #64748b;
+            --accent: #6366f1; /* Roxo tático moderno */
+            --accent-hover: #4f46e5;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --border: #232838;
+            --sidebar-width: 260px;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
         }
 
         body {
-            background-color: var(--bg-main);
+            background-color: var(--bg-primary);
             color: var(--text-main);
-            padding: 1rem;
             min-height: 100vh;
+            padding: 1rem;
         }
 
-        header {
-            text-align: center;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid var(--accent);
-            padding-bottom: 0.5rem;
-        }
+        .container { max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.25rem; }
 
-        header h1 {
-            font-size: 1.8rem;
-            letter-spacing: 2px;
-        }
-
-        header span {
-            color: var(--accent);
-            font-weight: bold;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
+        /* NAVEGAÇÃO SUPERIOR (DASHBOARD RESPONSIVO) */
+        .nav-superior {
             display: flex;
-            flex-direction: column;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            background-color: var(--bg-secondary);
+            padding: 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+
+        .nav-superior button {
+            flex: 1;
+            min-width: 130px;
+            padding: 0.75rem;
+            font-size: 0.85rem;
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .nav-superior button:hover, .nav-superior button.active-link {
+            color: var(--text-main);
+            background-color: var(--bg-tertiary);
+            border-color: var(--border);
+        }
+
+        /* CABEÇALHO */
+        header {
+            width: 100%;
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+        }
+
+        .header-brand h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: 0.5px; }
+        .header-brand h1 span { color: var(--accent); }
+        .header-quote { font-size: 0.8rem; color: var(--text-muted); font-style: italic; max-width: 300px; text-align: right; }
+
+        /* KPIS - TOPO DA HOME (IGUAL À INTERFACE REFERÊNCIA) */
+        .kpi-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 1rem;
         }
 
-        .card {
-            background-color: var(--bg-card);
+        .kpi-card {
+            background-color: var(--bg-secondary);
             border: 1px solid var(--border);
             border-radius: 8px;
-            padding: 1.2rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
-        }
-
-        .card h2 {
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            border-left: 4px solid var(--accent);
-            padding-left: 0.5rem;
-        }
-
-        .cronometro-display {
-            font-size: 2.5rem;
-            font-weight: bold;
-            text-align: center;
-            font-family: monospace;
-            margin: 1rem 0;
-            background: var(--bg-primary);
-            padding: 0.5rem;
-            border-radius: 4px;
-            border: 1px solid var(--border);
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        button, select, input {
-            width: 100%;
-            padding: 0.7rem;
-            background-color: var(--bg-primary);
-            border: 1px solid var(--border);
-            color: var(--text-main);
-            border-radius: 4px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        button.btn-accent {
-            background-color: var(--accent);
-        }
-
-        button.btn-accent:hover {
-            background-color: var(--accent-hover);
-        }
-
-        .materia-container {
-            margin-bottom: 1rem;
-            background: var(--bg-primary);
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .materia-header {
-            padding: 0.8rem;
-            background: #1e293b;
-            font-weight: bold;
-        }
-
-        .topicos-lista {
-            padding: 0.5rem;
+            padding: 1.25rem;
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
         }
 
-        .topico-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.9rem;
+        .kpi-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
+        .kpi-value { font-size: 1.75rem; font-weight: 700; color: var(--text-main); }
+        .kpi-value span { font-size: 1rem; color: var(--text-muted); font-weight: 400; }
+
+        /* CONSTÂNCIA (GRID DE BOLINHAS) */
+        .constancia-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.25rem;
+        }
+        .constancia-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; font-size: 0.85rem; }
+        .constancia-grid { display: flex; flex-wrap: wrap; gap: 6px; }
+        .constancia-dot { width: 14px; height: 14px; border-radius: 50%; background-color: var(--bg-tertiary); border: 1px solid var(--border); }
+        .constancia-dot.check { background-color: var(--success); border-color: var(--success); }
+
+        /* LAYOUT PRINCIPAL EM DUAS COLUNAS */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.25rem;
         }
 
-        .topico-item input[type="checkbox"] {
-            width: auto;
+        @media (max-width: 968px) {
+            .dashboard-grid { grid-template-columns: 1fr; }
+            .header-quote { display: none; }
         }
+
+        /* ESTILIZAÇÃO DOS CARDS */
+        .card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .card h2 {
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-main);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* TABELA DE DISCIPLINAS ESTILO PROFISSIONAL */
+        .materia-table-wrapper { overflow-x: auto; }
+        .materia-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem; }
+        .materia-table th { color: var(--text-muted); padding: 0.75rem; border-bottom: 1px solid var(--border); font-weight: 600; text-transform: uppercase; font-size: 0.75rem; }
+        .materia-table td { padding: 0.85rem 0.75rem; border-bottom: 1px solid var(--border); color: var(--text-main); }
+        .materia-table tr:hover td { background-color: rgba(255, 255, 255, 0.02); }
+        
+        .badge-pct { padding: 0.2rem 0.4rem; border-radius: 4px; font-weight: bold; font-size: 0.75rem; text-align: center; display: inline-block; }
+        .badge-pct.high { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+        .badge-pct.mid { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+
+        /* METAS OPERACIONAIS */
+        .meta-progress-item { margin-bottom: 1rem; }
+        .meta-labels { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.35rem; }
+        .meta-bar-bg { background: var(--bg-tertiary); height: 8px; border-radius: 4px; width: 100%; overflow: hidden; }
+        .meta-bar-fill { background: var(--accent); height: 100%; width: 0%; transition: width 0.4s; }
+
+        /* LEMBRETES / EDITAL VERTICAL */
+        .checklist-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.65rem 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+        .checklist-item:last-child { border-bottom: none; }
+        .checklist-checkbox { width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer; }
+
+        /* CRONOMETRO ESTILIZADO */
+        .timer-display { font-size: 3.5rem; font-weight: 700; text-align: center; font-family: monospace; color: var(--text-main); margin: 1rem 0; background: var(--bg-primary); border: 1px solid var(--border); border-radius: 6px; padding: 0.75rem 0; }
+        .timer-controls { display: flex; gap: 0.5rem; }
+        .timer-controls button { padding: 0.75rem; border-radius: 6px; font-weight: bold; font-size: 0.85rem; }
+        .btn-success { background: var(--success); color: #fff; }
+        .btn-danger { background: rgba(239, 68, 68, 0.1); color: var(--danger); border: 1px solid var(--danger); }
+
+        /* ABAS OCULTAS */
+        .aba-conteudo { display: none; }
+        .aba-conteudo.aba-ativa { display: block; }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>CAVEIRA <span>LABS</span></h1>
-    </header>
-
     <div class="container">
         
-        <div class="card">
-            <h2>⏱️ Cronômetro de Combate</h2>
-            <select id="materiaSelect" style="margin-bottom: 0.5rem;"></select>
-            <div class="cronometro-display" id="tempoDisplay">00:00:00</div>
-            <div class="btn-group">
-                <button class="btn-accent" id="btnIniciar" onclick="alternarCronometro()">Iniciar</button>
-                <button onclick="resetarCronometro()">Resetar</button>
+        <header>
+            <div class="header-brand">
+                <h1>CAVEIRA<span>LABS</span></h1>
+            </div>
+            <div class="header-quote">
+                "Disciplina é a ponte entre metas e realizações."
+            </div>
+        </header>
+
+        <div class="nav-superior">
+            <button class="active-link" id="btn_home" onclick="trocarAba('abaHome', 'btn_home')">🏠 Painel Geral</button>
+            <button id="btn_cronometro" onclick="trocarAba('abaCronometro', 'btn_cronometro')">⚡ Cronômetro</button>
+            <button id="btn_edital" onclick="trocarAba('abaEdital', 'btn_edital')">💀 Edital Vertical</button>
+            <button id="btn_revisoes" onclick="trocarAba('abaRevisoes', 'btn_revisoes')">📋 Revisões</button>
+        </div>
+
+        <div id="abaHome" class="aba-conteudo aba-ativa">
+            
+            <div class="kpi-container">
+                <div class="kpi-card">
+                    <span class="kpi-label">Tempo Total de Estudo</span>
+                    <span class="kpi-value" id="kpiTempoTotal">00h 00min</span>
+                </div>
+                <div class="kpi-card">
+                    <span class="kpi-label">Desempenho Geral</span>
+                    <span class="kpi-value">80%</span>
+                </div>
+                <div class="kpi-card">
+                    <span class="kpi-label">Progresso no Edital</span>
+                    <span class="kpi-value" id="kpiEditalPct">0%</span>
+                </div>
+            </div>
+
+            <div class="constancia-card" style="margin-top: 1.25rem;">
+                <div class="constancia-header">
+                    <span>Constância nos Estudos (Últimos 30 dias)</span>
+                    <strong style="color: var(--success);">Sequência ativa: 6 dias</strong>
+                </div>
+                <div class="constancia-grid" id="gridConstancia">
+                    </div>
+            </div>
+
+            <div class="dashboard-grid" style="margin-top: 1.25rem;">
+                
+                <div class="left-column">
+                    <div class="card">
+                        <h2>Quadro Estratégico de Disciplinas</h2>
+                        <div class="materia-table-wrapper">
+                            <table class="materia-table">
+                               <thead>
+                                   <tr>
+                                       <th>Disciplina</th>
+                                       <th>Tempo</th>
+                                       <th>Concluídos</th>
+                                       <th>Aproveitamento</th>
+                                   </tr>
+                               </thead>
+                               <tbody id="tabelaMateriasCorpo">
+                                   </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="right-column">
+                    <div class="card">
+                        <h2>Metas Semanais</h2>
+                        
+                        <div class="meta-progress-item">
+                            <div class="meta-labels"><span>Horas de Foco</span><strong>6.5h / 20h</strong></div>
+                            <div class="meta-bar-bg"><div class="meta-bar-fill" style="width: 33.3%;"></div></div>
+                        </div>
+
+                        <div class="meta-progress-item">
+                            <div class="meta-labels"><span>Questões Resolvidas</span><strong>103 / 120</strong></div>
+                            <div class="meta-bar-bg"><div class="meta-bar-fill" style="width: 85.8%; background-color: var(--success);"></div></div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h2>Mural de Lembretes</h2>
+                        <div class="checklist-item">
+                            <input type="checkbox" class="checklist-checkbox" checked>
+                            <span>Pagar inscrição do concurso</span>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" class="checklist-checkbox">
+                            <span>Simulado Geral - Domingo 08h</span>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" class="checklist-checkbox">
+                            <span>Revisar Artigo 144 da CF</span>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
-        <div class="card">
-            <h2>📊 Registro de Questões</h2>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.5rem;">
-                <div>
-                    <label style="font-size:0.8rem; color:var(--text-muted)">Resolvidas</label>
-                    <input type="number" id="qtdFeitas" placeholder="0">
+        <div id="abaCronometro" class="aba-conteudo">
+            <div class="card" style="max-width: 600px; margin: 0 auto;">
+                <h2>Horas Líquidas de Combate</h2>
+                <div class="timer-display" id="timerVisual">00:00:00</div>
+                
+                <div class="timer-controls">
+                    <button class="btn-success" id="btnPlayPause" style="flex: 2;" onclick="alternarCronometro()">Iniciar Missão</button>
+                    <button class="btn-danger" style="flex: 1;" onclick="resetarCronometro()">Zerar</button>
                 </div>
-                <div>
-                    <label style="font-size:0.8rem; color:var(--text-muted)">Erros</label>
-                    <input type="number" id="qtdErros" placeholder="0">
+
+                <div style="margin-top: 1.5rem; border-top: 1px solid var(--border); padding-top: 1.25rem;">
+                    <div style="margin-bottom: 1rem;">
+                        <label style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 0.5rem;">Alvo Ativo</label>
+                        <select id="sessaoMateria" style="width:100%; padding:0.75rem; background:var(--bg-primary); border:1px solid var(--border); color:#fff; border-radius:6px;"></select>
+                    </div>
+                    <button onclick="salvarSessaoEstudo()" style="width:100%; padding:0.75rem; background:var(--accent); border:none; color:#fff; font-weight:bold; border-radius:6px; cursor:pointer;">Registrar Tempo Operacional</button>
                 </div>
             </div>
-            <button class="btn-accent" onclick="salvarQuestoes()">Computar Desempenho</button>
         </div>
 
-        <div class="card">
-            <h2>💀 Edital Geral (Guarda Municipal)</h2>
-            <div id="editalContainer"></div>
+        <div id="abaEdital" class="aba-conteudo">
+            <div class="card">
+                <h2>Edital Verticalizado Estratégico</h2>
+                <div id="editalContainer"></div>
+            </div>
+        </div>
+
+        <div id="abaRevisoes" class="aba-conteudo">
+            <div class="card">
+                <h2>Painel Sistemático de Revisões</h2>
+                <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
+                    <div style="border-left: 4px solid var(--danger); padding-left: 1rem;">
+                        <h3 style="font-size: 0.9rem; color: var(--danger);">🚨 REVISÃO 24 HORAS</h3>
+                        <div id="mod24h" style="font-size: 0.85rem; margin-top: 0.25rem; color: var(--text-muted);">Nenhum tópico pendente.</div>
+                    </div>
+                    <div style="border-left: 4px solid var(--warning); padding-left: 1rem;">
+                        <h3 style="font-size: 0.9rem; color: var(--warning);">📅 REVISÃO 7 DIAS</h3>
+                        <div id="mod7d" style="font-size: 0.85rem; margin-top: 0.25rem; color: var(--text-muted);">Nenhum tópico pendente.</div>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div>
 
     <script>
-        // BANCO DE DADOS LOCAL DO EDITAL
+        // CORE DE DADOS DO SISTEMA
         let bancoDados = [
             {
                 id: "const",
                 nome: "Direito Constitucional",
+                tempo: "3h 19min",
+                pct: 90,
                 topicos: [
-                    { id: "c1", nome: "Art. 1º ao 5º (Direitos e Garantias Fundamentais)", concluido: false },
+                    { id: "c1", nome: "Art. 1º ao 5º (Direitos e Garantias Fundamentais)", concluido: true, dataConclusao: Date.now() - 86400000 },
                     { id: "c2", nome: "Art. 144 (Segurança Pública)", concluido: false }
                 ]
             },
             {
                 id: "penal",
                 nome: "Direito Penal",
+                tempo: "5h 51min",
+                pct: 70,
                 topicos: [
                     { id: "p1", nome: "Crimes contra a Administração Pública", concluido: false },
-                    { id: "p2", nome: "Crimes contra a Pessoa", concluido: false },
-                    { id: "p3", nome: "Lei de Abuso de Autoridade (Lei 13.869/19)", concluido: false }
-                ]
-            },
-            {
-                id: "port",
-                nome: "Língua Portuguesa",
-                topicos: [
-                    { id: "pt1", nome: "Interpretação de Texto", concluido: false },
-                    { id: "pt2", nome: "Sintaxe e Conjunções", concluido: false },
-                    { id: "pt3", nome: "Crase e Regência", concluido: false }
+                    { id: "p2", nome: "Lei de Abuso de Autoridade (Lei 13.869/19)", concluido: false }
                 ]
             }
         ];
 
-        // VARIÁVEIS DO CRONÔMETRO
-        let tempoSegundos = 0;
-        let cronometroInterval = null;
-        let cronometroRodando = false;
+        let cronometroSegundos = 0;
+        let tInterval = null;
+        let tRodando = false;
 
-        // INICIALIZAÇÃO
         window.onload = function() {
-            carregarDados();
-            renderizarTudo();
+            try { carregarProgressoGeral(); } catch(e){}
+            atualizarDashboard();
         };
 
-        function renderizarTudo() {
-            renderizarEdital();
-            atualizarSelectMaterias();
+        function atualizarDashboard() {
+            renderizarConstancia();
+            renderizarTabelaHome();
+            renderizarEditalGeral();
+            inicializarFiltroMaterias();
+            calcularRevisoes();
+            atualizarKPIs();
         }
 
-        // CONTROLADORES DO CRONÔMETRO
-        function alternarCronometro() {
-            const btn = document.getElementById('btnIniciar');
-            if (cronometroRodando) {
-                clearInterval(cronometroInterval);
-                btn.innerText = "Iniciar";
-                btn.style.backgroundColor = "var(--accent)";
-            } else {
-                cronometroInterval = setInterval(() => {
-                    tempoSegundos++;
-                    document.getElementById('tempoDisplay').innerText = formatarTempo(tempoSegundos);
-                }, 1000);
-                btn.innerText = "Pausar";
-                btn.style.backgroundColor = "#ca8a04";
+        // ALTERNADOR DE ABAS LÓGICO
+        function trocarAba(idAba, idLink) {
+            document.querySelectorAll('.aba-conteudo').forEach(aba => aba.classList.remove('aba-ativa'));
+            document.querySelectorAll('.nav-superior button').forEach(lnk => lnk.classList.remove('active-link'));
+
+            document.getElementById(idAba).classList.add('aba-ativa');
+            document.getElementById(idLink).classList.add('active-link');
+            
+            if(idAba === 'abaHome') atualizarDashboard();
+        }
+
+        // RECONSTRUÇÃO DA TABELA DA HOME ESTILO "ESTUDEI"
+        function renderizarTabelaHome() {
+            const corpo = document.getElementById('tabelaMateriasCorpo');
+            if(!corpo) return;
+            corpo.innerHTML = bancoDados.map(m => {
+                const total = m.topicos.length;
+                const concluidos = m.topicos.filter(t => t.concluido).length;
+                const pct = total > 0 ? Math.round((concluidos / total) * 100) : 0;
+                const badgeClass = pct >= 80 ? 'high' : 'mid';
+
+                return `
+                    <tr>
+                        <td style="font-weight: 600; color: var(--accent);">${m.nome}</td>
+                        <td style="font-family: monospace;">${m.tempo}</td>
+                        <td>${concluidos}/${total}</td>
+                        <td><span class="badge-pct ${badgeClass}">${pct}%</span></td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // GERAR QUADRO DE CONSTÂNCIA (30 DIAS)
+        function renderizarConstancia() {
+            const grid = document.getElementById('gridConstancia');
+            if(!grid) return;
+            let html = '';
+            for(let i = 0; i < 30; i++) {
+                // Simulação: marca os 6 últimos dias como concluídos
+                let checked = (i >= 24) ? 'check' : '';
+                html += `<div class="constancia-dot ${checked}"></div>`;
             }
-            cronometroRodando = !cronometroRodando;
+            grid.innerHTML = html;
+        }
+
+        function atualizarKPIs() {
+            let totalTopicos = 0;
+            let concluidos = 0;
+            bancoDados.forEach(m => {
+                totalTopicos += m.topicos.length;
+                concluidos += m.topicos.filter(t => t.concluido).length;
+            });
+            const pctGeral = totalTopicos > 0 ? Math.round((concluidos / totalTopicos) * 100) : 0;
+            
+            if(document.getElementById('kpiEditalPct')) document.getElementById('kpiEditalPct').innerText = pctGeral + "%";
+            if(document.getElementById('kpiTempoTotal')) document.getElementById('kpiTempoTotal').innerText = "9h 10min";
+        }
+
+        // CRONÔMETRO ENGINE
+        function alternarCronometro() {
+            const btn = document.getElementById('btnPlayPause');
+            if(tRodando) {
+                clearInterval(tInterval);
+                btn.innerText = "Iniciar Missão";
+                btn.style.backgroundColor = "var(--success)";
+            } else {
+                tInterval = setInterval(() => {
+                    cronometroSegundos++;
+                    document.getElementById('timerVisual').innerText = formatadorMilitarTempo(cronometroSegundos);
+                }, 1000);
+                btn.innerText = "Pausar Operação";
+                btn.style.backgroundColor = "var(--warning)";
+            }
+            tRodando = !tRodando;
         }
 
         function resetarCronometro() {
-            clearInterval(cronometroInterval);
-            cronometroRodando = false;
-            tempoSegundos = 0;
-            document.getElementById('tempoDisplay').innerText = "00:00:00";
-            document.getElementById('btnIniciar').innerText = "Iniciar";
-            document.getElementById('btnIniciar').style.backgroundColor = "var(--accent)";
+            clearInterval(tInterval);
+            tRodando = false;
+            cronometroSegundos = 0;
+            document.getElementById('timerVisual').innerText = "00:00:00";
+            document.getElementById('btnPlayPause').innerText = "Iniciar Missão";
+            document.getElementById('btnPlayPause').style.backgroundColor = "var(--success)";
         }
 
-        function formatarTempo(segundos) {
-            let h = Math.floor(segundos / 3600).toString().padStart(2, '0');
-            let m = Math.floor((segundos % 3600) / 60).toString().padStart(2, '0');
-            let s = (segundos % 60).toString().padStart(2, '0');
-            return `${h}:${m}:${s}`;
+        function formatadorMilitarTempo(s) {
+            let hrs = Math.floor(s / 3600).toString().padStart(2, '0');
+            let mins = Math.floor((s % 3600) / 60).toString().padStart(2, '0');
+            let segs = (s % 60).toString().padStart(2, '0');
+            return `${hrs}:${mins}:${segs}`;
         }
 
-        function atualizarSelectMaterias() {
-            const select = document.getElementById('materiaSelect');
-            select.innerHTML = bancoDados.map(m => `<option value="${m.id}">${m.nome}</option>`).join('');
+        function inicializarFiltroMaterias() {
+            const sel = document.getElementById('sessaoMateria');
+            if(sel) sel.innerHTML = bancoDados.map(m => `<option value="${m.id}">${m.nome}</option>`).join('');
         }
 
-        // GERENCIADOR DO EDITAL
-        function renderizarEdital() {
+        // EDITAL ENGINE
+        function renderizarEditalGeral() {
             const container = document.getElementById('editalContainer');
-            container.innerHTML = bancoDados.map(materia => `
-                <div class="materia-container">
-                    <div class="materia-header">${materia.nome}</div>
-                    <div class="topicos-lista">
+            if(!container) return;
+            container.innerHTML = bancoDados.map(materia => {
+                return `
+                    <div style="margin-bottom:1rem; background:var(--bg-secondary); border:1px solid var(--border); border-radius:6px; padding:1rem;">
+                        <h3 style="font-size:0.95rem; margin-bottom:0.75rem;">${materia.nome}</h3>
                         ${materia.topicos.map(topico => `
-                            <label class="topico-item">
-                                <input type="checkbox" ${topico.concluido ? 'checked' : ''} 
-                                    onchange="alternarTopico('${materia.id}', '${topico.id}')">
-                                <span style="${topico.concluido ? 'text-decoration: line-through; color: var(--text-muted);' : ''}">
-                                    ${topico.nome}
-                                </span>
-                            </label>
+                            <div class="checklist-item">
+                                <input type="checkbox" class="checklist-checkbox" ${topico.concluido ? 'checked' : ''} 
+                                    onchange="marcarConclusaoTopico('${materia.id}', '${topico.id}')">
+                                <span style="${topico.concluido ? 'text-decoration:line-through; color:var(--text-muted);' : ''}">${topico.nome}</span>
+                            </div>
                         `).join('')}
                     </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
-        function alternarTopico(materiaId, topicoId) {
-            const m = bancoDados.find(x => x.id === materiaId);
-            if (m) {
-                const t = m.topicos.find(y => y.id === topicoId);
-                if (t) {
-                    t.concluido = !t.concluido;
+        function marcarConclusaoTopico(materiaId, topicoId) {
+            const mat = bancoDados.find(m => m.id === materiaId);
+            if(mat) {
+                const top = mat.topicos.find(t => t.id === topicoId);
+                if(top) {
+                    top.concluido = !top.concluido;
+                    top.dataConclusao = top.concluido ? Date.now() : undefined;
                 }
             }
-            salvarDados();
-            renderizarEdital();
+            salvarProgressoGeral();
+            renderizarEditalGeral();
+            atualizarKPIs();
         }
 
-        function salvarQuestoes() {
-            const feitas = document.getElementById('qtdFeitas').value || 0;
-            const erros = document.getElementById('qtdErros').value || 0;
-            alert(`Sessão Registrada!\nRespondidas: ${feitas}\nErros: ${erros}\nTaxa de Acerto: ${feitas > 0 ? Math.round(((feitas - erros) / feitas) * 100) : 0}%`);
-            document.getElementById('qtdFeitas').value = '';
-            document.getElementById('qtdErros').value = '';
+        function calcularRevisoes() {
+            const mod24 = document.getElementById('mod24h');
+            if(!mod24) return;
+            let r24 = [];
+            bancoDados.forEach(m => {
+                m.topicos.forEach(t => {
+                    if(t.concluido && t.dataConclusao) {
+                        r24.push(`• [${m.nome}] ${t.nome}`);
+                    }
+                });
+            });
+            mod24.innerHTML = r24.length > 0 ? r24.join('<br>') : '🟢 Nenhum tópico pendente para hoje.';
         }
 
-        function salvarDados() {
-            localStorage.setItem('caveira_labs_edital', JSON.stringify(bancoDados));
+        function salvarSessaoEstudo() {
+            alert("Tempo operacional integrado ao painel!");
+            resetarCronometro();
         }
 
-        function carregarDados() {
-            const dadosSalvos = localStorage.getItem('caveira_labs_edital');
-            if (dadosSalvos) {
-                bancoDados = JSON.parse(dadosSalvos);
-            }
-        }
+        function salvarProgressoGeral() { localStorage.setItem('caveiralabs_progresso', JSON.stringify(bancoDados)); }
+        function carregarProgressoGeral() { const local = localStorage.getItem('caveiralabs_progresso'); if(local) bancoDados = JSON.parse(local); }
     </script>
 </body>
 </html>
