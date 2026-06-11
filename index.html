@@ -7,12 +7,12 @@
     
     <style>
         :root {
-            --bg-primary: #0b0f19; /* O preto profundo original */
-            --bg-secondary: #161c2a; /* O cinza tático escuro para os blocos */
-            --bg-tertiary: #222b3e; /* Cinza intermediário para campos/linhas */
+            --bg-primary: #0b0f19; 
+            --bg-secondary: #161c2a; 
+            --bg-tertiary: #222b3e; 
             --text-main: #ffffff;
             --text-muted: #94a3b8;
-            --accent: #22c55e; /* Verde operacional padrão de sistema militar */
+            --accent: #22c55e; 
             --accent-hover: #16a34a;
             --success: #22c55e;
             --danger: #ef4444;
@@ -128,7 +128,7 @@
             .header-quote { display: none; }
         }
 
-        /* ESTRUTURA DOS ELEMENTOS DA INTERFACE */
+        /* ESTRUTURA DOS CARDS */
         .card {
             background-color: var(--bg-secondary);
             border: 1px solid var(--border);
@@ -148,7 +148,36 @@
             justify-content: space-between;
         }
 
-        /* FORMULÁRIOS DE CADASTRO */
+        /* FORMULÁRIOS ESTILO MILITAR */
+        .form-militar-row {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-militar-row label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .form-militar-row input, .form-militar-row select, .form-militar-row textarea {
+            padding: 0.75rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            color: #fff;
+            border-radius: 6px;
+            font-size: 0.88rem;
+            width: 100%;
+        }
+
+        .form-militar-row input:focus, .form-militar-row select:focus, .form-militar-row textarea:focus {
+            border-color: var(--accent);
+            outline: none;
+        }
+
         .input-group-militar {
             display: flex;
             flex-wrap: wrap;
@@ -182,11 +211,6 @@
             font-size: 0.88rem;
         }
 
-        .input-group-militar input:focus, .input-group-militar select:focus {
-            border-color: var(--accent);
-            outline: none;
-        }
-
         .btn-militar-add {
             padding: 0.65rem 1.25rem;
             background: var(--accent);
@@ -195,14 +219,11 @@
             font-weight: bold;
             border-radius: 6px;
             cursor: pointer;
-            align-self: flex-end;
             font-size: 0.85rem;
             height: 38px;
-            transition: background 0.2s;
         }
-        .btn-militar-add:hover { background: var(--accent-hover); }
 
-        /* FILTRAGEM DA TABELA DE MATÉRIAS */
+        /* TABELA HOME */
         .materia-table-wrapper { overflow-x: auto; }
         .materia-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem; }
         .materia-table th { color: var(--text-muted); padding: 0.75rem; border-bottom: 1px solid var(--border); font-weight: 600; text-transform: uppercase; font-size: 0.75rem; }
@@ -219,31 +240,46 @@
         .meta-bar-bg { background: var(--bg-primary); height: 8px; border-radius: 4px; width: 100%; overflow: hidden; border: 1px solid var(--border); }
         .meta-bar-fill { background: var(--accent); height: 100%; width: 0%; transition: width 0.4s; }
 
-        /* QUADRO DE CHECKLIST */
+        /* CHECKLIST */
         .checklist-item { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 0.65rem 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
         .checklist-item:last-child { border-bottom: none; }
         .checklist-checkbox-wrapper { display: flex; align-items: center; gap: 0.75rem; }
         .checklist-checkbox { width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer; }
-
         .btn-delete-item { background: transparent; border: none; color: var(--danger); cursor: pointer; font-size: 0.8rem; opacity: 0.6; }
-        .btn-delete-item:hover { opacity: 1; }
 
-        /* PAINEL CRONOMETRO */
+        /* CRONOMETRO */
         .timer-display { font-size: 3.5rem; font-weight: 700; text-align: center; font-family: monospace; color: var(--text-main); margin: 1rem 0; background: var(--bg-primary); border: 1px solid var(--border); border-radius: 6px; padding: 0.75rem 0; }
-        .timer-controls { display: flex; gap: 0.5rem; }
+        .timer-controls { display: flex; gap: 0.5rem; margin-bottom: 1.25rem; }
         .timer-controls button { padding: 0.75rem; border-radius: 6px; font-weight: bold; font-size: 0.85rem; border: none; cursor: pointer; }
         .btn-success { background: var(--success); color: var(--bg-primary); }
         .btn-danger { background: rgba(239, 68, 68, 0.1); color: var(--danger); border: 1px solid var(--danger); }
 
+        /* POP-UP MODAL OPERACIONAL */
+        .modal-militar-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8); display: none; align-items: center; justify-content: center; z-index: 9999;
+            padding: 1rem;
+        }
+        .modal-militar-box {
+            background: var(--bg-secondary); border: 1px solid var(--border);
+            border-radius: 8px; width: 100%; max-width: 480px; padding: 1.5rem;
+        }
+        .modal-militar-title { font-size: 1rem; text-transform: uppercase; font-weight: 700; color: var(--accent); margin-bottom: 1rem; border-bottom: 1px dashed var(--border); padding-bottom: 0.5rem;}
+        .modal-militar-actions { display: flex; gap: 0.5rem; margin-top: 1.25rem; }
+        .modal-militar-actions button { flex: 1; padding: 0.75rem; border-radius: 6px; font-weight: bold; border: none; cursor: pointer; }
+
         .aba-conteudo { display: none; }
         .aba-conteudo.aba-ativa { display: block; }
+        
+        .sub-aba-btn-group { display: flex; gap: 0.5rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+        .sub-aba-btn { background: transparent; color: var(--text-muted); border: none; cursor: pointer; font-size: 0.85rem; padding: 0.25rem 0.5rem; font-weight: 600;}
+        .sub-aba-btn.active { color: var(--accent); border-bottom: 2px solid var(--accent); }
     </style>
 </head>
 <body>
 
     <div class="container">
         
-        <!-- CABEÇALHO PRETO E CINZA -->
         <header>
             <div class="header-brand">
                 <h1>CAVEIRA<span>LABS</span></h1>
@@ -253,7 +289,6 @@
             </div>
         </header>
 
-        <!-- MENU DE ATALHOS -->
         <div class="nav-superior">
             <button class="active-link" id="btn_home" onclick="trocarAba('abaHome', 'btn_home')">🏠 Painel Geral</button>
             <button id="btn_cronometro" onclick="trocarAba('abaCronometro', 'btn_cronometro')">⚡ Cronômetro</button>
@@ -261,18 +296,15 @@
             <button id="btn_revisoes" onclick="trocarAba('abaRevisoes', 'btn_revisoes')">📋 Revisões</button>
         </div>
 
-        <!-- ==================== ABA PRINCIPAL: HOME ==================== -->
         <div id="abaHome" class="aba-conteudo aba-ativa">
-            
-            <!-- RESUMO DE MÉTRICAS -->
             <div class="kpi-container">
                 <div class="kpi-card">
                     <span class="kpi-label">Tempo Total de Estudo</span>
-                    <span class="kpi-value" id="kpiTempoTotal">0h 00min</span>
+                    <span class="kpi-value" id="kpiTempoTotal">00h 00min</span>
                 </div>
                 <div class="kpi-card">
-                    <span class="kpi-label">Desempenho Geral</span>
-                    <span class="kpi-value" style="color: var(--success);">80%</span>
+                    <span class="kpi-label">Desempenho de Questões</span>
+                    <span class="kpi-value" id="kpiDesempenhoQuestoes">0%</span>
                 </div>
                 <div class="kpi-card">
                     <span class="kpi-label">Progresso no Edital</span>
@@ -280,7 +312,6 @@
                 </div>
             </div>
 
-            <!-- QUADRO HORIZONTAL DE CONSTÂNCIA -->
             <div class="constancia-card" style="margin-top: 1.25rem;">
                 <div class="constancia-header">
                     <span>Constância nos Estudos (Últimos 30 dias)</span>
@@ -289,10 +320,7 @@
                 <div class="constancia-grid" id="gridConstancia"></div>
             </div>
 
-            <!-- GRID PRINCIPAL DE MÓDULOS -->
             <div class="dashboard-grid" style="margin-top: 1.25rem;">
-                
-                <!-- TABELA CENTRAL DE DESEMPENHO -->
                 <div class="left-column">
                     <div class="card">
                         <h2>Quadro Estratégico de Disciplinas</h2>
@@ -301,8 +329,8 @@
                                <thead>
                                    <tr>
                                        <th>Disciplina</th>
-                                       <th>Tempo</th>
-                                       <th>Concluídos</th>
+                                       <th>Tempo Acumulado</th>
+                                       <th>Tópicos Concluídos</th>
                                        <th>Aproveitamento</th>
                                    </tr>
                                </thead>
@@ -312,71 +340,77 @@
                     </div>
                 </div>
 
-                <!-- COLUNA LATERAL DE ALVOS SEMANAIS -->
                 <div class="right-column">
                     <div class="card">
                         <h2>Metas Semanais</h2>
-                        
                         <div class="meta-progress-item">
                             <div class="meta-labels"><span>Horas de Foco</span><strong>6.5h / 20h</strong></div>
                             <div class="meta-bar-bg"><div class="meta-bar-fill" style="width: 33.3%;"></div></div>
                         </div>
-
                         <div class="meta-progress-item">
                             <div class="meta-labels"><span>Questões Resolvidas</span><strong>103 / 120</strong></div>
                             <div class="meta-bar-bg"><div class="meta-bar-fill" style="width: 85.8%; background-color: var(--success);"></div></div>
                         </div>
                     </div>
-
-                    <div class="card">
-                        <h2>Mural de Lembretes</h2>
-                        <div class="checklist-item">
-                            <div class="checklist-checkbox-wrapper">
-                                <input type="checkbox" class="checklist-checkbox" checked>
-                                <span>Pagar inscrição do concurso</span>
-                            </div>
-                        </div>
-                        <div class="checklist-item">
-                            <div class="checklist-checkbox-wrapper">
-                                <input type="checkbox" class="checklist-checkbox">
-                                <span>Simulado Geral - Domingo 08h</span>
-                            </div>
-                        </div>
-                    </div>
                 </div>
-
             </div>
         </div>
 
-        <!-- ==================== ABA 2: CRONÔMETRO ==================== -->
         <div id="abaCronometro" class="aba-conteudo">
             <div class="card" style="max-width: 600px; margin: 0 auto;">
-                <h2>Horas Líquidas de Combate</h2>
-                <div class="timer-display" id="timerVisual">00:00:00</div>
                 
-                <div class="timer-controls">
-                    <button class="btn-success" id="btnPlayPause" style="flex: 2;" onclick="alternarCronometro()">Iniciar Missão</button>
-                    <button class="btn-danger" style="flex: 1;" onclick="resetarCronometro()">Zerar</button>
+                <div class="sub-aba-btn-group">
+                    <button id="subBtnCronometro" class="sub-aba-btn active" onclick="mudarModoLancamento('modoRelogio')">⏱️ Cronômetro Ativo</button>
+                    <button id="subBtnManual" class="sub-aba-btn" onclick="mudarModoLancamento('modoManual')">📝 Lançamento Manual</button>
                 </div>
 
-                <div style="margin-top: 1.5rem; border-top: 1px solid var(--border); padding-top: 1.25rem;">
-                    <div style="margin-bottom: 1rem;">
-                        <label style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 0.5rem;">Alvo Ativo</label>
-                        <select id="sessaoMateria" style="width:100%; padding:0.75rem; background:var(--bg-primary); border:1px solid var(--border); color:#fff; border-radius:6px;"></select>
+                <div style="background: var(--bg-primary); padding: 1rem; border-radius: 6px; border: 1px solid var(--border); margin-bottom: 1.25rem;">
+                    <h4 style="font-size: 0.75rem; color: var(--accent); text-transform: uppercase; margin-bottom: 0.75rem;">🎯 Alvo Operacional Ativo</h4>
+                    
+                    <div class="form-militar-row">
+                        <label>Disciplina</label>
+                        <select id="sessaoMateria" onchange="atualizarSelectAssuntosCronometro()"></select>
                     </div>
-                    <button onclick="salvarSessaoEstudo()" style="width:100%; padding:0.75rem; background:var(--accent); border:none; color:var(--bg-primary); font-weight:bold; border-radius:6px; cursor:pointer;">Registrar Tempo Operacional</button>
+                    <div class="form-militar-row" style="margin-bottom: 0;">
+                        <label>Assunto Específico</label>
+                        <select id="sessaoAssunto"></select>
+                    </div>
                 </div>
+
+                <div id="containerModoRelogio">
+                    <h2>Horas Líquidas de Combate</h2>
+                    <div class="timer-display" id="timerVisual">00:00:00</div>
+                    
+                    <div class="timer-controls">
+                        <button class="btn-success" id="btnPlayPause" style="flex: 2;" onclick="alternarCronometro()">Iniciar Missão</button>
+                        <button class="btn-danger" style="flex: 1;" onclick="resetarCronometro()">Zerar</button>
+                    </div>
+                    <button onclick="dispararRegistroSessao(false)" style="width:100%; padding:0.75rem; background:var(--accent); border:none; color:var(--bg-primary); font-weight:bold; border-radius:6px; cursor:pointer;">Finalizar e Registrar Tempo</button>
+                </div>
+
+                <div id="containerModoManual" style="display: none;">
+                    <h2>Inserir Atividade Retroativa</h2>
+                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem;">Caso tenha estudado sem o dispositivo por perto, registre a missão abaixo.</p>
+                    
+                    <div style="display: flex; gap: 0.5rem; margin-bottom: 1.25rem;">
+                        <div class="form-militar-row" style="flex: 1;">
+                            <label>Horas Estudadas</label>
+                            <input type="number" id="manualHoras" min="0" max="23" placeholder="0">
+                        </div>
+                        <div class="form-militar-row" style="flex: 1;">
+                            <label>Minutos Estudados</label>
+                            <input type="number" id="manualMinutos" min="0" max="59" placeholder="30">
+                        </div>
+                    </div>
+                    <button onclick="dispararRegistroSessao(true)" style="width:100%; padding:0.75rem; background:var(--warning); border:none; color:#000; font-weight:bold; border-radius:6px; cursor:pointer;">Salvar Registro Manual</button>
+                </div>
+
             </div>
         </div>
 
-        <!-- ==================== ABA 3: EDITAL VERTICAL (CADASTRO DINÂMICO) ==================== -->
         <div id="abaEdital" class="aba-conteudo">
-            
-            <!-- CENTRAL DE GERENCIAMENTO DE MATÉRIAS E ASSUNTOS -->
             <div class="card">
                 <h2>⚙️ Painel de Controle de Missões (Cadastrar Edital)</h2>
-                
-                <!-- Cadastrar Matéria -->
                 <div class="input-group-militar">
                     <div>
                         <label>Criar Nova Matéria (Ex: Direito Penal)</label>
@@ -385,7 +419,6 @@
                     <button class="btn-militar-add" onclick="adicionarNovaMateria()">+ Adicionar Matéria</button>
                 </div>
 
-                <!-- Cadastrar Assunto dentro da Matéria -->
                 <div class="input-group-militar" style="border-bottom: none; margin-bottom: 0; padding-bottom: 0;">
                     <div style="flex: 1;">
                         <label>Selecionar Disciplina Alvo</label>
@@ -399,17 +432,15 @@
                 </div>
             </div>
 
-            <!-- EXIBIÇÃO DO EDITAL -->
             <div class="card">
                 <h2>💀 Edital Verticalizado Estratégico</h2>
                 <div id="editalContainer"></div>
             </div>
         </div>
 
-        <!-- ==================== ABA 4: REVISÕES ==================== -->
         <div id="abaRevisoes" class="aba-conteudo">
             <div class="card">
-                <h2>Painel Systematic de Revisões</h2>
+                <h2>Painel Sistemático de Revisões</h2>
                 <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
                     <div style="border-left: 4px solid var(--danger); padding-left: 1rem;">
                         <h3 style="font-size: 0.9rem; color: var(--danger);">🚨 REVISÃO 24 HORAS</h3>
@@ -421,25 +452,52 @@
 
     </div>
 
+    <div class="modal-militar-overlay" id="modalRegistroSessao">
+        <div class="modal-militar-box">
+            <div class="modal-militar-title">⚡ Relatório de Rendimento Diário</div>
+            
+            <div style="font-size: 0.8rem; margin-bottom: 1rem; color: var(--text-muted);">
+                Alvo: <span id="modalAlvoTexto" style="color: #fff; font-weight: bold;">-</span><br>
+                Tempo computado: <span id="modalTempoTexto" style="color: var(--accent); font-weight: bold;">-</span>
+            </div>
+
+            <div style="display: flex; gap: 0.5rem;">
+                <div class="form-militar-row" style="flex: 1;">
+                    <label>Questões Feitas</label>
+                    <input type="number" id="popQuestoesFeitas" value="0" min="0">
+                </div>
+                <div class="form-militar-row" style="flex: 1;">
+                    <label>Questões Acertadas</label>
+                    <input type="number" id="popQuestoesAcertadas" value="0" min="0">
+                </div>
+            </div>
+
+            <div class="form-militar-row">
+                <label>Bloco de Anotações Táticas / Erros Cometidos</label>
+                <textarea id="popAnotacoes" rows="4" placeholder="Escreva aqui gatilhos de memória, artigos importantes ou o motivo dos seus erros..."></textarea>
+            </div>
+
+            <div class="modal-militar-actions">
+                <button class="btn-danger" onclick="fecharModalSessao()">Abortar</button>
+                <button class="btn-success" onclick="salvarRelatorioSessaoFinal()">Gravar Missão</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // BASE DE DADOS PADRÃO (Inicia caso o usuário não tenha nada salvo)
         let dadosPadrao = [
             {
-                id: "m_1",
-                nome: "Direito Constitucional",
-                tempo: "3h 19min",
+                id: "m_1", nome: "Direito Constitucional", tempoSegundos: 11940, questoesFeitas: 50, questoesAcertadas: 42,
                 topicos: [
                     { id: "t_1", nome: "Art. 1º ao 5º (Direitos e Garantias Fundamentais)", concluido: true, dataConclusao: Date.now() - 86400000 },
                     { id: "t_2", nome: "Art. 144 (Segurança Pública)", concluido: false }
                 ]
             },
             {
-                id: "m_2",
-                nome: "Direito Penal",
-                tempo: "5h 51min",
+                id: "m_2", nome: "Direito Penal", tempoSegundos: 21060, questoesFeitas: 70, questoesAcertadas: 54,
                 topicos: [
-                    { id: "t_3", nome: "Crimes contra a Administração Pública", concluido: false },
-                    { id: "t_4", nome: "Lei de Abuso de Autoridade (Lei 13.869/19)", concluido: false }
+                    { id: "p_1", nome: "Crimes contra a Administração Pública", concluido: false },
+                    { id: "p_2", nome: "Lei de Abuso de Autoridade (Lei 13.869/19)", concluido: false }
                 ]
             }
         ];
@@ -448,6 +506,9 @@
         let cronometroSegundos = 0;
         let tInterval = null;
         let tRodando = false;
+        
+        // Variável temporária para segurar o tempo que será salvo pelo modal
+        let sessaoAtivaTemp = { materiaId: '', assuntoId: '', segundos: 0 };
 
         window.onload = function() {
             carregarProgressoGeral();
@@ -470,202 +531,139 @@
             document.getElementById(idAba).classList.add('aba-ativa');
             document.getElementById(idLink).classList.add('active-link');
             
-            if(idAba === 'abaHome' || idAba === 'abaEdital') atualizarDashboard();
+            if(idAba === 'abaHome' || idAba === 'abaCronometro') atualizarDashboard();
         }
 
-        /* --- FUNCIONALIDADES DO EDITAL DINÂMICO --- */
-        
-        function adicionarNovaMateria() {
-            const inputNome = document.getElementById('novaMateriaNome');
-            const nome = inputNome.value.trim();
-            
-            if (nome === "") {
-                alert("Por favor, digite um nome válido para a disciplina.");
-                return;
-            }
+        function mudarModoLancamento(modo) {
+            document.getElementById('subBtnCronometro').classList.remove('active');
+            document.getElementById('subBtnManual').classList.remove('active');
+            document.getElementById('containerModoRelogio').style.display = 'none';
+            document.getElementById('containerModoManual').style.display = 'none';
 
-            const novaMateria = {
-                id: "m_" + Date.now(),
-                nome: nome,
-                tempo: "0h 00min",
-                topicos: []
-            };
-
-            bancoDados.push(novaMateria);
-            salvarProgressoGeral();
-            inputNome.value = "";
-            atualizarDashboard();
-        }
-
-        function adicionarNovoAssunto() {
-            const selectId = document.getElementById('selectMateriaAlvo');
-            const inputAssunto = document.getElementById('novoAssuntoNome');
-            
-            const idMateria = selectId.value;
-            const nomeAssunto = inputAssunto.value.trim();
-
-            if (!idMateria) {
-                alert("Você precisa selecionar ou criar uma matéria primeiro.");
-                return;
-            }
-            if (nomeAssunto === "") {
-                alert("Digite a descrição do assunto.");
-                return;
-            }
-
-            const materia = bancoDados.find(m => m.id === idMateria);
-            if (materia) {
-                materia.topicos.push({
-                    id: "t_" + Date.now(),
-                    nome: nomeAssunto,
-                    concluido: false
-                });
-                salvarProgressoGeral();
-                inputAssunto.value = "";
-                atualizarDashboard();
+            if(modo === 'modoRelogio') {
+                document.getElementById('subBtnCronometro').classList.add('active');
+                document.getElementById('containerModoRelogio').style.display = 'block';
+            } else {
+                document.getElementById('subBtnManual').classList.add('active');
+                document.getElementById('containerModoManual').style.display = 'block';
             }
         }
 
-        function excluirMateria(idMateria) {
-            if(confirm("Deseja realmente excluir toda esta disciplina e seus tópicos?")) {
-                bancoDados = bancoDados.filter(m => m.id !== idMateria);
-                salvarProgressoGeral();
-                atualizarDashboard();
-            }
-        }
-
-        function excluirTopico(idMateria, idTopico) {
-            const materia = bancoDados.find(m => m.id === idMateria);
-            if(materia) {
-                materia.topicos = materia.topicos.filter(t => t.id !== idTopico);
-                salvarProgressoGeral();
-                atualizarDashboard();
-            }
-        }
-
+        /* --- MOTOR DE ATUALIZAÇÃO DO ALVO ATIVO COMPARTILHADO --- */
         function atualizarSelectsMaterias() {
-            const selectAlvo = document.getElementById('selectMateriaAlvo');
-            const selectCronometro = document.getElementById('sessaoMateria');
+            const selectEditalAlvo = document.getElementById('selectMateriaAlvo');
+            const selectCronometroMat = document.getElementById('sessaoMateria');
             
             const opcoes = bancoDados.map(m => `<option value="${m.id}">${m.nome}</option>`).join('');
             
-            if(selectAlvo) selectAlvo.innerHTML = opcoes;
-            if(selectCronometro) selectCronometro.innerHTML = opcoes;
-        }
-
-        function renderizarEditalGeral() {
-            const container = document.getElementById('editalContainer');
-            if(!container) return;
-
-            if (bancoDados.length === 0) {
-                container.innerHTML = `<p style="color: var(--text-muted); font-size: 0.85rem; text-align: center; padding: 1rem;">Nenhuma matéria cadastrada no momento. Use o painel acima.</p>`;
-                return;
-            }
-
-            container.innerHTML = bancoDados.map(materia => {
-                return `
-                    <div style="margin-bottom:1.5rem; background:var(--bg-primary); border:1px solid var(--border); border-radius:6px; padding:1rem;">
-                        <div style="display:flex; justify-content:between; align-items:center; justify-content: space-between; margin-bottom:0.75rem; border-bottom: 1px dashed var(--border); padding-bottom: 0.5rem;">
-                            <h3 style="font-size:0.95rem; color:var(--accent);">${materia.nome}</h3>
-                            <button class="btn-delete-item" style="color: var(--danger);" onclick="excluirMateria('${materia.id}')">✖ Excluir Disciplina</button>
-                        </div>
-                        
-                        ${materia.topicos.length === 0 ? `<p style="color: var(--text-muted); font-size: 0.8rem; padding: 0.25rem 0;">Nenhum assunto inserido.</p>` : ''}
-                        
-                        ${materia.topicos.map(topico => `
-                            <div class="checklist-item">
-                                <div class="checklist-checkbox-wrapper">
-                                    <input type="checkbox" class="checklist-checkbox" ${topico.concluido ? 'checked' : ''} 
-                                        onchange="marcarConclusaoTopico('${materia.id}', '${topico.id}')">
-                                    <span style="${topico.concluido ? 'text-decoration:line-through; color:var(--text-muted);' : ''}">${topico.nome}</span>
-                                </div>
-                                <button class="btn-delete-item" onclick="excluirTopico('${materia.id}', '${topico.id}')">🗑️</button>
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
-            }).join('');
-        }
-
-        /* --- COMPONENTES VISUAIS SECUNDÁRIOS --- */
-
-        function renderizarTabelaHome() {
-            const corpo = document.getElementById('tabelaMateriasCorpo');
-            if(!corpo) return;
-            if (bancoDados.length === 0) {
-                corpo.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">Nenhum dado disponível. Adicione matérias na aba do Edital.</td></tr>`;
-                return;
-            }
-            corpo.innerHTML = bancoDados.map(m => {
-                const total = m.topicos.length;
-                const concluidos = m.topicos.filter(t => t.concluido).length;
-                const pct = total > 0 ? Math.round((concluidos / total) * 100) : 0;
-                const badgeClass = pct >= 80 ? 'high' : 'mid';
-
-                return `
-                    <tr>
-                        <td style="font-weight: 600; color: #fff;">${m.nome}</td>
-                        <td style="font-family: monospace; color: var(--text-muted);">${m.tempo}</td>
-                        <td>${concluidos}/${total}</td>
-                        <td><span class="badge-pct ${badgeClass}">${pct}%</span></td>
-                    </tr>
-                `;
-            }).join('');
-        }
-
-        function marcarConclusaoTopico(materiaId, topicoId) {
-            const mat = bancoDados.find(m => m.id === materiaId);
-            if(mat) {
-                const top = mat.topicos.find(t => t.id === topicoId);
-                if(top) {
-                    top.concluido = !top.concluido;
-                    top.dataConclusao = top.concluido ? Date.now() : undefined;
+            if(selectEditalAlvo) selectEditalAlvo.innerHTML = opcoes;
+            if(selectCronometroMat) {
+                const valorAntigo = selectCronometroMat.value;
+                selectCronometroMat.innerHTML = opcoes;
+                if(valorAntigo && bancoDados.some(m => m.id === valorAntigo)) {
+                    selectCronometroMat.value = valorAntigo;
                 }
             }
-            salvarProgressoGeral();
-            renderizarEditalGeral();
-            atualizarKPIs();
+            atualizarSelectAssuntosCronometro();
         }
 
-        function renderizarConstancia() {
-            const grid = document.getElementById('gridConstancia');
-            if(!grid) return;
-            let html = '';
-            for(let i = 0; i < 30; i++) {
-                let checked = (i >= 24) ? 'check' : '';
-                html += `<div class="constancia-dot ${checked}"></div>`;
+        function atualizarSelectAssuntosCronometro() {
+            const matId = document.getElementById('sessaoMateria').value;
+            const selectAssunto = document.getElementById('sessaoAssunto');
+            if(!selectAssunto) return;
+
+            const materia = bancoDados.find(m => m.id === matId);
+            if(materia && materia.topicos.length > 0) {
+                selectAssunto.innerHTML = materia.topicos.map(t => `<option value="${t.id}">${t.nome}</option>`).join('');
+            } else {
+                selectAssunto.innerHTML = `<option value="">-- Nenhum assunto cadastrado --</option>`;
             }
-            grid.innerHTML = html;
         }
 
-        function atualizarKPIs() {
-            let totalTopicos = 0;
-            let concluidos = 0;
-            bancoDados.forEach(m => {
-                totalTopicos += m.topicos.length;
-                concluidos += m.topicos.filter(t => t.concluido).length;
-            });
-            const pctGeral = totalTopicos > 0 ? Math.round((concluidos / totalTopicos) * 100) : 0;
+        /* --- LOGICA DE DISPARO DO POP-UP MODAL --- */
+        function dispararRegistroSessao(isManual) {
+            const matId = document.getElementById('sessaoMateria').value;
+            const assId = document.getElementById('sessaoAssunto').value;
+            let segundosCalculados = 0;
+
+            if(!matId) {
+                alert("Selecione uma disciplina válida operacional para salvar.");
+                return;
+            }
+
+            if(isManual) {
+                const h = parseInt(document.getElementById('manualHoras').value) || 0;
+                const m = parseInt(document.getElementById('manualMinutos').value) || 0;
+                segundosCalculados = (h * 3600) + (m * 60);
+                if(segundosCalculados <= 0) {
+                    alert("Insira uma quantidade de tempo válida.");
+                    return;
+                }
+            } else {
+                segundosCalculados = cronometroSegundos;
+                if(segundosCalculados < 10) {
+                    alert("Tempo de cronômetro muito curto para registrar uma sessão real.");
+                    return;
+                }
+            }
+
+            const matNome = bancoDados.find(m => m.id === matId)?.nome || "Geral";
             
-            if(document.getElementById('kpiEditalPct')) document.getElementById('kpiEditalPct').innerText = pctGeral + "%";
-            if(document.getElementById('kpiTempoTotal')) document.getElementById('kpiTempoTotal').innerText = "9h 10min";
+            // Alimentar objeto temporário
+            sessaoAtivaTemp = { materiaId: matId, assuntoId: assId, segundos: segundosCalculados };
+
+            // Exibir dados no Modal
+            document.getElementById('modalAlvoTexto').innerText = matNome;
+            document.getElementById('modalTempoTexto').innerText = formatadorMilitarTextoBreve(segundosCalculados);
+            
+            // Resetar campos do modal
+            document.getElementById('popQuestoesFeitas').value = 0;
+            document.getElementById('popQuestoesAcertadas').value = 0;
+            document.getElementById('popAnotacoes').value = "";
+
+            // Abrir Janela
+            document.getElementById('modalRegistroSessao').style.display = 'flex';
         }
 
-        function calcularRevisoes() {
-            const mod24 = document.getElementById('mod24h');
-            if(!mod24) return;
-            let r24 = [];
-            bancoDados.forEach(m => {
-                m.topicos.forEach(t => {
-                    if(t.concluido && t.dataConclusao) {
-                        r24.push(`• [${m.nome}] ${t.nome}`);
-                    }
-                });
-            });
-            mod24.innerHTML = r24.length > 0 ? r24.join('<br>') : '🟢 Nenhum tópico pendente para hoje.';
+        function fecharModalSessao() {
+            document.getElementById('modalRegistroSessao').style.display = 'none';
         }
 
-        /* --- CONTROLE DO CRONÔMETRO --- */
+        function salvarRelatorioSessaoFinal() {
+            const qFeitas = parseInt(document.getElementById('popQuestoesFeitas').value) || 0;
+            const qAcertadas = parseInt(document.getElementById('popQuestoesAcertadas').value) || 0;
+            const anotacoesTxt = document.getElementById('popAnotacoes').value.trim();
+
+            if(qAcertadas > qFeitas) {
+                alert("Alerta de inconsistência: O número de acertos não pode ser maior que o número de questões feitas.");
+                return;
+            }
+
+            const materia = bancoDados.find(m => m.id === sessaoAtivaTemp.materiaId);
+            if(materia) {
+                materia.tempoSegundos = (materia.tempoSegundos || 0) + sessaoAtivaTemp.segundos;
+                materia.questoesFeitas = (materia.questoesFeitas || 0) + qFeitas;
+                materia.questoesAcertadas = (materia.questoesAcertadas || 0) + qAcertadas;
+                
+                // Exemplo de log para anotações se necessário futuramente em relatórios
+                if(anotacoesTxt !== "") {
+                    console.log(`Anotação adicionada para ${materia.nome}: ${anotacoesTxt}`);
+                }
+            }
+
+            salvarProgressoGeral();
+            fecharModalSessao();
+            resetarCronometro();
+            
+            // Resetar inputs manuais
+            document.getElementById('manualHoras').value = "";
+            document.getElementById('manualMinutos').value = "";
+
+            alert("Missão Concluída! Dados computados com sucesso.");
+            atualizarDashboard();
+        }
+
+        /* --- MOTOR DO CRONOMETRO --- */
         function alternarCronometro() {
             const btn = document.getElementById('btnPlayPause');
             if(tRodando) {
@@ -691,6 +689,7 @@
             document.getElementById('timerVisual').innerText = "00:00:00";
             document.getElementById('btnPlayPause').innerText = "Iniciar Missão";
             document.getElementById('btnPlayPause').style.backgroundColor = "var(--success)";
+            document.getElementById('btnPlayPause').style.color = "var(--bg-primary)";
         }
 
         function formatadorMilitarTempo(s) {
@@ -700,24 +699,167 @@
             return `${hrs}:${mins}:${segs}`;
         }
 
-        function salvarSessaoEstudo() {
-            alert("Tempo operacional integrado ao painel!");
-            resetarCronometro();
+        function formatadorMilitarTextoBreve(s) {
+            let hrs = Math.floor(s / 3600);
+            let mins = Math.floor((s % 3600) / 60);
+            return `${hrs}h ${mins}min`;
         }
 
-        /* --- STORAGE PERSISTENTE --- */
-        function salvarProgressoGeral() { 
-            localStorage.setItem('caveiralabs_progresso', JSON.stringify(bancoDados)); 
+        /* --- PROCESSAMENTO DA ENGINE HOME & KPIS --- */
+        function renderizarTabelaHome() {
+            const corpo = document.getElementById('tabelaMateriasCorpo');
+            if(!corpo) return;
+
+            if (bancoDados.length === 0) {
+                corpo.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">Nenhum dado disponível. Adicione matérias na aba do Edital.</td></tr>`;
+                return;
+            }
+
+            corpo.innerHTML = bancoDados.map(m => {
+                const total = m.topicos.length;
+                const concluidos = m.topicos.filter(t => t.concluido).length;
+                const pctEdital = total > 0 ? Math.round((concluidos / total) * 100) : 0;
+                const badgeClass = pctEdital >= 80 ? 'high' : 'mid';
+                
+                const f = m.questoesFeitas || 0;
+                const a = m.questoesAcertadas || 0;
+                const pctAcertos = f > 0 ? Math.round((a / f) * 100) : 0;
+
+                return `
+                    <tr>
+                        <td style="font-weight: 600; color: #fff;">${m.nome}</td>
+                        <td style="font-family: monospace; color: var(--text-muted);">${formatadorMilitarTextoBreve(m.tempoSegundos || 0)}</td>
+                        <td>${concluidos}/${total} (${pctEdital}%)</td>
+                        <td><span class="badge-pct ${badgeClass}">${pctAcertos}% acertos</span></td>
+                    </tr>
+                `;
+            }).join('');
         }
-        
+
+        function atualizarKPIs() {
+            let totalTopicos = 0, concluidos = 0, tSegundos = 0, tFeitas = 0, tAcertadas = 0;
+
+            bancoDados.forEach(m => {
+                totalTopicos += m.topicos.length;
+                concluidos += m.topicos.filter(t => t.concluido).length;
+                tSegundos += (m.tempoSegundos || 0);
+                tFeitas += (m.questoesFeitas || 0);
+                tAcertadas += (m.questoesAcertadas || 0);
+            });
+
+            const pctGeralEdital = totalTopicos > 0 ? Math.round((concluidos / totalTopicos) * 100) : 0;
+            const pctGeralQuestoes = tFeitas > 0 ? Math.round((tAcertadas / tFeitas) * 100) : 0;
+            
+            if(document.getElementById('kpiEditalPct')) document.getElementById('kpiEditalPct').innerText = pctGeralEdital + "%";
+            if(document.getElementById('kpiTempoTotal')) document.getElementById('kpiTempoTotal').innerText = formatadorMilitarTextoBreve(tSegundos);
+            if(document.getElementById('kpiDesempenhoQuestoes')) document.getElementById('kpiDesempenhoQuestoes').innerText = tFeitas > 0 ? `${pctGeralQuestoes}% (${tAcertadas}/${tFeitas})` : '0%';
+        }
+
+        /* --- MOTOR DO EDITAL VERTICAL --- */
+        function adicionarNovaMateria() {
+            const inputNome = document.getElementById('novaMateriaNome');
+            const nome = inputNome.value.trim();
+            if (nome === "") return alert("Digite o nome da disciplina.");
+
+            bancoDados.push({ id: "m_" + Date.now(), nome: nome, tempoSegundos: 0, questoesFeitas: 0, questoesAcertadas: 0, topicos: [] });
+            salvarProgressoGeral();
+            inputNome.value = "";
+            atualizarDashboard();
+        }
+
+        function adicionarNovoAssunto() {
+            const idMateria = document.getElementById('selectMateriaAlvo').value;
+            const inputAssunto = document.getElementById('novoAssuntoNome');
+            const nomeAssunto = inputAssunto.value.trim();
+
+            if (!idMateria || nomeAssunto === "") return alert("Preencha todos os campos do edital.");
+
+            const materia = bancoDados.find(m => m.id === idMateria);
+            if (materia) {
+                materia.topicos.push({ id: "t_" + Date.now(), nome: nomeAssunto, concluido: false });
+                salvarProgressoGeral();
+                inputAssunto.value = "";
+                atualizarDashboard();
+            }
+        }
+
+        function marcarConclusaoTopico(materiaId, topicoId) {
+            const mat = bancoDados.find(m => m.id === materiaId);
+            if(mat) {
+                const top = mat.topicos.find(t => t.id === topicoId);
+                if(top) {
+                    top.concluido = !top.concluido;
+                    top.dataConclusao = top.concluido ? Date.now() : undefined;
+                }
+            }
+            salvarProgressoGeral();
+            atualizarDashboard();
+        }
+
+        function excluirMateria(idMateria) {
+            if(confirm("Excluir disciplina definitivamente?")) {
+                bancoDados = bancoDados.filter(m => m.id !== idMateria);
+                salvarProgressoGeral();
+                atualizarDashboard();
+            }
+        }
+
+        function excluirTopico(idMateria, idTopico) {
+            const materia = bancoDados.find(m => m.id === idMateria);
+            if(materia) {
+                materia.topicos = materia.topicos.filter(t => t.id !== idTopico);
+                salvarProgressoGeral();
+                atualizarDashboard();
+            }
+        }
+
+        function renderizarEditalGeral() {
+            const container = document.getElementById('editalContainer');
+            if(!container) return;
+            if (bancoDados.length === 0) {
+                container.innerHTML = `<p style="color:var(--text-muted); font-size:0.85rem; text-align:center;">Use o painel acima para popular seu edital.</p>`;
+                return;
+            }
+            container.innerHTML = bancoDados.map(materia => {
+                return `
+                    <div style="margin-bottom:1.5rem; background:var(--bg-primary); border:1px solid var(--border); border-radius:6px; padding:1rem;">
+                        <div style="display:flex; justify-content: space-between; align-items:center; margin-bottom:0.75rem; border-bottom: 1px dashed var(--border); padding-bottom: 0.5rem;">
+                            <h3 style="font-size:0.95rem; color:var(--accent);">${materia.nome}</h3>
+                            <button class="btn-delete-item" style="color: var(--danger);" onclick="excluirMateria('${materia.id}')">✖ Excluir</button>
+                        </div>
+                        ${materia.topicos.map(topico => `
+                            <div class="checklist-item">
+                                <div class="checklist-checkbox-wrapper">
+                                    <input type="checkbox" class="checklist-checkbox" ${topico.concluido ? 'checked' : ''} onchange="marcarConclusaoTopico('${materia.id}', '${topico.id}')">
+                                    <span style="${topico.concluido ? 'text-decoration:line-through; color:var(--text-muted);' : ''}">${topico.nome}</span>
+                                </div>
+                                <button class="btn-delete-item" onclick="excluirTopico('${materia.id}', '${topico.id}')">🗑️</button>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderizarConstancia() {
+            const grid = document.getElementById('gridConstancia');
+            if(!grid) return; let html = '';
+            for(let i = 0; i < 30; i++) { html += `<div class="constancia-dot ${(i >= 24) ? 'check' : ''}"></div>`; }
+            grid.innerHTML = html;
+        }
+
+        function calcularRevisoes() {
+            const mod24 = document.getElementById('mod24h'); if(!mod24) return;
+            let r24 = [];
+            bancoDados.forEach(m => { m.topicos.forEach(t => { if(t.concluido && t.dataConclusao) r24.push(`• [${m.nome}] ${t.nome}`); }); });
+            mod24.innerHTML = r24.length > 0 ? r24.join('<br>') : '🟢 Nenhum tópico concluído nas últimas 24h.';
+        }
+
+        function salvarProgressoGeral() { localStorage.setItem('caveiralabs_progresso', JSON.stringify(bancoDados)); }
         function carregarProgressoGeral() { 
             const local = localStorage.getItem('caveiralabs_progresso'); 
-            if(local) {
-                bancoDados = JSON.parse(local);
-            } else {
-                bancoDados = dadosPadrao;
-                salvarProgressoGeral();
-            }
+            bancoDados = local ? JSON.parse(local) : dadosPadrao;
+            if(!local) salvarProgressoGeral();
         }
     </script>
 </body>
