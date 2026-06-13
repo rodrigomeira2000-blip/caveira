@@ -16,6 +16,7 @@
             --accent: #38bdf8;          /* Azul Tático Discreto */
             --border: #232a3b;          /* Divisórias de Baixo Contraste */
             --sidebar-width: 260px;
+            --gold: #eab308;            /* Amarelo Ouro para Patentes Altas */
         }
 
         * {
@@ -159,6 +160,22 @@
         .kpi-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
         .kpi-value { font-size: 1.6rem; font-weight: 800; color: var(--text-main); font-variant-numeric: tabular-nums; }
 
+        /* SEÇÃO DE PATENTE DESTACADA */
+        .patente-header-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(135deg, #121620 0%, #1e2538 100%);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--gold);
+            border-radius: 4px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 0.25rem;
+        }
+        .patente-info h3 { font-size: 1.3rem; font-weight: 900; color: var(--gold); text-transform: uppercase; letter-spacing: 0.5px; }
+        .patente-info p { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; margin-top: 2px; }
+        .patente-proximo-requisito { text-align: right; font-size: 0.75rem; color: var(--text-main); font-weight: 700; }
+
         /* PANELS */
         .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 1.25rem; }
         @media (max-width: 968px) { .dashboard-grid { grid-template-columns: 1fr; } .header-quote { display: none; } }
@@ -275,11 +292,23 @@
             <div class="header-brand">
                 <h1>PROJETO <span>CAVEIRA</span></h1>
             </div>
-            <div class="header-quote" id="fraseMotivacional">"A FARDA CUSTA CARO, MAC O PREÇO DO FRACASSO É PERMANENTE."</div>
+            <div class="header-quote" id="fraseMotivacional">"A FARDA CUSTA CARO, MAS O PREÇO DO FRACASSO É PERMANENTE."</div>
         </header>
 
         <!-- ==================== ABA 1: HOME / VISÃO GERAL ==================== -->
         <div id="abaHome" class="aba-conteudo aba-ativa">
+            
+            <!-- EXIBIÇÃO DE PATENTE GAMIFICADA -->
+            <div class="patente-header-box">
+                <div class="patente-info">
+                    <p>Hierarquia Funcional de Concurseiro</p>
+                    <h3 id="patenteNome">Soldado</h3>
+                </div>
+                <div class="patente-proximo-requisito" id="patenteProximoNivel">
+                    Carregando diretrizes...
+                </div>
+            </div>
+
             <div class="kpi-container">
                 <div class="kpi-card" style="border-color: #f97316;">
                     <span class="kpi-label" style="color: #f97316;">🔥 Ofensiva Constante</span>
@@ -641,12 +670,15 @@
             atualizarSelectsMaterias();
             renderizarRevisoesEspacadas();
             
-            renderizarFiltrosBotoes(); // Atualiza botões de filtro com as matérias atuais
+            renderizarFiltrosBotoes(); 
             renderizarCadernoErros();
             
             atualizarKPIs();
             calcularCicloSemanal();
-            calcularOfensivaStreak();
+            
+            // A ordem aqui importa: calcula a ofensiva e depois processa a Patente
+            let streakAtual = calcularOfensivaStreak();
+            calcularPatenteMilitar(streakAtual);
         }
 
         // ==========================================
@@ -655,16 +687,14 @@
         function calcularOfensivaStreak() {
             if (!bancoDados.historicoSessoes || bancoDados.historicoSessoes.length === 0) {
                 document.getElementById('kpiOfensiva').innerText = "0 Dias";
-                return;
+                return 0;
             }
 
-            // Mapeia todas as datas únicas em que houve estudo (pelo timestamp)
             let datasEstudo = bancoDados.historicoSessoes.map(s => {
                 let d = new Date(s.timestamp);
                 return d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
             });
             
-            // Remove duplicadas e ordena de forma decrescente
             datasEstudo = [...new Set(datasEstudo)].sort((a, b) => new Date(b) - new Date(a));
 
             let hoje = new Date();
@@ -674,10 +704,9 @@
             ontem.setDate(hoje.getDate() - 1);
             let stringOntem = ontem.getFullYear() + "-" + (ontem.getMonth() + 1) + "-" + ontem.getDate();
 
-            // Se não estudou hoje e nem ontem, a ofensiva zerou
             if (!datasEstudo.includes(stringHoje) && !datasEstudo.includes(stringOntem)) {
                 document.getElementById('kpiOfensiva').innerText = "0 Dias";
-                return;
+                return 0;
             }
 
             let streak = 0;
@@ -687,7 +716,6 @@
                 let stringVerificacao = dataVerificacao.getFullYear() + "-" + (dataVerificacao.getMonth() + 1) + "-" + dataVerificacao.getDate();
                 if (datasEstudo.includes(stringVerificacao)) {
                     streak++;
-                    // Recua um dia para continuar checando a cadeia
                     dataVerificacao.setDate(dataVerificacao.getDate() - 1);
                 } else {
                     break;
@@ -695,6 +723,69 @@
             }
 
             document.getElementById('kpiOfensiva').innerText = streak === 1 ? "1 Dia" : `${streak} Dias`;
+            return streak;
+        }
+
+        // ==========================================
+        //  FUNCIONALIDADE: SISTEMA DE PATENTES (GAMIFICAÇÃO)
+        // ==========================================
+        function calcularPatenteMilitar(streak) {
+            let tempoTotalSegundos = 0;
+            if(bancoDados.materias) {
+                bancoDados.materias.forEach(m => { tempoTotalSegundos += (m.tempoSegundos || 0); });
+            }
+            const horasTotais = tempoTotalSegundos / 3600;
+
+            // Definição da hierarquia do Exército Brasileiro aplicada aos estudos
+            const patentes = [
+                { nome: "Soldado",           horas: 0,   ofensiva: 0 },
+                { nome: "Cabo",              horas: 5,   ofensiva: 2 },
+                { nome: "3º Sargento",       horas: 15,  ofensiva: 4 },
+                { nome: "2º Sargento",       horas: 30,  ofensiva: 6 },
+                { nome: "1º Sargento",       horas: 50,  ofensiva: 8 },
+                { nome: "Subtenente",        horas: 75,  ofensiva: 10 },
+                { nome: "2º Tenente",        horas: 100, ofensiva: 12 },
+                { nome: "1º Tenente",        horas: 135, ofensiva: 15 },
+                { nome: "Capitão",           horas: 180, ofensiva: 20 },
+                { nome: "Major",             horas: 240, ofensiva: 25 },
+                { nome: "Tenente-Coronel",   horas: 320, ofensiva: 30 },
+                { nome: "Coronel (Caveira)", horas: 420, ofensiva: 40 }
+            ];
+
+            let patenteAtual = patentes[0];
+
+            // Varre a lista para encontrar a maior patente cujos REQUISITOS FORAM PREENCHIDOS SIMULTANEAMENTE
+            for (let i = 0; i < patentes.length; i++) {
+                if (horasTotais >= patentes[i].horas && streak >= patentes[i].ofensiva) {
+                    patenteAtual = patentes[i];
+                } else {
+                    break; 
+                }
+            }
+
+            // Atualiza os elementos visuais na aba Visão Geral
+            document.getElementById('patenteNome').innerText = patenteAtual.nome;
+
+            let idxAtual = patentes.indexOf(patenteAtual);
+            if (idxAtual < patentes.length - 1) {
+                let proxima = patentes[idxAtual + 1];
+                let faltaHoras = Math.max(0, proxima.horas - horasTotais).toFixed(1);
+                let faltaOfensiva = Math.max(0, proxima.ofensiva - streak);
+
+                let msgRequisitos = [];
+                if (faltaHoras > 0) msgRequisitos.push(`-${faltaHoras}h de estudo`);
+                if (faltaOfensiva > 0) msgRequisitos.push(`-${faltaOfensiva} dias de ofensiva`);
+
+                document.getElementById('patenteProximoNivel').innerHTML = `
+                    Próxima Patente: <span style="color:var(--accent); font-weight:800;">${proxima.nome}</span><br>
+                    <span style="color:var(--text-muted); font-size:0.7rem;">Falta: ${msgRequisitos.join(' e ')}</span>
+                `;
+            } else {
+                document.getElementById('patenteProximoNivel').innerHTML = `
+                    <span style="color:var(--gold); font-weight:900;">👑 TOPO DA HIERARQUIA ALCANÇADO</span><br>
+                    <span style="color:var(--text-muted); font-size:0.7rem;">Você é um Coronel com autoridade total.</span>
+                `;
+            }
         }
 
         // ==========================================
@@ -734,6 +825,13 @@
         // ==========================================
         //  FUNCIONALIDADE: CICLO OPERACIONAL / METAS
         // ==========================================
+        function abrirAbaConfig() {
+            document.getElementById('modalConfigMeta').style.display = 'flex';
+        }
+        function fecharAbaConfig() {
+            document.getElementById('modalConfigMeta').style.display = 'none';
+        }
+
         function alterarMetaSemanalHoras() {
             const val = parseInt(document.getElementById('inputMetaSemanal').value) || 20;
             bancoDados.metaSemanalHoras = val;
@@ -743,9 +841,7 @@
         function calcularCicloSemanal() {
             let tempoTotalSegundos = 0;
             if(bancoDados.materias) {
-                bancoDados.materias.forEach(m => {
-                    tempoTotalSegundos += (m.tempoSegundos || 0);
-                });
+                bancoDados.materias.forEach(m => { tempoTotalSegundos += (m.tempoSegundos || 0); });
             }
 
             const horasEstudadas = tempoTotalSegundos / 3600;
@@ -809,7 +905,6 @@
                 return;
             }
 
-            // Aplica filtro de disciplina se houver
             let errosFiltrados = bancoDados.cadernoErros;
             if (filtroErroAtivo !== "TODOS") {
                 errosFiltrados = bancoDados.cadernoErros.filter(e => e.materiaNome === filtroErroAtivo);
@@ -877,7 +972,6 @@
                 return;
             }
 
-            // Filtra o deck ativo
             let deckFiltrado = bancoDados.flashcards;
             if (filtroFlashcardAtivo !== "TODOS") {
                 deckFiltrado = bancoDados.flashcards.filter(f => f.materiaNome === filtroFlashcardAtivo);
@@ -890,11 +984,9 @@
                 return;
             }
 
-            // Seleção randômica dentro do deck filtrado
             let randomIdx = Math.floor(Math.random() * deckFiltrado.length);
             let cardSelecionado = deckFiltrado[randomIdx];
             
-            // Acha o index real no banco de dados principal
             fcIndexAtivo = bancoDados.flashcards.findIndex(f => f.id === cardSelecionado.id);
             fcLadoFrente = true;
 
@@ -926,7 +1018,7 @@
             exibirCardAtual();
         }
 
-        function evaluarCard(nivel) {
+        function avaliarCard(nivel) {
             if(bancoDados.flashcards[fcIndexAtivo]) {
                 bancoDados.flashcards[fcIndexAtivo].nivelRevisao = nivel;
             }
@@ -1139,6 +1231,9 @@
 
         function eliminarRevisaoDoPainel(id) { bancoDados.revisoesAgendadas = bancoDados.revisoesAgendadas.filter(r=>r.id!==id); salvarProgressoGeral(); }
 
+        // ==========================================
+        //  CÁLCULO DE REQUISITOS GERAIS (KPIS)
+        // ==========================================
         function atualizarKPIs() {
             let totT = 0, conc = 0, tSeg = 0, tF = 0, tA = 0;
             if(bancoDados.materias) {
