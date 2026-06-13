@@ -3,27 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PROJETO CAVEIRA - Mentoria & Simulados</title>
+    <title>PROJETO CAVEIRA - Mentoria & Múltiplos Editais</title>
     
     <style>
-        /* PALETA DE CORES INSPIRADA NO PROJETO CAVEIRA - SÓBRIA, FRIA E MILITAR */
+        /* PALETA DE CORES MILITAR / OPERACIONAL */
         :root {
-            --bg-primary: #0a0d14;      /* Preto Profundo */
-            --bg-secondary: #121620;    /* Grafite Escuro */
-            --bg-tertiary: #1a202c;     /* Grafite Médio */
-            --text-main: #f8fafc;       /* Branco Puro/Gelo */
-            --text-muted: #64748b;      /* Cinza Operacional */
-            --accent: #38bdf8;          /* Azul Tático Discreto */
-            --border: #232a3b;          /* Divisórias de Baixo Contraste */
+            --bg-primary: #0a0d14;      
+            --bg-secondary: #121620;    
+            --bg-tertiary: #1a202c;     
+            --text-main: #f8fafc;       
+            --text-muted: #64748b;      
+            --accent: #38bdf8;          
+            --border: #232a3b;          
             --sidebar-width: 260px;
-            --gold: #eab308;            /* Amarelo Ouro para Patentes Altas */
+            --gold: #eab308;            
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             letter-spacing: -0.2px;
         }
 
@@ -35,10 +35,70 @@
             overflow-x: hidden;
         }
 
+        /* BARRA SUPERIOR DE CONTEXTO (WORKSPACES) */
+        .workspace-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.5rem;
+        }
+
+        .workspace-selector-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .workspace-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            font-weight: 800;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+        }
+
+        .select-workspace {
+            padding: 0.5rem 1rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        .select-workspace:focus {
+            border-color: var(--accent);
+            outline: none;
+        }
+
+        .btn-militar-sm {
+            padding: 0.4rem 0.8rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-militar-sm:hover { background: var(--border); border-color: var(--text-muted); }
+
         /* BOTÃO DE MENU FLUTUANTE */
         .btn-menu-toggle {
             position: fixed;
-            top: 1rem;
+            top: 4.5rem;
             left: 1rem;
             z-index: 1000;
             background: var(--bg-secondary);
@@ -51,30 +111,24 @@
             font-weight: bold;
             transition: all 0.2s;
         }
-        .btn-menu-toggle:hover {
-            background: var(--bg-tertiary);
-            border-color: var(--text-muted);
-        }
 
         /* MENU LATERAL RETRÁTIL (SIDEBAR) */
         .sidebar {
             position: fixed;
-            top: 0;
+            top: 60px;
             left: calc(-1 * var(--sidebar-width));
             width: var(--sidebar-width);
-            height: 100vh;
+            height: calc(100vh - 60px);
             background: var(--bg-secondary);
             border-right: 1px solid var(--border);
             z-index: 999;
             transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            padding: 5rem 1rem 1.5rem 1rem;
+            padding: 4rem 1rem 1.5rem 1rem;
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
         }
-        .sidebar.open {
-            left: 0;
-        }
+        .sidebar.open { left: 0; }
 
         .sidebar-title {
             font-size: 0.7rem;
@@ -111,22 +165,17 @@
             flex: 1;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 5rem 1.5rem 1.5rem 1.5rem;
+            padding: 8rem 1.5rem 1.5rem 1.5rem;
             display: flex;
             flex-direction: column;
             gap: 1.25rem;
             transition: margin-left 0.3s ease;
             width: 100%;
         }
-        body.sidebar-aberta .container {
-            margin-left: calc(var(--sidebar-width) + 20px);
-        }
+        body.sidebar-aberta .container { margin-left: calc(var(--sidebar-width) + 20px); }
+        @media (max-width: 1024px) { body.sidebar-aberta .container { margin-left: auto; } }
 
-        @media (max-width: 1024px) {
-            body.sidebar-aberta .container { margin-left: auto; }
-        }
-
-        /* CABEÇALHO CAVEIRA */
+        /* HEADER INTERNO */
         header {
             width: 100%;
             background-color: var(--bg-secondary);
@@ -139,28 +188,15 @@
         }
         .header-brand h1 { font-size: 1.35rem; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; }
         .header-brand h1 span { color: var(--text-muted); font-weight: 300; }
-        .header-quote { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+        .header-quote { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
 
-        /* CARDS RESUMO */
-        .kpi-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-        }
-        .kpi-card {
-            background-color: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 4px;
-            padding: 1.25rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.35rem;
-            position: relative;
-        }
-        .kpi-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
-        .kpi-value { font-size: 1.6rem; font-weight: 800; color: var(--text-main); font-variant-numeric: tabular-nums; }
+        /* CARDS RESUMO (KPIS) */
+        .kpi-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+        .kpi-card { background-color: var(--bg-secondary); border: 1px solid var(--border); border-radius: 4px; padding: 1.25rem; display: flex; flex-direction: column; gap: 0.35rem; }
+        .kpi-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
+        .kpi-value { font-size: 1.6rem; font-weight: 800; color: var(--text-main); }
 
-        /* SEÇÃO DE PATENTE DESTACADA */
+        /* SEÇÃO DE PATENTE */
         .patente-header-box {
             display: flex;
             align-items: center;
@@ -170,37 +206,30 @@
             border-left: 4px solid var(--gold);
             border-radius: 4px;
             padding: 1.25rem 1.5rem;
-            margin-bottom: 0.25rem;
         }
-        .patente-info h3 { font-size: 1.3rem; font-weight: 900; color: var(--gold); text-transform: uppercase; letter-spacing: 0.5px; }
-        .patente-info p { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; margin-top: 2px; }
-        .patente-proximo-requisito { text-align: right; font-size: 0.75rem; color: var(--text-main); font-weight: 700; }
+        .patente-info h3 { font-size: 1.3rem; font-weight: 900; color: var(--gold); text-transform: uppercase; }
+        .patente-info p { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
+        .patente-proximo-requisito { text-align: right; font-size: 0.75rem; font-weight: 700; }
 
-        /* PANELS */
+        /* GRIDS E SEÇÕES */
         .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 1.25rem; }
         @media (max-width: 968px) { .dashboard-grid { grid-template-columns: 1fr; } .header-quote { display: none; } }
 
-        .card { background-color: var(--bg-secondary); border: 1px solid var(--border); border-radius: 4px; padding: 1.5rem; margin-bottom: 1.25rem; }
-        .card h2 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.7px; color: var(--text-main); margin-bottom: 1.25rem; font-weight: 800; border-left: 2px solid var(--text-muted); padding-left: 0.5rem; }
+        .card { background-color: var(--bg-secondary); border: 1px solid var(--border); border-radius: 4px; padding: 1.5rem; }
+        .card h2 { font-size: 0.85rem; text-transform: uppercase; color: var(--text-main); margin-bottom: 1.25rem; font-weight: 800; border-left: 2px solid var(--text-muted); padding-left: 0.5rem; }
 
-        /* FORMULÁRIOS */
+        /* FORMULÁRIOS MILITARES */
         .form-militar-row { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
         .form-militar-row label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
         .form-militar-row input, .form-militar-row select, .form-militar-row textarea { padding: 0.7rem; background: var(--bg-primary); border: 1px solid var(--border); color: #fff; border-radius: 3px; font-size: 0.85rem; width: 100%; }
-        .form-militar-row input:focus, .form-militar-row select:focus, .form-militar-row textarea:focus { border-color: var(--text-muted); outline: none; }
-
+        
         .input-group-militar { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); align-items: flex-end; }
         .input-group-militar div { flex: 1; min-width: 200px; display: flex; flex-direction: column; gap: 0.35rem; }
         .input-group-militar label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
         .input-group-militar input, .input-group-militar select { padding: 0.65rem; background: var(--bg-primary); border: 1px solid var(--border); color: #fff; border-radius: 3px; }
 
-        .btn-militar-add { padding: 0.65rem 1.25rem; background: var(--bg-tertiary); border: 1px solid var(--border); color: var(--text-main); font-weight: 700; text-transform: uppercase; font-size: 0.75rem; border-radius: 3px; cursor: pointer; height: 36px; transition: background 0.2s; }
+        .btn-militar-add { padding: 0.65rem 1.25rem; background: var(--bg-tertiary); border: 1px solid var(--border); color: var(--text-main); font-weight: 700; text-transform: uppercase; font-size: 0.75rem; border-radius: 3px; cursor: pointer; height: 36px; }
         .btn-militar-add:hover { background: var(--border); }
-
-        /* SELETORES DE FILTRO RÁPIDO */
-        .filtro-militar-container { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.25rem; padding: 0.6rem; background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; }
-        .btn-filtro-tag { background: var(--bg-secondary); border: 1px solid var(--border); color: var(--text-muted); padding: 0.35rem 0.75rem; font-size: 0.7rem; font-weight: 700; border-radius: 3px; cursor: pointer; text-transform: uppercase; transition: all 0.15s; }
-        .btn-filtro-tag.ativo, .btn-filtro-tag:hover { background: var(--bg-tertiary); color: var(--text-main); border-color: var(--text-muted); }
 
         /* TABELAS */
         .materia-table-wrapper { overflow-x: auto; }
@@ -209,65 +238,69 @@
         .materia-table td { padding: 0.85rem 0.75rem; border-bottom: 1px solid var(--border); color: var(--text-main); }
         .badge-pct { padding: 0.2rem 0.4rem; border-radius: 2px; font-weight: 700; font-size: 0.7rem; text-transform: uppercase; background: var(--bg-tertiary); color: var(--text-main); border: 1px solid var(--border); }
 
-        /* CRONOMETRO */
+        /* CRONÔMETRO */
         .timer-display { font-size: 3.8rem; font-weight: 800; text-align: center; font-family: monospace; color: var(--text-main); margin: 1rem 0; background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 1rem 0; }
         .timer-controls { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
         .timer-controls button { padding: 0.75rem; border-radius: 3px; font-weight: 700; font-size: 0.8rem; text-transform: uppercase; border: none; cursor: pointer; width: 100%; }
         .btn-success { background: var(--text-main); color: var(--bg-primary); }
         .btn-danger { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
-        .btn-danger:hover { color: #fff; border-color: var(--text-muted); }
 
-        /* PROGRESS TRACKS (CICLO DE ESTUDOS) */
-        .ciclo-progress-container { margin-top: 1rem; }
+        /* BARRAS DE CICLO */
         .ciclo-bar-wrapper { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem; font-size: 0.75rem; text-transform: uppercase; font-weight: bold; }
         .ciclo-track { background: var(--bg-primary); height: 16px; border-radius: 3px; border: 1px solid var(--border); overflow: hidden; position: relative; display: flex; align-items: center; }
         .ciclo-fill { height: 100%; background: #22c55e; width: 0%; transition: width 0.4s ease; }
-        .ciclo-text-overlay { position: absolute; width: 100%; text-align: center; font-size: 0.65rem; font-weight: 900; color: #fff; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); }
+        .ciclo-text-overlay { position: absolute; width: 100%; text-align: center; font-size: 0.65rem; font-weight: 900; color: #fff; }
 
-        /* REVISÕES E FLASHCARDS */
-        .revisao-grid-options { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; margin-top: 0.5rem; }
-        .revisao-option { display: flex; align-items: center; gap: 0.4rem; background: var(--bg-primary); padding: 0.5rem; border: 1px solid var(--border); border-radius: 3px; cursor: pointer; font-size: 0.75rem; font-weight: 600; }
-        .revisao-option input { width: 14px; height: 14px; accent-color: var(--text-main); }
-
-        /* CARTÃO DE FLASHCARD */
-        .flashcard-box { background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 2rem; min-height: 180px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; cursor: pointer; position: relative; margin-bottom: 1rem; user-select: none; }
+        /* FLASHCARDS */
+        .flashcard-box { background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 2rem; min-height: 180px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; cursor: pointer; position: relative; margin-bottom: 1rem; }
         .flashcard-badge { position: absolute; top: 0.5rem; left: 0.5rem; font-size: 0.6rem; text-transform: uppercase; font-weight: 800; background: var(--bg-tertiary); padding: 2px 6px; border: 1px solid var(--border); border-radius: 2px; color: var(--text-muted); }
-        .flashcard-lado-titulo { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; font-weight: bold; margin-bottom: 0.5rem; }
-        .flashcard-texto { font-size: 1.1rem; font-weight: 700; line-height: 1.4; color: var(--text-main); }
+        .flashcard-texto { font-size: 1.1rem; font-weight: 700; color: var(--text-main); }
         .flashcard-actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
         .btn-fc-facil { background: #16a34a; color: white; padding: 0.6rem; font-weight: bold; border: none; border-radius: 3px; cursor: pointer; text-transform: uppercase; font-size: 0.7rem; }
         .btn-fc-medio { background: #ca8a04; color: white; padding: 0.6rem; font-weight: bold; border: none; border-radius: 3px; cursor: pointer; text-transform: uppercase; font-size: 0.7rem; }
         .btn-fc-dificil { background: #dc2626; color: white; padding: 0.6rem; font-weight: bold; border: none; border-radius: 3px; cursor: pointer; text-transform: uppercase; font-size: 0.7rem; }
 
-        /* LISTA / GRID DE CADERNO DE ERROS */
+        /* CADERNO DE ERROS */
         .erro-card-item { background: var(--bg-primary); border: 1px solid var(--border); border-left: 4px solid #dc2626; border-radius: 0 4px 4px 0; padding: 1rem; margin-bottom: 0.75rem; }
         .erro-card-meta { font-size: 0.65rem; color: var(--text-muted); font-weight: bold; text-transform: uppercase; margin-bottom: 0.35rem; display: flex; justify-content: space-between; }
         .erro-card-enunciado { font-size: 0.85rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-main); }
         .erro-card-motivo { font-size: 0.8rem; background: var(--bg-secondary); border: 1px solid var(--border); padding: 0.5rem; border-radius: 3px; color: #fca5a5; }
 
         /* EDITAL VERTICAL */
-        .checklist-item { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 0.65rem 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+        .checklist-item { display: flex; align-items: center; justify-content: space-between; padding: 0.65rem 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
         .checklist-checkbox-wrapper { display: flex; align-items: center; gap: 0.75rem; }
         .checklist-checkbox { width: 15px; height: 15px; accent-color: var(--text-main); cursor: pointer; }
         .btn-delete-item { background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 0.75rem; }
         .btn-delete-item:hover { color: #fff; }
 
-        /* TABS */
-        .aba-conteudo { display: none; }
-        .aba-conteudo.aba-ativa { display: block; }
-        .sub-aba-btn-group { display: flex; gap: 0.5rem; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
-        .sub-aba-btn { background: transparent; color: var(--text-muted); border: none; cursor: pointer; font-size: 0.8rem; padding: 0.25rem 0.5rem; font-weight: 700; text-transform: uppercase; }
-        .sub-aba-btn.active { color: var(--text-main); border-bottom: 2px solid var(--text-main); }
-
-        /* POP-UP MODAL */
+        /* MODAIS POP-UP */
         .modal-militar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); display: none; align-items: center; justify-content: center; z-index: 9999; padding: 1rem; }
         .modal-militar-box { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 4px; width: 100%; max-width: 500px; padding: 1.5rem; }
         .modal-militar-title { font-size: 0.9rem; text-transform: uppercase; font-weight: 800; color: var(--text-main); margin-bottom: 1.25rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;}
         .modal-militar-actions { display: flex; gap: 0.5rem; margin-top: 1.5rem; }
         .modal-militar-actions button { flex: 1; padding: 0.75rem; border-radius: 3px; font-weight: 700; text-transform: uppercase; font-size: 0.8rem; border: none; cursor: pointer; }
+
+        /* ABAS */
+        .aba-conteudo { display: none; }
+        .aba-conteudo.aba-ativa { display: block; }
+        .sub-aba-btn-group { display: flex; gap: 0.5rem; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+        .sub-aba-btn { background: transparent; color: var(--text-muted); border: none; cursor: pointer; font-size: 0.8rem; padding: 0.25rem 0.5rem; font-weight: 700; text-transform: uppercase; }
+        .sub-aba-btn.active { color: var(--text-main); border-bottom: 2px solid var(--text-main); }
     </style>
 </head>
 <body class="sidebar-aberta">
+
+    <!-- BARRA SUPERIOR DE PROJETOS (WORKSPACES) -->
+    <div class="workspace-bar">
+        <div class="workspace-selector-container">
+            <span class="workspace-label">Foco Operacional:</span>
+            <select id="seletorProjetosGlobal" class="select-workspace" onchange="alternarProjetoAtivo()"></select>
+            <button class="btn-militar-sm" onclick="abrirModalNovoProjeto()">+ Gerenciar Projetos</button>
+        </div>
+        <div style="font-size: 0.7rem; font-weight: bold; color: var(--text-muted); text-transform: uppercase;">
+            Quartel General de Estudos v2.0
+        </div>
+    </div>
 
     <!-- BOTÃO DO MENU FLUTUANTE -->
     <button class="btn-menu-toggle" onclick="toggleSidebar()">☰ MENU</button>
@@ -290,9 +323,9 @@
         
         <header>
             <div class="header-brand">
-                <h1>PROJETO <span>CAVEIRA</span></h1>
+                <h1 id="tituloEditalHeader">PROJETO <span>CAVEIRA</span></h1>
             </div>
-            <div class="header-quote" id="fraseMotivacional">"A FARDA CUSTA CARO, MAS O PREÇO DO FRACASSO É PERMANENTE."</div>
+            <div class="header-quote">"A FARDA CUSTA CARO, MAS O PREÇO DO FRACASSO É PERMANENTE."</div>
         </header>
 
         <!-- ==================== ABA 1: HOME / VISÃO GERAL ==================== -->
@@ -301,12 +334,10 @@
             <!-- EXIBIÇÃO DE PATENTE GAMIFICADA -->
             <div class="patente-header-box">
                 <div class="patente-info">
-                    <p>Hierarquia Funcional de Concurseiro</p>
+                    <p>Hierarquia Funcional do Projeto Ativo</p>
                     <h3 id="patenteNome">Soldado</h3>
                 </div>
-                <div class="patente-proximo-requisito" id="patenteProximoNivel">
-                    Carregando diretrizes...
-                </div>
+                <div class="patente-proximo-requisito" id="patenteProximoNivel">Carregando diretrizes...</div>
             </div>
 
             <div class="kpi-container">
@@ -315,11 +346,11 @@
                     <span class="kpi-value" id="kpiOfensiva">0 Dias</span>
                 </div>
                 <div class="kpi-card">
-                    <span class="kpi-label">Tempo Total de Combate</span>
+                    <span class="kpi-label">Tempo no Edital Atual</span>
                     <span class="kpi-value" id="kpiTempoTotal">00h 00min</span>
                 </div>
                 <div class="kpi-card">
-                    <span class="kpi-label">Aproveitamento Líquido</span>
+                    <span class="kpi-label">Rendimento de Questões</span>
                     <span class="kpi-value" id="kpiDesempenhoQuestoes">0%</span>
                 </div>
                 <div class="kpi-card">
@@ -328,21 +359,21 @@
                 </div>
             </div>
 
-            <!-- CICLO DE ESTUDOS / METAS SEMANAIS -->
+            <!-- CICLO DE ESTUDOS -->
             <div class="card" style="margin-top: 1.25rem;">
-                <h2>📅 Ciclo Operacional Semanal</h2>
+                <h2>📅 Ciclo Operacional Semanal (Deste Projeto)</h2>
                 <div class="input-group-militar" style="border-bottom:none; margin-bottom:0; padding-bottom:0;">
                     <div>
-                        <label>Meta de Horas da Semana</label>
+                        <label>Meta de Horas Semanais</label>
                         <input type="number" id="inputMetaSemanal" value="20" onchange="alterarMetaSemanalHoras()">
                     </div>
                     <div style="flex:2; color:var(--text-muted); font-size:0.75rem; padding-bottom:0.5rem;">
-                        O progresso é atualizado dinamicamente conforme você registra suas missões e estudos no cronômetro.
+                        O progresso abaixo reflete exclusivamente as missões cumpridas no projeto selecionado.
                     </div>
                 </div>
                 <div class="ciclo-progress-container">
                     <div class="ciclo-bar-wrapper">
-                        <span>Progresso da Meta Semanal</span>
+                        <span>Progresso da Meta</span>
                         <span id="textoCicloHoras">0h / 20h</span>
                     </div>
                     <div class="ciclo-track">
@@ -355,14 +386,14 @@
             <div class="dashboard-grid" style="margin-top: 1.25rem;">
                 <div class="left-column">
                     <div class="card">
-                        <h2>Relatório de Disciplinas Alvo</h2>
+                        <h2>Disciplinas Estratégicas do Edital</h2>
                         <div class="materia-table-wrapper">
                             <table class="materia-table">
                                <thead>
                                    <tr>
                                        <th>Disciplina</th>
                                        <th>Horas Líquidas</th>
-                                       <th>Progresso</th>
+                                       <th>Progresso Tópicos</th>
                                        <th>Rendimento</th>
                                    </tr>
                                </thead>
@@ -373,11 +404,11 @@
                 </div>
                 <div class="right-column">
                     <div class="card">
-                        <h2>Diretrizes Estratégicas</h2>
+                        <h2>Diretrizes de Inteligência</h2>
                         <div style="font-size:0.8rem; color:var(--text-muted); line-height: 1.6;">
-                            • Mapeie todos os seus erros no Caderno Dedicado.<br>
-                            • Use os flashcards diariamente para fixar as penas e prazos da Lei de Abuso de Autoridade.<br>
-                            • Não encerre a semana sem preencher totalmente a sua barra de metas.
+                            • Alterne seus projetos na barra superior para focar em outros editais.<br>
+                            • O histórico de horas, revisões e erros é totalmente isolado por projeto.<br>
+                            • Mantenha a consistência diária para evitar o rebaixamento de patente.
                         </div>
                     </div>
                 </div>
@@ -393,7 +424,7 @@
                 </div>
 
                 <div style="background: var(--bg-primary); padding: 1.25rem; border-radius: 4px; border: 1px solid var(--border); margin-bottom: 1.25rem;">
-                    <h4 style="font-size: 0.7rem; color: var(--text-main); text-transform: uppercase; margin-bottom: 0.8rem;">🎯 ALVO OPERACIONAL SELECIONADO</h4>
+                    <h4 style="font-size: 0.7rem; color: var(--text-main); text-transform: uppercase; margin-bottom: 0.8rem;">🎯 ALVO DO PROJETO SELECIONADO</h4>
                     <div class="form-militar-row">
                         <label>Matéria</label>
                         <select id="sessaoMateria" onchange="atualizarSelectAssuntosCronometro()"></select>
@@ -428,7 +459,7 @@
         <!-- ==================== ABA 3: EDITAL VERTICAL ==================== -->
         <div id="abaEdital" class="aba-conteudo">
             <div class="card">
-                <h2>Alimentação do Banco de Dados (Edital)</h2>
+                <h2>Alimentação do Banco de Dados (Edital do Projeto)</h2>
                 <div class="input-group-militar">
                     <div><label>Cadastrar Nova Disciplina</label><input type="text" id="novaMateriaNome" placeholder="Ex: Direito Penal"></div>
                     <button class="btn-militar-add" onclick="adicionarNovaMateria()">+ Matéria</button>
@@ -453,7 +484,7 @@
         <!-- ==================== ABA 5: CADERNO DE ERROS ==================== -->
         <div id="abaCadernoErro" class="aba-conteudo">
             <div class="card">
-                <h2>📔 Alimentar Caderno de Erros (Simulados e Questões)</h2>
+                <h2>📔 Alimentar Caderno de Erros (Deste Projeto)</h2>
                 <div class="input-group-militar">
                     <div>
                         <label>Disciplina Origem</label>
@@ -466,18 +497,14 @@
                 </div>
                 <div class="form-militar-row">
                     <label>Enunciado Simplificado ou Gatilho da Questão</label>
-                    <input type="text" id="errEnunciado" placeholder="Ex: No crime de Abuso de Autoridade, a divergência na interpretação de lei...">
+                    <input type="text" id="errEnunciado" placeholder="Gatilho da questão...">
                 </div>
                 <div class="form-militar-row">
-                    <label>Motivo do Erro / Pegadinha da Banca / Fundamentação Correta</label>
-                    <textarea id="errMotivo" rows="2" placeholder="Ex: Não configura crime de abuso de autoridade (Art. 1º, §2º da Lei 13.869). Confundi achar que qualquer divergência punia."></textarea>
+                    <label>Motivo do Erro / Fundamentação Correta</label>
+                    <textarea id="errMotivo" rows="2" placeholder="Fundamentação jurídica ou pegadinha mapeada..."></textarea>
                 </div>
                 <button class="btn-militar-add" onclick="salvarErroCaderno()">Gravar Erro no Caderno</button>
             </div>
-
-            <!-- FILTRO DE BUSCA DEDICADO -->
-            <div style="margin-bottom: 0.5rem; font-size: 0.75rem; text-transform: uppercase; font-weight: bold; color: var(--text-muted);">Filtrar Erros por Disciplina:</div>
-            <div class="filtro-militar-container" id="filtroErrosContainer"></div>
 
             <div class="card">
                 <h2>📋 Seus Erros Mapeados</h2>
@@ -487,30 +514,23 @@
 
         <!-- ==================== ABA 6: FLASHCARDS ==================== -->
         <div id="abaFlashcards" class="aba-conteudo">
-            
-            <!-- FILTRO DE BUSCA DEDICADO PARA FLASHCARDS -->
-            <div style="margin-bottom: 0.5rem; font-size: 0.75rem; text-transform: uppercase; font-weight: bold; color: var(--text-muted);">Mudar Deck de Foco (Filtrar):</div>
-            <div class="filtro-militar-container" id="filtroFlashcardsContainer"></div>
-
             <div class="dashboard-grid">
                 <div class="left-column">
                     <div class="card">
                         <h2>🗂️ Revisão Ativa por Flashcards</h2>
                         <div id="containerDeckFoco">
-                            <!-- Flashcard Visível -->
                             <div class="flashcard-box" id="caixaFlashcard" onclick="virarFlashcard()">
                                 <div class="flashcard-badge" id="fcBadgeMateria">Disciplina</div>
                                 <div id="fcLadoInfo">
-                                    <div class="flashcard-lado-titulo" id="fcLadoTitulo">FRENTE (PERGUNTA)</div>
-                                    <div class="flashcard-texto" id="fcTextoPrincipal">Cadastre seus primeiros flashcards ao lado para iniciar.</div>
+                                    <div style="font-size: 0.65rem; color: var(--text-muted); font-weight: bold; margin-bottom: 0.5rem;" id="fcLadoTitulo">FRENTE</div>
+                                    <div class="flashcard-texto" id="fcTextoPrincipal">Carregando...</div>
                                 </div>
                             </div>
                             
-                            <!-- Ações de Autoavaliação -->
                             <div class="flashcard-actions" id="fcBotoesAcao" style="display: none;">
-                                <button class="btn-fc-dificil" onclick="avaliarCard(1)">❌ Errei / Difícil</button>
-                                <button class="btn-fc-medio" onclick="avaliarCard(2)">🟡 Quase / Médio</button>
-                                <button class="btn-fc-facil" onclick="avaliarCard(3)">✅ Decorei / Fácil</button>
+                                <button class="btn-fc-dificil" onclick="avaliarCard(1)">❌ Errei</button>
+                                <button class="btn-fc-medio" onclick="avaliarCard(2)">🟡 Médio</button>
+                                <button class="btn-fc-facil" onclick="avaliarCard(3)">✅ Fácil</button>
                             </div>
                         </div>
                     </div>
@@ -524,12 +544,12 @@
                             <select id="fcMateriaSelect"></select>
                         </div>
                         <div class="form-militar-row">
-                            <label>Frente (Pergunta / Gatilho)</label>
-                            <textarea id="fcFrente" rows="2" placeholder="Ex: Qual o prazo da prisão temporária em crimes hediondos?"></textarea>
+                            <label>Frente (Pergunta)</label>
+                            <textarea id="fcFrente" rows="2"></textarea>
                         </div>
                         <div class="form-militar-row">
-                            <label>Verso (Resposta / Lei Seca)</label>
-                            <textarea id="fcVerso" rows="2" placeholder="Ex: 30 dias, prorrogável por igual período (Lei 7.960)."></textarea>
+                            <label>Verso (Resposta)</label>
+                            <textarea id="fcVerso" rows="2"></textarea>
                         </div>
                         <button class="btn-militar-add" style="width: 100%;" onclick="salvarNovoFlashcard()">Criar Card</button>
                     </div>
@@ -539,24 +559,13 @@
 
     </div>
 
-    <!-- MODAL POP-UP (FECHAMENTO DE SESSÃO) -->
+    <!-- MODAL POP-UP: FECHAMENTO DE SESSÃO -->
     <div class="modal-militar-overlay" id="modalRegistroSessao">
         <div class="modal-militar-box">
             <div class="modal-militar-title">Relatório de Fechamento de Missão</div>
-            <div style="font-size: 0.8rem; margin-bottom: 1.25rem; color: var(--text-muted); line-height: 1.5;">
+            <div style="font-size: 0.8rem; margin-bottom: 1.25rem; color: var(--text-muted);">
                 DISCIPLINA: <span id="modalAlvoTexto" style="color: #fff; font-weight: 700;">-</span><br>
                 TEMPO ESTUDADO: <span id="modalTempoTexto" style="color: #fff; font-weight: 700;">-</span>
-            </div>
-
-            <div class="form-militar-row">
-                <label>Método / Tipo de Estudo Predominante</label>
-                <select id="popTipoEstudo">
-                    <option value="PDF">Leitura de PDFs / Livros</option>
-                    <option value="Vídeoaula">Visualização de Vídeoaulas</option>
-                    <option value="Questões">Resolução de Questões Dedicada</option>
-                    <option value="Revisão">Revisão Ativa / Flashcards</option>
-                    <option value="Lei Seca">Estudo da Legislação Seca</option>
-                </select>
             </div>
 
             <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
@@ -566,17 +575,12 @@
 
             <div class="form-militar-row">
                 <label>Agendar Próximas Revisões?</label>
-                <div class="revisao-grid-options">
-                    <label class="revisao-option"><input type="checkbox" value="1" class="checkRevisao"> 24h</label>
-                    <label class="revisao-option"><input type="checkbox" value="7" class="checkRevisao"> 7d</label>
-                    <label class="revisao-option"><input type="checkbox" value="14" class="checkRevisao"> 14d</label>
-                    <label class="revisao-option"><input type="checkbox" value="30" class="checkRevisao"> 30d</label>
+                <div class="revisao-grid-options" style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem;">
+                    <label style="font-size:0.75rem;"><input type="checkbox" value="1" class="checkRevisao"> 24h</label>
+                    <label style="font-size:0.75rem;"><input type="checkbox" value="7" class="checkRevisao"> 7d</label>
+                    <label style="font-size:0.75rem;"><input type="checkbox" value="14" class="checkRevisao"> 14d</label>
+                    <label style="font-size:0.75rem;"><input type="checkbox" value="30" class="checkRevisao"> 30d</label>
                 </div>
-            </div>
-
-            <div class="form-militar-row">
-                <label>Bloco de Notas Estratégicas</label>
-                <textarea id="popAnotacoes" rows="2" placeholder="Bizus rápidos..."></textarea>
             </div>
 
             <div class="modal-militar-actions">
@@ -586,157 +590,232 @@
         </div>
     </div>
 
+    <!-- MODAL DE GESTÃO DE PROJETOS -->
+    <div class="modal-militar-overlay" id="modalGerenciarProjetos">
+        <div class="modal-militar-box">
+            <div class="modal-militar-title">Painel de Controle de Projetos</div>
+            
+            <div style="background: var(--bg-primary); padding: 1rem; border-radius:4px; border: 1px solid var(--border); margin-bottom: 1.25rem;">
+                <h3 style="font-size:0.75rem; text-transform:uppercase; margin-bottom:0.5rem;">⚡ Implantar Novo Projeto (Concurso)</h3>
+                <div class="form-militar-row">
+                    <label>Nome do Projeto Operacional</label>
+                    <input type="text" id="novoProjetoNome" placeholder="Ex: Polícia de São Paulo, PRF, PC-SP">
+                </div>
+                <button class="btn-militar-add" style="width:100%;" onclick="criarNovoProjetoObjeto()">Criar Novo Projeto</button>
+            </div>
+
+            <h3 style="font-size:0.75rem; text-transform:uppercase; margin-bottom:0.5rem; color:var(--text-muted);">Projetos Ativos no Sistema</h3>
+            <div id="listaProjetosGerenciador" style="max-height: 150px; overflow-y:auto; display:flex; flex-direction:column; gap:0.5rem;"></div>
+
+            <div class="modal-militar-actions">
+                <button class="btn-danger" style="background:var(--bg-tertiary); color:#fff;" onclick="fecharModalNovoProjeto()">Fechar</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // ==========================================
-        //  BANCO DE DADOS LOCAL (LOCALSTORAGE)
+        //  ESTRUTURA DE DADOS COMPARTILHADA E ISOLADA
         // ==========================================
-        let bancoDados = {
-            materias: [],
-            revisoesAgendadas: [],
-            historicoSessoes: [],
-            cadernoErros: [],
-            flashcards: [],
-            metaSemanalHoras: 20
+        let globalDB = {
+            projetoAtivoId: "",
+            projetos: [] // Array de Objetos de Projetos Independentes
         };
-
-        // Estados Globais de Filtro
-        let filtroErroAtivo = "TODOS";
-        let filtroFlashcardAtivo = "TODOS";
-
-        let fcIndexAtivo = -1;
-        let fcLadoFrente = true;
 
         let cronometroSegundos = 0;
         let tInterval = null;
         let tRodando = false;
         let sessaoAtivaTemp = { materiaId: '', assuntoId: '', segundos: 0 };
+        let fcIndexAtivo = -1;
+        let fcLadoFrente = true;
 
         window.onload = function() {
-            carregarBancoLocal();
+            carregarBancoCompleto();
+            sincronizarInterfaceProjetos();
             atualizarDashboard();
         };
 
-        function carregarBancoLocal() {
-            const dataLocal = localStorage.getItem('projeto_caveira_db_local');
-            if(dataLocal) {
+        // CARREGA E VALIDA O BACKEND LOCAL
+        function carregarBancoCompleto() {
+            const localData = localStorage.getItem('projeto_caveira_multiprojetos');
+            if (localData) {
                 try {
-                    bancoDados = JSON.parse(dataLocal);
-                    if(!bancoDados.cadernoErros) bancoDados.cadernoErros = [];
-                    if(!bancoDados.flashcards) bancoDados.flashcards = [];
-                    if(!bancoDados.metaSemanalHoras) bancoDados.metaSemanalHoras = 20;
-                    if(!bancoDados.historicoSessoes) bancoDados.historicoSessoes = [];
-                } catch(e) {
-                    console.error("Erro estrutural no banco local, resetando.");
+                    globalDB = JSON.parse(localData);
+                } catch (e) {
+                    console.error("Erro estrutural no banco, reiniciando.");
                 }
+            }
+
+            // Se o banco estiver vazio, cria o primeiro projeto padrão (Polícia de São Paulo)
+            if (!globalDB.projetos || globalDB.projetos.length === 0) {
+                globalDB.projetos = [{
+                    id: "proj_default",
+                    nome: "Polícia de São Paulo",
+                    materias: [],
+                    revisoesAgendadas: [],
+                    historicoSessoes: [],
+                    cadernoErros: [],
+                    flashcards: [],
+                    metaSemanalHoras: 20
+                }];
+                globalDB.projetoAtivoId = "proj_default";
+                salvarBancoCompleto();
+            }
+            if(!globalDB.projetoAtivoId) {
+                globalDB.projetoAtivoId = globalDB.projetos[0].id;
             }
         }
 
-        function salvarProgressoGeral() {
-            localStorage.setItem('projeto_caveira_db_local', JSON.stringify(bancoDados));
+        function salvarBancoCompleto() {
+            localStorage.setItem('projeto_caveira_multiprojetos', JSON.stringify(globalDB));
+        }
+
+        // CAPTURA O WORKSPACE SELECIONADO NA MEMÓRIA
+        function obterProjetoAtivo() {
+            return globalDB.projetos.find(p => p.id === globalDB.projetoAtivoId) || globalDB.projetos[0];
+        }
+
+        // ALTERNA O SISTEMA INTEIRO AO MUDAR O DROPDOWN
+        function alternarProjetoAtivo() {
+            globalDB.projetoAtivoId = document.getElementById('seletorProjetosGlobal').value;
+            salvarBancoCompleto();
+            resetarCronometro();
+            fcIndexAtivo = -1;
             atualizarDashboard();
         }
 
+        // ATUALIZA TODOS OS GRÁFICOS, METAS E TEXTOS DA TELA
+        function atualizarDashboard() {
+            const proj = obterProjetoAtivo();
+            
+            document.getElementById('tituloEditalHeader').innerHTML = `${proj.nome.toUpperCase()} <span>CAVEIRA</span>`;
+            
+            renderizarTabelaHome(proj);
+            renderizarEditalGeral(proj);
+            atualizarSelectsMaterias(proj);
+            renderizarRevisoesEspacadas(proj);
+            renderizarCadernoErros(proj);
+            
+            atualizarKPIs(proj);
+            calcularCicloSemanal(proj);
+            
+            let streak = calcularOfensivaStreak(proj);
+            calcularPatenteMilitar(proj, streak);
+        }
+
+        function sincronizarInterfaceProjetos() {
+            const seletor = document.getElementById('seletorProjetosGlobal');
+            seletor.innerHTML = globalDB.projetos.map(p => `<option value="${p.id}">${p.nome}</option>`).join('');
+            seletor.value = globalDB.projetoAtivoId;
+        }
+
+        // MODAL DE GERENCIAMENTO DE POSTOS
+        function abrirModalNovoProjeto() {
+            document.getElementById('modalGerenciarProjetos').style.display = 'flex';
+            renderizarListaGerenciadorProjetos();
+        }
+        function fecharModalNovoProjeto() { document.getElementById('modalGerenciarProjetos').style.display = 'none'; }
+
+        function criarNovoProjetoObjeto() {
+            const inp = document.getElementById('novoProjetoNome');
+            const nome = inp.value.trim();
+            if (!nome) return alert("Insira uma designação válida para o projeto.");
+
+            const novoProj = {
+                id: "proj_" + Date.now(),
+                nome: nome,
+                materias: [],
+                revisoesAgendadas: [],
+                historicoSessoes: [],
+                cadernoErros: [],
+                flashcards: [],
+                metaSemanalHoras: 20
+            };
+
+            globalDB.projetos.push(novoProj);
+            globalDB.projetoAtivoId = novoProj.id; // Ativa automaticamente o novo projeto
+            salvarBancoCompleto();
+            
+            inp.value = "";
+            sincronizarInterfaceProjetos();
+            fecharModalNovoProjeto();
+            atualizarDashboard();
+        }
+
+        function renderizarListaGerenciadorProjetos() {
+            const container = document.getElementById('listaProjetosGerenciador');
+            container.innerHTML = globalDB.projetos.map(p => `
+                <div style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-secondary); border:1px solid var(--border); padding:0.5rem; border-radius:3px;">
+                    <span style="font-size:0.8rem; font-weight:bold;">${p.nome}</span>
+                    ${globalDB.projetos.length > 1 ? `<button class="btn-delete-item" style="color:#ef4444;" onclick="excluirProjetoObjeto('${p.id}')">DELETAR</button>` : '<span style="font-size:0.6rem; color:var(--text-muted);">PADRÃO</span>'}
+                </div>
+            `).join('');
+        }
+
+        function excluirProjetoObjeto(id) {
+            if(confirm("ATENÇÃO: Deletar este projeto apagará definitivamente todas as horas, matérias, erros e flashcards vinculados a ele. Confirma?")) {
+                globalDB.projetos = globalDB.projetos.filter(p => p.id !== id);
+                if (globalDB.projetoAtivoId === id) {
+                    globalDB.projetoAtivoId = globalDB.projetos[0].id;
+                }
+                salvarBancoCompleto();
+                sincronizarInterfaceProjetos();
+                renderizarListaGerenciadorProjetos();
+                atualizarDashboard();
+            }
+        }
+
+        // ==========================================
+        //  CONTROLE DE ABAS E SIDEBAR
+        // ==========================================
         function toggleSidebar() {
             const sb = document.getElementById('sidebarTatica');
             const body = document.body;
-            if(sb.classList.contains('open')) {
-                sb.classList.remove('open');
-                body.classList.remove('sidebar-aberta');
-            } else {
-                sb.classList.add('open');
-                body.classList.add('sidebar-aberta');
-            }
+            if(sb.classList.contains('open')) { sb.classList.remove('open'); body.classList.remove('sidebar-aberta'); }
+            else { sb.classList.add('open'); body.classList.add('sidebar-aberta'); }
         }
 
         function trocarAba(idAba, idLink) {
             document.querySelectorAll('.aba-conteudo').forEach(aba => aba.classList.remove('aba-ativa'));
             document.querySelectorAll('.sidebar button').forEach(lnk => lnk.classList.remove('active-link'));
-
             document.getElementById(idAba).classList.add('aba-ativa');
-            const el = document.getElementById(idLink);
-            if(el) el.classList.add('active-link');
+            if(document.getElementById(idLink)) document.getElementById(idLink).classList.add('active-link');
             
-            if(idAba === 'abaFlashcards') {
-                fcIndexAtivo = -1;
-                proximoFlashcard();
-            }
-
+            if(idAba === 'abaFlashcards') { fcIndexAtivo = -1; proximoFlashcard(); }
             atualizarDashboard();
         }
 
-        function atualizarDashboard() {
-            renderizarTabelaHome();
-            renderizarEditalGeral();
-            atualizarSelectsMaterias();
-            renderizarRevisoesEspacadas();
-            
-            renderizarFiltrosBotoes(); 
-            renderizarCadernoErros();
-            
-            atualizarKPIs();
-            calcularCicloSemanal();
-            
-            // A ordem aqui importa: calcula a ofensiva e depois processa a Patente
-            let streakAtual = calcularOfensivaStreak();
-            calcularPatenteMilitar(streakAtual);
-        }
-
         // ==========================================
-        //  FUNCIONALIDADE: CONTROLE DE OFENSIVA (STREAK)
+        //  CÁLCULO DINÂMICO DE OFENSIVA E PATENTES
         // ==========================================
-        function calcularOfensivaStreak() {
-            if (!bancoDados.historicoSessoes || bancoDados.historicoSessoes.length === 0) {
-                document.getElementById('kpiOfensiva').innerText = "0 Dias";
-                return 0;
+        function calcularOfensivaStreak(proj) {
+            if (!proj.historicoSessoes || proj.historicoSessoes.length === 0) {
+                document.getElementById('kpiOfensiva').innerText = "0 Dias"; return 0;
             }
-
-            let datasEstudo = bancoDados.historicoSessoes.map(s => {
-                let d = new Date(s.timestamp);
-                return d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+            let datas = proj.historicoSessoes.map(s => {
+                let d = new Date(s.timestamp); return d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
             });
+            datas = [...new Set(datas)].sort((a, b) => new Date(b) - new Date(a));
             
-            datasEstudo = [...new Set(datasEstudo)].sort((a, b) => new Date(b) - new Date(a));
+            let hoje = new Date(); let sHoje = hoje.getFullYear() + "-" + (hoje.getMonth() + 1) + "-" + hoje.getDate();
+            let ontem = new Date(); ontem.setDate(hoje.getDate() - 1); let sOntem = ontem.getFullYear() + "-" + (ontem.getMonth() + 1) + "-" + ontem.getDate();
 
-            let hoje = new Date();
-            let stringHoje = hoje.getFullYear() + "-" + (hoje.getMonth() + 1) + "-" + hoje.getDate();
-            
-            let ontem = new Date();
-            ontem.setDate(hoje.getDate() - 1);
-            let stringOntem = ontem.getFullYear() + "-" + (ontem.getMonth() + 1) + "-" + ontem.getDate();
-
-            if (!datasEstudo.includes(stringHoje) && !datasEstudo.includes(stringOntem)) {
-                document.getElementById('kpiOfensiva').innerText = "0 Dias";
-                return 0;
+            if (!datas.includes(sHoje) && !datas.includes(sOntem)) {
+                document.getElementById('kpiOfensiva').innerText = "0 Dias"; return 0;
             }
-
-            let streak = 0;
-            let dataVerificacao = datasEstudo.includes(stringHoje) ? hoje : ontem;
-
+            let streak = 0; let check = datas.includes(sHoje) ? hoje : ontem;
             while (true) {
-                let stringVerificacao = dataVerificacao.getFullYear() + "-" + (dataVerificacao.getMonth() + 1) + "-" + dataVerificacao.getDate();
-                if (datasEstudo.includes(stringVerificacao)) {
-                    streak++;
-                    dataVerificacao.setDate(dataVerificacao.getDate() - 1);
-                } else {
-                    break;
-                }
+                let sCheck = check.getFullYear() + "-" + (check.getMonth() + 1) + "-" + check.getDate();
+                if (datas.includes(sCheck)) { streak++; check.setDate(check.getDate() - 1); } else { break; }
             }
-
             document.getElementById('kpiOfensiva').innerText = streak === 1 ? "1 Dia" : `${streak} Dias`;
             return streak;
         }
 
-        // ==========================================
-        //  FUNCIONALIDADE: SISTEMA DE PATENTES (GAMIFICAÇÃO)
-        // ==========================================
-        function calcularPatenteMilitar(streak) {
-            let tempoTotalSegundos = 0;
-            if(bancoDados.materias) {
-                bancoDados.materias.forEach(m => { tempoTotalSegundos += (m.tempoSegundos || 0); });
-            }
-            const horasTotais = tempoTotalSegundos / 3600;
+        function calcularPatenteMilitar(proj, streak) {
+            let tSeg = 0; proj.materias.forEach(m => { tSeg += (m.tempoSegundos || 0); });
+            const horas = tSeg / 3600;
 
-            // Definição da hierarquia do Exército Brasileiro aplicada aos estudos
             const patentes = [
                 { nome: "Soldado",           horas: 0,   ofensiva: 0 },
                 { nome: "Cabo",              horas: 5,   ofensiva: 2 },
@@ -752,308 +831,100 @@
                 { nome: "Coronel (Caveira)", horas: 420, ofensiva: 40 }
             ];
 
-            let patenteAtual = patentes[0];
-
-            // Varre a lista para encontrar a maior patente cujos REQUISITOS FORAM PREENCHIDOS SIMULTANEAMENTE
+            let atual = patentes[0];
             for (let i = 0; i < patentes.length; i++) {
-                if (horasTotais >= patentes[i].horas && streak >= patentes[i].ofensiva) {
-                    patenteAtual = patentes[i];
-                } else {
-                    break; 
-                }
+                if (horas >= patentes[i].horas && streak >= patentes[i].ofensiva) { atual = patentes[i]; } else { break; }
             }
-
-            // Atualiza os elementos visuais na aba Visão Geral
-            document.getElementById('patenteNome').innerText = patenteAtual.nome;
-
-            let idxAtual = patentes.indexOf(patenteAtual);
-            if (idxAtual < patentes.length - 1) {
-                let proxima = patentes[idxAtual + 1];
-                let faltaHoras = Math.max(0, proxima.horas - horasTotais).toFixed(1);
-                let faltaOfensiva = Math.max(0, proxima.ofensiva - streak);
-
-                let msgRequisitos = [];
-                if (faltaHoras > 0) msgRequisitos.push(`-${faltaHoras}h de estudo`);
-                if (faltaOfensiva > 0) msgRequisitos.push(`-${faltaOfensiva} dias de ofensiva`);
-
-                document.getElementById('patenteProximoNivel').innerHTML = `
-                    Próxima Patente: <span style="color:var(--accent); font-weight:800;">${proxima.nome}</span><br>
-                    <span style="color:var(--text-muted); font-size:0.7rem;">Falta: ${msgRequisitos.join(' e ')}</span>
-                `;
+            document.getElementById('patenteNome').innerText = atual.nome;
+            let idx = patentes.indexOf(atual);
+            if (idx < patentes.length - 1) {
+                let prox = patentes[idx + 1];
+                document.getElementById('patenteProximoNivel').innerHTML = `Próxima Patente: <span style="color:var(--accent);">${prox.nome}</span><br><span style="color:var(--text-muted); font-size:0.7rem;">Faltam ${(prox.horas - horas).toFixed(1)}h e ${Math.max(0, prox.ofensiva - streak)}d de ofensiva</span>`;
             } else {
-                document.getElementById('patenteProximoNivel').innerHTML = `
-                    <span style="color:var(--gold); font-weight:900;">👑 TOPO DA HIERARQUIA ALCANÇADO</span><br>
-                    <span style="color:var(--text-muted); font-size:0.7rem;">Você é um Coronel com autoridade total.</span>
-                `;
+                document.getElementById('patenteProximoNivel').innerHTML = `<span style="color:var(--gold);">👑 CORONEL DO EDITAL</span>`;
             }
         }
 
         // ==========================================
-        //  FUNCIONALIDADE: FILTROS DINÂMICOS
+        //  GESTÃO DE EDITAL E DISCIPLINAS
         // ==========================================
-        function renderizarFiltrosBotoes() {
-            const cErros = document.getElementById('filtroErrosContainer');
-            const cFlash = document.getElementById('filtroFlashcardsContainer');
-            
-            if(!bancoDados.materias) return;
-
-            let htmlBotoesErro = `<button class="btn-filtro-tag ${filtroErroAtivo === 'TODOS' ? 'ativo' : ''}" onclick="mudarFiltroData('erro', 'TODOS')">VER TODOS</button>`;
-            let htmlBotoesFlash = `<button class="btn-filtro-tag ${filtroFlashcardAtivo === 'TODOS' ? 'ativo' : ''}" onclick="mudarFiltroData('flash', 'TODOS')">VER TODOS</button>`;
-
-            bancoDados.materias.forEach(m => {
-                htmlBotoesErro += `<button class="btn-filtro-tag ${filtroErroAtivo === m.nome ? 'ativo' : ''}" onclick="mudarFiltroData('erro', '${m.nome}')">${m.nome}</button>`;
-                htmlBotoesFlash += `<button class="btn-filtro-tag ${filtroFlashcardAtivo === m.nome ? 'ativo' : ''}" onclick="mudarFiltroData('flash', '${m.nome}')">${m.nome}</button>`;
-            });
-
-            if(cErros) cErros.innerHTML = htmlBotoesErro;
-            if(cFlash) cFlash.innerHTML = htmlBotoesFlash;
-        }
-
-        function mudarFiltroData(tipo, mNome) {
-            if(tipo === 'erro') {
-                filtroErroAtivo = mNome;
-                renderizarFiltrosBotoes();
-                renderizarCadernoErros();
-            } else {
-                filtroFlashcardAtivo = mNome;
-                renderizarFiltrosBotoes();
-                fcIndexAtivo = -1;
-                proximoFlashcard();
-            }
-        }
-
-        // ==========================================
-        //  FUNCIONALIDADE: CICLO OPERACIONAL / METAS
-        // ==========================================
-        function abrirAbaConfig() {
-            document.getElementById('modalConfigMeta').style.display = 'flex';
-        }
-        function fecharAbaConfig() {
-            document.getElementById('modalConfigMeta').style.display = 'none';
-        }
-
         function alterarMetaSemanalHoras() {
-            const val = parseInt(document.getElementById('inputMetaSemanal').value) || 20;
-            bancoDados.metaSemanalHoras = val;
-            salvarProgressoGeral();
+            const proj = obterProjetoAtivo();
+            proj.metaSemanalHoras = parseInt(document.getElementById('inputMetaSemanal').value) || 20;
+            salvarBancoCompleto();
+            calcularCicloSemanal(proj);
         }
 
-        function calcularCicloSemanal() {
-            let tempoTotalSegundos = 0;
-            if(bancoDados.materias) {
-                bancoDados.materias.forEach(m => { tempoTotalSegundos += (m.tempoSegundos || 0); });
-            }
-
-            const horasEstudadas = tempoTotalSegundos / 3600;
-            const metaHoras = bancoDados.metaSemanalHoras;
-            let pct = metaHoras > 0 ? Math.round((horasEstudadas / metaHoras) * 100) : 0;
-            if(pct > 100) pct = 100;
-
-            document.getElementById('textoCicloHoras').innerText = `${horasEstudadas.toFixed(1)}h / ${metaHoras}h`;
+        function calcularCicloSemanal(proj) {
+            let tSeg = 0; proj.materias.forEach(m => { tSeg += (m.tempoSegundos || 0); });
+            const hEstudadas = tSeg / 3600; const mHoras = proj.metaSemanalHoras;
+            let pct = mHoras > 0 ? Math.min(100, Math.round((hEstudadas / mHoras) * 100)) : 0;
+            document.getElementById('textoCicloHoras').innerText = `${hEstudadas.toFixed(1)}h / ${mHoras}h`;
             document.getElementById('barraCicloFill').style.width = pct + '%';
             document.getElementById('barraCicloPct').innerText = pct + '%';
+            document.getElementById('inputMetaSemanal').value = mHoras;
         }
 
-        // ==========================================
-        //  FUNCIONALIDADE: CADERNO DE ERROS
-        // ==========================================
-        function atualizarSelectAssuntosErro() {
-            const matId = document.getElementById('errMateriaSelect').value;
-            const selectAssunto = document.getElementById('errAssuntoSelect');
-            if(!selectAssunto || !matId) return;
-            const m = bancoDados.materias.find(x => x.id === matId);
-            if(m && m.topicos && m.topicos.length > 0) {
-                selectAssunto.innerHTML = m.topicos.map(t => `<option value="${t.id}">${t.nome}</option>`).join('');
-            } else {
-                selectAssunto.innerHTML = `<option value="">-- Tópico Geral --</option>`;
-            }
+        function adicionarNovaMateria() {
+            const proj = obterProjetoAtivo();
+            const inp = document.getElementById('novaMateriaNome'); const n = inp.value.trim(); if(!n) return;
+            proj.materias.push({ id:"m_"+Date.now(), nome:n, tempoSegundos:0, questoesFeitas:0, questoesAcertadas:0, topicos:[] });
+            salvarBancoCompleto(); inp.value = ""; atualizarDashboard();
         }
 
-        function salvarErroCaderno() {
-            const matId = document.getElementById('errMateriaSelect').value;
-            const assId = document.getElementById('errAssuntoSelect').value;
-            const enunciado = document.getElementById('errEnunciado').value.trim();
-            const motivo = document.getElementById('errMotivo').value.trim();
-
-            if(!matId || !enunciado || !motivo) return alert("Preencha todos os campos operacionais do erro.");
-
-            const matNome = bancoDados.materias.find(m => m.id === matId)?.nome || "Geral";
-            const mObj = bancoDados.materias.find(m => m.id === matId);
-            const assNome = mObj?.topicos?.find(t => t.id === assId)?.nome || "Geral/Tópico não definido";
-
-            bancoDados.cadernoErros.push({
-                id: "err_" + Date.now(),
-                materiaId: matId,
-                materiaNome: matNome,
-                assuntoNome: assNome,
-                enunciado: enunciado,
-                motivo: motivo,
-                data: new Date().toLocaleDateString('pt-BR')
-            });
-
-            salvarProgressoGeral();
-            document.getElementById('errEnunciado').value = "";
-            document.getElementById('errMotivo').value = "";
+        function adicionarNovoAssunto() {
+            const proj = obterProjetoAtivo();
+            const idM = document.getElementById('selectMateriaAlvo').value; const inp = document.getElementById('novoAssuntoNome'); const n = inp.value.trim(); if(!idM || !n) return;
+            const m = proj.materias.find(x => x.id === idM);
+            if(m) { if(!m.topicos) m.topicos = []; m.topicos.push({ id:"t_"+Date.now(), nome:n, concluido:false }); salvarBancoCompleto(); inp.value = ""; atualizarDashboard(); }
         }
 
-        function renderizarCadernoErros() {
-            const container = document.getElementById('containerListaErros');
-            if(!container) return;
-            
-            if(!bancoDados.cadernoErros || bancoDados.cadernoErros.length === 0) {
-                container.innerHTML = `<p style="color:var(--text-muted); font-size:0.8rem;">Nenhum erro registrado até o momento.</p>`;
-                return;
-            }
+        function marcarConclusaoTopico(mId, tId) {
+            const proj = obterProjetoAtivo();
+            const m = proj.materias.find(x=>x.id===mId); if(m && m.topicos) { const t = m.topicos.find(y=>y.id===tId); if(t) t.concluido = !t.concluido; }
+            salvarBancoCompleto(); atualizarDashboard();
+        }
 
-            let errosFiltrados = bancoDados.cadernoErros;
-            if (filtroErroAtivo !== "TODOS") {
-                errosFiltrados = bancoDados.cadernoErros.filter(e => e.materiaNome === filtroErroAtivo);
-            }
+        function excluirMateria(id) { if(confirm("Deseja expurgar esta disciplina?")) { const proj = obterProjetoAtivo(); proj.materias = proj.materias.filter(m=>m.id!==id); salvarBancoCompleto(); atualizarDashboard(); } }
+        function excluirTopico(mId, tId) { const proj = obterProjetoAtivo(); const m = proj.materias.find(x=>x.id===mId); if(m && m.topicos) { m.topicos = m.topicos.filter(t=>t.id!==tId); salvarBancoCompleto(); atualizarDashboard(); } }
 
-            if(errosFiltrados.length === 0) {
-                container.innerHTML = `<p style="color:var(--text-muted); font-size:0.8rem;">Nenhum erro localizado para a disciplina "${filtroErroAtivo}".</p>`;
-                return;
-            }
+        function renderizarTabelaHome(proj) {
+            const corpo = document.getElementById('tabelaMateriasCorpo'); if(!corpo) return;
+            if(!proj.materias || proj.materias.length === 0) { corpo.innerHTML = '<tr><td colspan="4">Nenhuma disciplina cadastrada neste projeto.</td></tr>'; return; }
+            corpo.innerHTML = proj.materias.map(m => {
+                const tot = m.topicos ? m.topicos.length : 0; const conc = m.topicos ? m.topicos.filter(t=>t.concluido).length : 0;
+                return `<tr><td style="font-weight:700;">${m.nome}</td><td style="font-family:monospace;">${Math.floor((m.tempoSegundos||0)/3600)}h ${Math.floor(((m.tempoSegundos||0)%3600)/60)}min</td><td>${conc}/${tot}</td><td><span class="badge-pct">${(m.questoesFeitas||0)>0?Math.round(((m.questoesAcertadas||0)/(m.questoesFeitas||0))*100):0}% acertos</span></td></tr>`;
+            }).join('');
+        }
 
-            container.innerHTML = errosFiltrados.map(err => `
-                <div class="erro-card-item">
-                    <div class="erro-card-meta">
-                        <span>💀 ${err.materiaNome} ➔ ${err.assuntoNome}</span>
-                        <div>
-                            <span style="margin-right:10px;">${err.data}</span>
-                            <span style="cursor:pointer; color:#ef4444;" onclick="excluirErroDoCaderno('${err.id}')">✖ EXPURGAR</span>
-                        </div>
+        function renderizarEditalGeral(proj) {
+            const c = document.getElementById('editalContainer'); if(!c) return;
+            if(!proj.materias || proj.materias.length === 0) { c.innerHTML = '<p style="color:var(--text-muted); font-size:0.8rem;">Cadastre disciplinas acima.</p>'; return; }
+            c.innerHTML = proj.materias.map(m => `
+                <div style="margin-bottom:1rem; background:var(--bg-primary); border:1px solid var(--border); padding:1rem; border-radius:4px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:5px; margin-bottom:5px;">
+                        <h3 style="font-size:0.8rem; text-transform:uppercase;">${m.nome}</h3><button class="btn-delete-item" onclick="excluirMateria('${m.id}')">✖ DELETAR MATÉRIA</button>
                     </div>
-                    <div class="erro-card-enunciado">${err.enunciado}</div>
-                    <div class="erro-card-motivo"><strong>Foco na Correção:</strong> ${err.motivo}</div>
+                    ${m.topicos ? m.topicos.map(t => `<div class="checklist-item"><div class="checklist-checkbox-wrapper"><input type="checkbox" class="checklist-checkbox" ${t.concluido?'checked':''} onchange="marcarConclusaoTopico('${m.id}','${t.id}')"><span style="${t.concluido?'text-decoration:line-through; color:var(--text-muted);':''}">${t.nome}</span></div><button class="btn-delete-item" onclick="excluirTopico('${m.id}','${t.id}')">🗑️</button></div>`).join('') : ''}
                 </div>
             `).join('');
         }
 
-        function excluirErroDoCaderno(id) {
-            if(confirm("Deseja deletar este registro de erro?")) {
-                bancoDados.cadernoErros = bancoDados.cadernoErros.filter(e => e.id !== id);
-                salvarProgressoGeral();
-            }
-        }
-
         // ==========================================
-        //  FUNCIONALIDADE: FLASHCARDS
-        // ==========================================
-        function salvarNovoFlashcard() {
-            const matId = document.getElementById('fcMateriaSelect').value;
-            const frente = document.getElementById('fcFrente').value.trim();
-            const verso = document.getElementById('fcVerso').value.trim();
-
-            if(!matId || !frente || !verso) return alert("Preencha a disciplina, frente e verso do flashcard.");
-
-            const matNome = bancoDados.materias.find(m => m.id === matId)?.nome || "Geral";
-
-            bancoDados.flashcards.push({
-                id: "fc_" + Date.now(),
-                materiaNome: matNome,
-                frente: frente,
-                verso: verso,
-                nivelRevisao: 0
-            });
-
-            salvarProgressoGeral();
-            document.getElementById('fcFrente').value = "";
-            document.getElementById('fcVerso').value = "";
-            alert("Card injetado com sucesso no deck!");
-            if(fcIndexAtivo === -1) proximoFlashcard();
-        }
-
-        function proximoFlashcard() {
-            if(!bancoDados.flashcards || bancoDados.flashcards.length === 0) {
-                document.getElementById('fcTextoPrincipal').innerText = "Cadastre seus primeiros flashcards ao lado para iniciar.";
-                document.getElementById('fcBadgeMateria').innerText = "Vazio";
-                document.getElementById('fcBotoesAcao').style.display = 'none';
-                return;
-            }
-
-            let deckFiltrado = bancoDados.flashcards;
-            if (filtroFlashcardAtivo !== "TODOS") {
-                deckFiltrado = bancoDados.flashcards.filter(f => f.materiaNome === filtroFlashcardAtivo);
-            }
-
-            if(deckFiltrado.length === 0) {
-                document.getElementById('fcTextoPrincipal').innerText = `Nenhum card cadastrado no deck de "${filtroFlashcardAtivo}".`;
-                document.getElementById('fcBadgeMateria').innerText = filtroFlashcardAtivo;
-                document.getElementById('fcBotoesAcao').style.display = 'none';
-                return;
-            }
-
-            let randomIdx = Math.floor(Math.random() * deckFiltrado.length);
-            let cardSelecionado = deckFiltrado[randomIdx];
-            
-            fcIndexAtivo = bancoDados.flashcards.findIndex(f => f.id === cardSelecionado.id);
-            fcLadoFrente = true;
-
-            exibirCardAtual();
-        }
-
-        function exibirCardAtual() {
-            const card = bancoDados.flashcards[fcIndexAtivo];
-            if(!card) return;
-
-            document.getElementById('fcBadgeMateria').innerText = card.materiaNome;
-            document.getElementById('fcBotoesAcao').style.display = 'none';
-
-            if(fcLadoFrente) {
-                document.getElementById('fcLadoTitulo').innerText = "FRENTE (PERGUNTA) - CLIQUE PARA VIRAR";
-                document.getElementById('fcTextoPrincipal').innerText = card.frente;
-                document.getElementById('caixaFlashcard').style.borderColor = "var(--border)";
-            } else {
-                document.getElementById('fcLadoTitulo').innerText = "VERSO (RESPOSTA) - AUTOAVALIAÇÃO";
-                document.getElementById('fcTextoPrincipal').innerText = card.verso;
-                document.getElementById('caixaFlashcard').style.borderColor = "var(--accent)";
-                document.getElementById('fcBotoesAcao').style.display = 'grid';
-            }
-        }
-
-        function virarFlashcard() {
-            if(fcIndexAtivo === -1) return;
-            fcLadoFrente = !fcLadoFrente;
-            exibirCardAtual();
-        }
-
-        function avaliarCard(nivel) {
-            if(bancoDados.flashcards[fcIndexAtivo]) {
-                bancoDados.flashcards[fcIndexAtivo].nivelRevisao = nivel;
-            }
-            salvarProgressoGeral();
-            proximoFlashcard();
-        }
-
-        // ==========================================
-        //  CRONÔMETRO DE ESTUDO
+        //  CRONÔMETRO DE ESTUDO POR PROJETO
         // ==========================================
         function mudarModoLancamento(modo) {
-            document.getElementById('subBtnCronometro').classList.remove('active');
-            document.getElementById('subBtnManual').classList.remove('active');
-            document.getElementById('containerModoRelogio').style.display = 'none';
-            document.getElementById('containerModoManual').style.display = 'none';
-
-            if(modo === 'modoRelogio') {
-                document.getElementById('subBtnCronometro').classList.add('active');
-                document.getElementById('containerModoRelogio').style.display = 'block';
-            } else {
-                document.getElementById('subBtnManual').classList.add('active');
-                document.getElementById('containerModoManual').style.display = 'block';
-            }
+            document.getElementById('subBtnCronometro').classList.remove('active'); document.getElementById('subBtnManual').classList.remove('active');
+            document.getElementById('containerModoRelogio').style.display = 'none'; document.getElementById('containerModoManual').style.display = 'none';
+            if(modo === 'modoRelogio') { document.getElementById('subBtnCronometro').classList.add('active'); document.getElementById('containerModoRelogio').style.display = 'block'; }
+            else { document.getElementById('subBtnManual').classList.add('active'); document.getElementById('containerModoManual').style.display = 'block'; }
         }
 
         function alternarCronometro() {
             const btn = document.getElementById('btnPlayPause');
-            if(tRodando) {
-                clearInterval(tInterval);
-                btn.innerText = "Iniciar Foco"; btn.className = "btn-success";
-            } else {
-                tInterval = setInterval(() => { 
-                    cronometroSegundos++; 
-                    document.getElementById('timerVisual').innerText = formatadorMilitarTempo(cronometroSegundos); 
-                }, 1000);
+            if(tRodando) { clearInterval(tInterval); btn.innerText = "Iniciar Foco"; btn.className = "btn-success"; }
+            else {
+                tInterval = setInterval(() => { cronometroSegundos++; document.getElementById('timerVisual').innerText = `${Math.floor(cronometroSegundos/3600).toString().padStart(2,'0')}:${Math.floor((cronometroSegundos%3600)/60).toString().padStart(2,'0')}:${(cronometroSegundos%60).toString().padStart(2,'0')}`; }, 1000);
                 btn.innerText = "Pausar"; btn.className = "btn-danger";
             }
             tRodando = !tRodando;
@@ -1062,188 +933,147 @@
         function resetarCronometro() {
             clearInterval(tInterval); tRodando = false; cronometroSegundos = 0;
             document.getElementById('timerVisual').innerText = "00:00:00";
-            document.getElementById('btnPlayPause').innerText = "Iniciar Foco";
-            document.getElementById('btnPlayPause').className = "btn-success";
+            const btn = document.getElementById('btnPlayPause'); if(btn) { btn.innerText = "Iniciar Foco"; btn.className = "btn-success"; }
         }
 
         function dispararRegistroSessao(isManual) {
-            const matId = document.getElementById('sessaoMateria').value;
-            const assId = document.getElementById('sessaoAssunto').value;
-            let segs = 0;
-
-            if(!matId) return alert("Selecione uma disciplina base.");
-
+            const proj = obterProjetoAtivo(); const matId = document.getElementById('sessaoMateria').value; const assId = document.getElementById('sessaoAssunto').value;
+            let segs = 0; if(!matId) return alert("Selecione uma disciplina base.");
             if(isManual) {
-                const h = parseInt(document.getElementById('manualHoras').value) || 0;
-                const m = parseInt(document.getElementById('manualMinutos').value) || 0;
-                segs = (h * 3600) + (m * 60);
-                if(segs <= 0) return alert("Defina um tempo de estudo válido.");
-            } else {
-                segs = cronometroSegundos;
-                if(segs < 5) return alert("Tempo de estudo muito curto para registro.");
-            }
-
-            const matNome = bancoDados.materias.find(m => m.id === matId)?.nome || "Geral";
-            sessaoAtivaTemp = { materiaId: matId, assuntoId: assId, segundos: segs };
-
+                const h = parseInt(document.getElementById('manualHoras').value) || 0; const m = parseInt(document.getElementById('manualMinutos').value) || 0;
+                segs = (h * 3600) + (m * 60); if(segs <= 0) return alert("Defina um tempo válido.");
+            } else { segs = cronometroSegundos; if(segs < 5) return alert("Tempo muito curto para registro."); }
+            
+            const matNome = proj.materias.find(m => m.id === matId)?.nome || "Geral";
+            sessaoAtivaTemp = { mId: matId, aId: assId, segundos: segs };
             document.getElementById('modalAlvoTexto').innerText = matNome;
-            document.getElementById('modalTempoTexto').innerText = formatadorMilitarTextoBreve(segs);
+            document.getElementById('modalTempoTexto').innerText = `${Math.floor(segs/3600)}h ${Math.floor((segs%3600)/60)}min`;
             document.getElementById('modalRegistroSessao').style.display = 'flex';
         }
 
         function fecharModalSessao() { document.getElementById('modalRegistroSessao').style.display = 'none'; }
 
         function salvarRelatorioSessaoFinal() {
-            const qFeitas = parseInt(document.getElementById('popQuestoesFeitas').value) || 0;
-            const qAcertadas = parseInt(document.getElementById('popQuestoesAcertadas').value) || 0;
-            const tipoEstudo = document.getElementById('popTipoEstudo').value;
-            const anotacoesTxt = document.getElementById('popAnotacoes').value.trim();
+            const proj = obterProjetoAtivo();
+            const qF = parseInt(document.getElementById('popQuestoesFeitas').value) || 0; const qA = parseInt(document.getElementById('popQuestoesAcertadas').value) || 0;
+            if(qA > qF) return alert("Acertos maiores que o total.");
 
-            if(qAcertadas > qFeitas) return alert("Acertos não podem superar o total de questões.");
-
-            const m = bancoDados.materias.find(m => m.id === sessaoAtivaTemp.materiaId);
+            const m = proj.materias.find(x => x.id === sessaoAtivaTemp.mId);
             if(m) {
                 m.tempoSegundos = (m.tempoSegundos || 0) + sessaoAtivaTemp.segundos;
-                m.questoesFeitas = (m.questoesFeitas || 0) + qFeitas;
-                m.questoesAcertadas = (m.questoesAcertadas || 0) + qAcertadas;
+                m.questoesFeitas = (m.questoesFeitas || 0) + qF; m.questoesAcertadas = (m.questoesAcertadas || 0) + qA;
                 
-                const assObj = m.topicos ? m.topicos.find(t => t.id === sessaoAtivaTemp.assuntoId) : null;
-                const nomeAss = assObj ? assObj.nome : "Tópico Geral";
-
-                bancoDados.historicoSessoes.push({
-                    timestamp: Date.now(),
-                    materiaId: sessaoAtivaTemp.materiaId,
-                    materiaNome: m.nome,
-                    segundos: sessaoAtivaTemp.segundos,
-                    questoesFeitas: qFeitas,
-                    questoesAcertadas: qAcertadas
-                });
-
+                proj.historicoSessoes.push({ timestamp: Date.now(), materiaId: m.id, materiaNome: m.nome, segundos: sessaoAtivaTemp.segundos, questoesFeitas: qF, questoesAcertadas: qA });
+                
+                const aObj = m.topicos ? m.topicos.find(t => t.id === sessaoAtivaTemp.aId) : null; const nA = aObj ? aObj.nome : "Geral";
                 document.querySelectorAll('.checkRevisao:checked').forEach(cb => {
-                    const dias = parseInt(cb.value);
-                    const dataAlvo = new Date();
-                    dataAlvo.setDate(dataAlvo.getDate() + dias);
-                    bancoDados.revisoesAgendadas.push({
-                        id: "rev_" + Date.now() + "_" + Math.random().toString(36).substr(2, 5),
-                        materiaNome: m.nome,
-                        assuntoNome: nomeAss,
-                        tipoCiclo: dias + "d",
-                        dataLimite: dataAlvo.toLocaleDateString('pt-BR')
-                    });
+                    const dias = parseInt(cb.value); const dAlvo = new Date(); dAlvo.setDate(dAlvo.getDate() + dias);
+                    proj.revisoesAgendadas.push({ id: "rev_"+Date.now()+"_"+Math.random().toString(36).substr(2,5), materiaNome: m.nome, assuntoNome: nA, tipoCiclo: dias+"d", dataLimite: dAlvo.toLocaleDateString('pt-BR') });
                 });
             }
-
-            salvarProgressoGeral();
-            fecharModalSessao();
-            resetarCronometro();
+            salvarBancoCompleto(); fecharModalSessao(); resetarCronometro(); atualizarDashboard();
         }
 
         // ==========================================
-        //  AUXILIARES, FORMATAÇÃO E EDITAL
+        //  CADERNO DE ERROS E REVISÕES
         // ==========================================
-        function formatadorMilitarTempo(s) { return `${Math.floor(s/3600).toString().padStart(2,'0')}:${Math.floor((s%3600)/60).toString().padStart(2,'0')}:${(s%60).toString().padStart(2,'0')}`; }
-        function formatadorMilitarTextoBreve(s) { return `${Math.floor(s/3600)}h ${Math.floor((s%3600)/60)}min`; }
-
-        function atualizarSelectsMaterias() {
-            const sEdital = document.getElementById('selectMateriaAlvo');
-            const sCron = document.getElementById('sessaoMateria');
-            const sErro = document.getElementById('errMateriaSelect');
-            const sFc = document.getElementById('fcMateriaSelect');
-
-            if(!bancoDados.materias) return;
-            const opcoes = bancoDados.materias.map(m => `<option value="${m.id}">${m.nome}</option>`).join('');
+        function salvarErroCaderno() {
+            const proj = obterProjetoAtivo(); const mId = document.getElementById('errMateriaSelect').value; const aId = document.getElementById('errAssuntoSelect').value;
+            const en = document.getElementById('errEnunciado').value.trim(); const mot = document.getElementById('errMotivo').value.trim();
+            if(!mId || !en || !mot) return alert("Preencha todos os dados básicos.");
             
-            if(sEdital) sEdital.innerHTML = opcoes;
-            if(sCron) { const v = sCron.value; sCron.innerHTML = opcoes; if(v) sCron.value = v; }
+            const mObj = proj.materias.find(x => x.id === mId); const aNome = mObj?.topicos?.find(t => t.id === aId)?.nome || "Geral";
+            proj.cadernoErros.push({ id: "err_"+Date.now(), materiaNome: mObj.nome, assuntoNome: aNome, enunciado: en, motivo: mot, data: new Date().toLocaleDateString('pt-BR') });
+            salvarBancoCompleto(); document.getElementById('errEnunciado').value = ""; document.getElementById('errMotivo').value = ""; atualizarDashboard();
+        }
+
+        function renderizarCadernoErros(proj) {
+            const container = document.getElementById('containerListaErros'); if(!container) return;
+            if(!proj.cadernoErros || proj.cadernoErros.length === 0) { container.innerHTML = '<p style="color:var(--text-muted); font-size:0.8rem;">Nenhum erro registrado neste edital.</p>'; return; }
+            container.innerHTML = proj.cadernoErros.map(err => `
+                <div class="erro-card-item">
+                    <div class="erro-card-meta"><span>💀 ${err.materiaNome} ➔ ${err.assuntoNome}</span><div><span style="margin-right:10px;">${err.data}</span><span style="cursor:pointer; color:#ef4444;" onclick="excluirErro('${err.id}')">✖ EXPURGAR</span></div></div>
+                    <div class="erro-card-enunciado">${err.enunciado}</div><div class="erro-card-motivo"><strong>Correção:</strong> ${err.motivo}</div>
+                </div>
+            `).join('');
+        }
+
+        function excluirErro(id) { const proj = obterProjetoAtivo(); proj.cadernoErros = proj.cadernoErros.filter(e=>e.id!==id); salvarBancoCompleto(); atualizarDashboard(); }
+
+        function renderizarRevisoesEspacadas(proj) {
+            const c = document.getElementById('containerFilaRevisoes'); if(!c) return;
+            if(!proj.revisoesAgendadas || proj.revisoesAgendadas.length===0) { c.innerHTML='<p style="color:var(--text-muted); font-size:0.8rem;">Nenhuma revisão ativa neste edital.</p>'; return; }
+            c.innerHTML = proj.revisoesAgendadas.map(r => `
+                <div style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-primary); border:1px solid var(--border); padding:0.75rem; border-radius:4px;">
+                    <div><span style="font-size:0.6rem; background:var(--bg-tertiary); padding:2px 5px; color:var(--accent); font-weight:bold;">${r.tipoCiclo} (Até: ${r.dataLimite})</span><div style="font-weight:bold; font-size:0.8rem; margin-top:3px;">[${r.materiaNome}] - ${r.assuntoNome}</div></div>
+                    <button class="btn-militar-add" style="height:28px; font-size:0.65rem;" onclick="eliminarRevisao('${r.id}')">CONCLUÍDO ✓</button>
+                </div>
+            `).join('');
+        }
+        function eliminarRevisao(id) { const proj = obterProjetoAtivo(); proj.revisoesAgendadas = proj.revisoesAgendadas.filter(r=>r.id!==id); salvarBancoCompleto(); atualizarDashboard(); }
+
+        // ==========================================
+        //  FLASHCARDS DENTRO DO CONTEXTO DO PROJETO
+        // ==========================================
+        function salvarNovoFlashcard() {
+            const proj = obterProjetoAtivo(); const mId = document.getElementById('fcMateriaSelect').value; const f = document.getElementById('fcFrente').value.trim(); const v = document.getElementById('fcVerso').value.trim();
+            if(!mId || !f || !v) return alert("Preencha todos os campos do card.");
+            const mNome = proj.materias.find(m => m.id === mId)?.nome || "Geral";
+            proj.flashcards.push({ id: "fc_"+Date.now(), materiaNome: mNome, frente: f, verso: v });
+            salvarBancoCompleto(); document.getElementById('fcFrente').value = ""; document.getElementById('fcVerso').value = ""; alert("Card alocado!"); proximoFlashcard();
+        }
+
+        function proximoFlashcard() {
+            const proj = obterProjetoAtivo();
+            if(!proj.flashcards || proj.flashcards.length === 0) {
+                document.getElementById('fcTextoPrincipal').innerText = "Cadastre cards para o projeto ativo.";
+                document.getElementById('fcBadgeMateria').innerText = "Vazio"; document.getElementById('fcBotoesAcao').style.display = 'none'; return;
+            }
+            fcIndexAtivo = Math.floor(Math.random() * proj.flashcards.length); fcLadoFrente = true; exibirCardAtual(proj);
+        }
+
+        function exibirCardAtual(proj) {
+            const card = proj.flashcards[fcIndexAtivo]; if(!card) return;
+            document.getElementById('fcBadgeMateria').innerText = card.materiaNome; document.getElementById('fcBotoesAcao').style.display = 'none';
+            if(fcLadoFrente) { document.getElementById('fcLadoTitulo').innerText = "FRENTE - CLIQUE PARA VIRAR"; document.getElementById('fcTextoPrincipal').innerText = card.frente; document.getElementById('caixaFlashcard').style.borderColor = "var(--border)"; }
+            else { document.getElementById('fcLadoTitulo').innerText = "VERSO - AUTOAVALIAÇÃO"; document.getElementById('fcTextoPrincipal').innerText = card.verso; document.getElementById('caixaFlashcard').style.borderColor = "var(--accent)"; document.getElementById('fcBotoesAcao').style.display = 'grid'; }
+        }
+        function virarFlashcard() { if(fcIndexAtivo === -1) return; fcLadoFrente = !fcLadoFrente; exibirCardAtual(obterProjetoAtivo()); }
+        function avaliarCard(nivel) { proximoFlashcard(); }
+
+        // ==========================================
+        //  SELECTS COMPARTILHADOS E AUXILIARES
+        // ==========================================
+        function atualizarSelectsMaterias(proj) {
+            const sEdital = document.getElementById('selectMateriaAlvo'); const sCron = document.getElementById('sessaoMateria');
+            const sErro = document.getElementById('errMateriaSelect'); const sFc = document.getElementById('fcMateriaSelect');
+            const opcoes = proj.materias.map(m => `<option value="${m.id}">${m.nome}</option>`).join('');
+            if(sEdital) sEdital.innerHTML = opcoes; if(sCron) { const v = sCron.value; sCron.innerHTML = opcoes; if(v) sCron.value = v; }
             if(sErro) { const v = sErro.value; sErro.innerHTML = opcoes; if(v) sErro.value = v; }
             if(sFc)   { const v = sFc.value; sFc.innerHTML = opcoes; if(v) sFc.value = v; }
-
-            atualizarSelectAssuntosCronometro();
-            atualizarSelectAssuntosErro();
+            atualizarSelectAssuntosCronometro(); atualizarSelectAssuntosErro();
         }
 
         function atualizarSelectAssuntosCronometro() {
-            const matId = document.getElementById('sessaoMateria').value;
-            const selectAssunto = document.getElementById('sessaoAssunto');
-            if(!selectAssunto || !matId) return;
-            const m = bancoDados.materias.find(x => x.id === matId);
-            if(m && m.topicos && m.topicos.length > 0) {
-                selectAssunto.innerHTML = m.topicos.map(t => `<option value="${t.id}">${t.nome}</option>`).join('');
-            } else {
-                selectAssunto.innerHTML = `<option value="">-- Cadastre tópicos no edital --</option>`;
-            }
+            const proj = obterProjetoAtivo(); const matId = document.getElementById('sessaoMateria').value; const select = document.getElementById('sessaoAssunto'); if(!select || !matId) return;
+            const m = proj.materias.find(x => x.id === matId);
+            select.innerHTML = (m && m.topicos && m.topicos.length > 0) ? m.topicos.map(t => `<option value="${t.id}">${t.nome}</option>`).join('') : `<option value="">-- Sem Tópicos --</option>`;
         }
 
-        function adicionarNovaMateria() {
-            const inp = document.getElementById('novaMateriaNome'); const n = inp.value.trim(); if(!n) return;
-            if(!bancoDados.materias) bancoDados.materias = [];
-            bancoDados.materias.push({ id:"m_"+Date.now(), nome:n, tempoSegundos:0, questoesFeitas:0, questoesAcertadas:0, topicos:[] });
-            salvarProgressoGeral(); inp.value = "";
+        function atualizarSelectAssuntosErro() {
+            const proj = obterProjetoAtivo(); const matId = document.getElementById('errMateriaSelect').value; const select = document.getElementById('errAssuntoSelect'); if(!select || !matId) return;
+            const m = proj.materias.find(x => x.id === matId);
+            select.innerHTML = (m && m.topicos && m.topicos.length > 0) ? m.topicos.map(t => `<option value="${t.id}">${t.nome}</option>`).join('') : `<option value="">-- Sem Tópicos --</option>`;
         }
 
-        function adicionarNovoAssunto() {
-            const idM = document.getElementById('selectMateriaAlvo').value; const inp = document.getElementById('novoAssuntoNome'); const n = inp.value.trim(); if(!idM || !n) return;
-            const m = bancoDados.materias.find(x => x.id === idM);
-            if(m) { if(!m.topicos) m.topicos = []; m.topicos.push({ id:"t_"+Date.now(), nome:n, concluido:false }); salvarProgressoGeral(); inp.value = ""; }
-        }
-
-        function marcarConclusaoTopico(mId, tId) {
-            const m = bancoDados.materias.find(x=>x.id===mId); if(m && m.topicos) { const t = m.topicos.find(y=>y.id===tId); if(t) t.concluido = !t.concluido; }
-            salvarProgressoGeral();
-        }
-
-        function excluirMateria(id) { if(confirm("Deseja expurgar esta disciplina?")) { bancoDados.materias = bancoDados.materias.filter(m=>m.id!==id); salvarProgressoGeral(); } }
-        function excluirTopico(mId, tId) { const m = bancoDados.materias.find(x=>x.id===mId); if(m && m.topicos) { m.topicos = m.topicos.filter(t=>t.id!==tId); salvarProgressoGeral(); } }
-
-        function renderizarTabelaHome() {
-            const corpo = document.getElementById('tabelaMateriasCorpo'); if(!corpo) return;
-            if(!bancoDados.materias || bancoDados.materias.length === 0) { corpo.innerHTML = '<tr><td colspan="4">Nenhuma disciplina cadastrada.</td></tr>'; return; }
-            corpo.innerHTML = bancoDados.materias.map(m => {
-                const tot = m.topicos ? m.topicos.length : 0;
-                const conc = m.topicos ? m.topicos.filter(t=>t.concluido).length : 0;
-                return `<tr><td style="font-weight:700;">${m.nome}</td><td style="font-family:monospace;">${formatadorMilitarTextoBreve(m.tempoSegundos||0)}</td><td>${conc}/${tot}</td><td><span class="badge-pct">${(m.questoesFeitas||0)>0?Math.round(((m.questoesAcertadas||0)/(m.questoesFeitas||0))*100):0}% acertos</span></td></tr>`;
-            }).join('');
-        }
-
-        function renderizarEditalGeral() {
-            const c = document.getElementById('editalContainer'); if(!c) return;
-            if(!bancoDados.materias || bancoDados.materias.length === 0) { c.innerHTML = ""; return; }
-            c.innerHTML = bancoDados.materias.map(m => `
-                <div style="margin-bottom:1rem; background:var(--bg-primary); border:1px solid var(--border); padding:1rem; border-radius:4px;">
-                    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:5px; margin-bottom:5px;">
-                        <h3 style="font-size:0.8rem; text-transform:uppercase;">${m.nome}</h3><button class="btn-delete-item" onclick="excluirMateria('${m.id}')">✖ DELETAR</button>
-                    </div>
-                    ${m.topicos ? m.topicos.map(t => `<div class="checklist-item"><div class="checklist-checkbox-wrapper"><input type="checkbox" class="checklist-checkbox" ${t.concluido?'checked':''} onchange="marcarConclusaoTopico('${m.id}','${t.id}')"><span style="${t.concluido?'text-decoration:line-through; color:var(--text-muted);':''}">${t.nome}</span></div><button class="btn-delete-item" onclick="excluirTopico('${m.id}','${t.id}')">🗑️</button></div>`).join('') : ''}
-                </div>
-            `).join('');
-        }
-
-        function renderizarRevisoesEspacadas() {
-            const c = document.getElementById('containerFilaRevisoes'); if(!c) return;
-            if(!bancoDados.revisoesAgendadas || bancoDados.revisoesAgendadas.length===0) { c.innerHTML='<p style="color:var(--text-muted); font-size:0.8rem;">Nenhum alerta de revisão ativo.</p>'; return; }
-            c.innerHTML = bancoDados.revisoesAgendadas.map(r => `
-                <div style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-primary); border:1px solid var(--border); padding:0.75rem; border-radius:4px;">
-                    <div><span style="font-size:0.6rem; background:var(--bg-tertiary); padding:2px 5px; color:var(--accent); font-weight:bold;">${r.tipoCiclo} (Até: ${r.dataLimite})</span><div style="font-weight:bold; font-size:0.8rem; margin-top:3px;">[${r.materiaNome}] - ${r.assuntoNome}</div></div>
-                    <button class="btn-militar-add" style="height:28px; font-size:0.65rem;" onclick="eliminarRevisaoDoPainel('${r.id}')">CONCLUÍDO ✓</button>
-                </div>
-            `).join('');
-        }
-
-        function eliminarRevisaoDoPainel(id) { bancoDados.revisoesAgendadas = bancoDados.revisoesAgendadas.filter(r=>r.id!==id); salvarProgressoGeral(); }
-
-        // ==========================================
-        //  CÁLCULO DE REQUISITOS GERAIS (KPIS)
-        // ==========================================
-        function atualizarKPIs() {
+        function atualizarKPIs(proj) {
             let totT = 0, conc = 0, tSeg = 0, tF = 0, tA = 0;
-            if(bancoDados.materias) {
-                bancoDados.materias.forEach(m => {
-                    if(m.topicos) { totT += m.topicos.length; conc += m.topicos.filter(t=>t.concluido).length; }
-                    tSeg += (m.tempoSegundos||0); tF += (m.questoesFeitas||0); tA += (m.questoesAcertadas||0);
-                });
-            }
+            proj.materias.forEach(m => {
+                if(m.topicos) { totT += m.topicos.length; conc += m.topicos.filter(t=>t.concluido).length; }
+                tSeg += (m.tempoSegundos||0); tF += (m.questoesFeitas||0); tA += (m.questoesAcertadas||0);
+            });
             if(document.getElementById('kpiEditalPct')) document.getElementById('kpiEditalPct').innerText = totT>0?Math.round((conc/totT)*100)+'%':'0%';
-            if(document.getElementById('kpiTempoTotal')) document.getElementById('kpiTempoTotal').innerText = formatadorMilitarTextoBreve(tSeg);
+            if(document.getElementById('kpiTempoTotal')) document.getElementById('kpiTempoTotal').innerText = `${Math.floor(tSeg/3600)}h ${Math.floor((tSeg%3600)/60)}m`;
             if(document.getElementById('kpiDesempenhoQuestoes')) document.getElementById('kpiDesempenhoQuestoes').innerText = tF>0?Math.round((tA/tF)*100)+'%':'0%';
         }
     </script>
