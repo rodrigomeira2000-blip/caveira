@@ -143,7 +143,7 @@
         /* CARDS RESUMO */
         .kpi-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1rem;
         }
         .kpi-card {
@@ -154,6 +154,7 @@
             display: flex;
             flex-direction: column;
             gap: 0.35rem;
+            position: relative;
         }
         .kpi-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
         .kpi-value { font-size: 1.6rem; font-weight: 800; color: var(--text-main); font-variant-numeric: tabular-nums; }
@@ -178,6 +179,11 @@
 
         .btn-militar-add { padding: 0.65rem 1.25rem; background: var(--bg-tertiary); border: 1px solid var(--border); color: var(--text-main); font-weight: 700; text-transform: uppercase; font-size: 0.75rem; border-radius: 3px; cursor: pointer; height: 36px; transition: background 0.2s; }
         .btn-militar-add:hover { background: var(--border); }
+
+        /* SELETORES DE FILTRO RÁPIDO */
+        .filtro-militar-container { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.25rem; padding: 0.6rem; background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; }
+        .btn-filtro-tag { background: var(--bg-secondary); border: 1px solid var(--border); color: var(--text-muted); padding: 0.35rem 0.75rem; font-size: 0.7rem; font-weight: 700; border-radius: 3px; cursor: pointer; text-transform: uppercase; transition: all 0.15s; }
+        .btn-filtro-tag.ativo, .btn-filtro-tag:hover { background: var(--bg-tertiary); color: var(--text-main); border-color: var(--text-muted); }
 
         /* TABELAS */
         .materia-table-wrapper { overflow-x: auto; }
@@ -269,12 +275,16 @@
             <div class="header-brand">
                 <h1>PROJETO <span>CAVEIRA</span></h1>
             </div>
-            <div class="header-quote" id="fraseMotivacional">"A FARDA CUSTA CARO, MAS O PREÇO DO FRACASSO É PERMANENTE."</div>
+            <div class="header-quote" id="fraseMotivacional">"A FARDA CUSTA CARO, MAC O PREÇO DO FRACASSO É PERMANENTE."</div>
         </header>
 
         <!-- ==================== ABA 1: HOME / VISÃO GERAL ==================== -->
         <div id="abaHome" class="aba-conteudo aba-ativa">
             <div class="kpi-container">
+                <div class="kpi-card" style="border-color: #f97316;">
+                    <span class="kpi-label" style="color: #f97316;">🔥 Ofensiva Constante</span>
+                    <span class="kpi-value" id="kpiOfensiva">0 Dias</span>
+                </div>
                 <div class="kpi-card">
                     <span class="kpi-label">Tempo Total de Combate</span>
                     <span class="kpi-value" id="kpiTempoTotal">00h 00min</span>
@@ -436,6 +446,10 @@
                 <button class="btn-militar-add" onclick="salvarErroCaderno()">Gravar Erro no Caderno</button>
             </div>
 
+            <!-- FILTRO DE BUSCA DEDICADO -->
+            <div style="margin-bottom: 0.5rem; font-size: 0.75rem; text-transform: uppercase; font-weight: bold; color: var(--text-muted);">Filtrar Erros por Disciplina:</div>
+            <div class="filtro-militar-container" id="filtroErrosContainer"></div>
+
             <div class="card">
                 <h2>📋 Seus Erros Mapeados</h2>
                 <div id="containerListaErros"></div>
@@ -444,6 +458,11 @@
 
         <!-- ==================== ABA 6: FLASHCARDS ==================== -->
         <div id="abaFlashcards" class="aba-conteudo">
+            
+            <!-- FILTRO DE BUSCA DEDICADO PARA FLASHCARDS -->
+            <div style="margin-bottom: 0.5rem; font-size: 0.75rem; text-transform: uppercase; font-weight: bold; color: var(--text-muted);">Mudar Deck de Foco (Filtrar):</div>
+            <div class="filtro-militar-container" id="filtroFlashcardsContainer"></div>
+
             <div class="dashboard-grid">
                 <div class="left-column">
                     <div class="card">
@@ -551,7 +570,10 @@
             metaSemanalHoras: 20
         };
 
-        // Estado do controle dos flashcards ativos em tela
+        // Estados Globais de Filtro
+        let filtroErroAtivo = "TODOS";
+        let filtroFlashcardAtivo = "TODOS";
+
         let fcIndexAtivo = -1;
         let fcLadoFrente = true;
 
@@ -573,6 +595,7 @@
                     if(!bancoDados.cadernoErros) bancoDados.cadernoErros = [];
                     if(!bancoDados.flashcards) bancoDados.flashcards = [];
                     if(!bancoDados.metaSemanalHoras) bancoDados.metaSemanalHoras = 20;
+                    if(!bancoDados.historicoSessoes) bancoDados.historicoSessoes = [];
                 } catch(e) {
                     console.error("Erro estrutural no banco local, resetando.");
                 }
@@ -617,9 +640,95 @@
             renderizarEditalGeral();
             atualizarSelectsMaterias();
             renderizarRevisoesEspacadas();
+            
+            renderizarFiltrosBotoes(); // Atualiza botões de filtro com as matérias atuais
             renderizarCadernoErros();
+            
             atualizarKPIs();
             calcularCicloSemanal();
+            calcularOfensivaStreak();
+        }
+
+        // ==========================================
+        //  FUNCIONALIDADE: CONTROLE DE OFENSIVA (STREAK)
+        // ==========================================
+        function calcularOfensivaStreak() {
+            if (!bancoDados.historicoSessoes || bancoDados.historicoSessoes.length === 0) {
+                document.getElementById('kpiOfensiva').innerText = "0 Dias";
+                return;
+            }
+
+            // Mapeia todas as datas únicas em que houve estudo (pelo timestamp)
+            let datasEstudo = bancoDados.historicoSessoes.map(s => {
+                let d = new Date(s.timestamp);
+                return d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+            });
+            
+            // Remove duplicadas e ordena de forma decrescente
+            datasEstudo = [...new Set(datasEstudo)].sort((a, b) => new Date(b) - new Date(a));
+
+            let hoje = new Date();
+            let stringHoje = hoje.getFullYear() + "-" + (hoje.getMonth() + 1) + "-" + hoje.getDate();
+            
+            let ontem = new Date();
+            ontem.setDate(hoje.getDate() - 1);
+            let stringOntem = ontem.getFullYear() + "-" + (ontem.getMonth() + 1) + "-" + ontem.getDate();
+
+            // Se não estudou hoje e nem ontem, a ofensiva zerou
+            if (!datasEstudo.includes(stringHoje) && !datasEstudo.includes(stringOntem)) {
+                document.getElementById('kpiOfensiva').innerText = "0 Dias";
+                return;
+            }
+
+            let streak = 0;
+            let dataVerificacao = datasEstudo.includes(stringHoje) ? hoje : ontem;
+
+            while (true) {
+                let stringVerificacao = dataVerificacao.getFullYear() + "-" + (dataVerificacao.getMonth() + 1) + "-" + dataVerificacao.getDate();
+                if (datasEstudo.includes(stringVerificacao)) {
+                    streak++;
+                    // Recua um dia para continuar checando a cadeia
+                    dataVerificacao.setDate(dataVerificacao.getDate() - 1);
+                } else {
+                    break;
+                }
+            }
+
+            document.getElementById('kpiOfensiva').innerText = streak === 1 ? "1 Dia" : `${streak} Dias`;
+        }
+
+        // ==========================================
+        //  FUNCIONALIDADE: FILTROS DINÂMICOS
+        // ==========================================
+        function renderizarFiltrosBotoes() {
+            const cErros = document.getElementById('filtroErrosContainer');
+            const cFlash = document.getElementById('filtroFlashcardsContainer');
+            
+            if(!bancoDados.materias) return;
+
+            let htmlBotoesErro = `<button class="btn-filtro-tag ${filtroErroAtivo === 'TODOS' ? 'ativo' : ''}" onclick="mudarFiltroData('erro', 'TODOS')">VER TODOS</button>`;
+            let htmlBotoesFlash = `<button class="btn-filtro-tag ${filtroFlashcardAtivo === 'TODOS' ? 'ativo' : ''}" onclick="mudarFiltroData('flash', 'TODOS')">VER TODOS</button>`;
+
+            bancoDados.materias.forEach(m => {
+                htmlBotoesErro += `<button class="btn-filtro-tag ${filtroErroAtivo === m.nome ? 'ativo' : ''}" onclick="mudarFiltroData('erro', '${m.nome}')">${m.nome}</button>`;
+                htmlBotoesFlash += `<button class="btn-filtro-tag ${filtroFlashcardAtivo === m.nome ? 'ativo' : ''}" onclick="mudarFiltroData('flash', '${m.nome}')">${m.nome}</button>`;
+            });
+
+            if(cErros) cErros.innerHTML = htmlBotoesErro;
+            if(cFlash) cFlash.innerHTML = htmlBotoesFlash;
+        }
+
+        function mudarFiltroData(tipo, mNome) {
+            if(tipo === 'erro') {
+                filtroErroAtivo = mNome;
+                renderizarFiltrosBotoes();
+                renderizarCadernoErros();
+            } else {
+                filtroFlashcardAtivo = mNome;
+                renderizarFiltrosBotoes();
+                fcIndexAtivo = -1;
+                proximoFlashcard();
+            }
         }
 
         // ==========================================
@@ -642,7 +751,7 @@
             const horasEstudadas = tempoTotalSegundos / 3600;
             const metaHoras = bancoDados.metaSemanalHoras;
             let pct = metaHoras > 0 ? Math.round((horasEstudadas / metaHoras) * 100) : 0;
-            if(pct > 100) pct = 100; // Trava visual na barra
+            if(pct > 100) pct = 100;
 
             document.getElementById('textoCicloHoras').innerText = `${horasEstudadas.toFixed(1)}h / ${metaHoras}h`;
             document.getElementById('barraCicloFill').style.width = pct + '%';
@@ -656,9 +765,9 @@
             const matId = document.getElementById('errMateriaSelect').value;
             const selectAssunto = document.getElementById('errAssuntoSelect');
             if(!selectAssunto || !matId) return;
-            const materia = bancoDados.materias.find(m => m.id === matId);
-            if(materia && materia.topicos && materia.topicos.length > 0) {
-                selectAssunto.innerHTML = materia.topicos.map(t => `<option value="${t.id}">${t.nome}</option>`).join('');
+            const m = bancoDados.materias.find(x => x.id === matId);
+            if(m && m.topicos && m.topicos.length > 0) {
+                selectAssunto.innerHTML = m.topicos.map(t => `<option value="${t.id}">${t.nome}</option>`).join('');
             } else {
                 selectAssunto.innerHTML = `<option value="">-- Tópico Geral --</option>`;
             }
@@ -673,8 +782,8 @@
             if(!matId || !enunciado || !motivo) return alert("Preencha todos os campos operacionais do erro.");
 
             const matNome = bancoDados.materias.find(m => m.id === matId)?.nome || "Geral";
-            const materiaObj = bancoDados.materias.find(m => m.id === matId);
-            const assNome = materiaObj?.topicos?.find(t => t.id === assId)?.nome || "Geral/Tópico não definido";
+            const mObj = bancoDados.materias.find(m => m.id === matId);
+            const assNome = mObj?.topicos?.find(t => t.id === assId)?.nome || "Geral/Tópico não definido";
 
             bancoDados.cadernoErros.push({
                 id: "err_" + Date.now(),
@@ -694,12 +803,24 @@
         function renderizarCadernoErros() {
             const container = document.getElementById('containerListaErros');
             if(!container) return;
+            
             if(!bancoDados.cadernoErros || bancoDados.cadernoErros.length === 0) {
                 container.innerHTML = `<p style="color:var(--text-muted); font-size:0.8rem;">Nenhum erro registrado até o momento.</p>`;
                 return;
             }
 
-            container.innerHTML = bancoDados.cadernoErros.map(err => `
+            // Aplica filtro de disciplina se houver
+            let errosFiltrados = bancoDados.cadernoErros;
+            if (filtroErroAtivo !== "TODOS") {
+                errosFiltrados = bancoDados.cadernoErros.filter(e => e.materiaNome === filtroErroAtivo);
+            }
+
+            if(errosFiltrados.length === 0) {
+                container.innerHTML = `<p style="color:var(--text-muted); font-size:0.8rem;">Nenhum erro localizado para a disciplina "${filtroErroAtivo}".</p>`;
+                return;
+            }
+
+            container.innerHTML = errosFiltrados.map(err => `
                 <div class="erro-card-item">
                     <div class="erro-card-meta">
                         <span>💀 ${err.materiaNome} ➔ ${err.assuntoNome}</span>
@@ -738,7 +859,7 @@
                 materiaNome: matNome,
                 frente: frente,
                 verso: verso,
-                nivelRevisao: 0 // 0 = sem revisar, 1 = dificil, 2 = medio, 3 = facil
+                nivelRevisao: 0
             });
 
             salvarProgressoGeral();
@@ -756,8 +877,25 @@
                 return;
             }
 
-            // Seleção simples: pega cards de forma aleatória ou sequencial para revisão
-            fcIndexAtivo = Math.floor(Math.random() * bancoDados.flashcards.length);
+            // Filtra o deck ativo
+            let deckFiltrado = bancoDados.flashcards;
+            if (filtroFlashcardAtivo !== "TODOS") {
+                deckFiltrado = bancoDados.flashcards.filter(f => f.materiaNome === filtroFlashcardAtivo);
+            }
+
+            if(deckFiltrado.length === 0) {
+                document.getElementById('fcTextoPrincipal').innerText = `Nenhum card cadastrado no deck de "${filtroFlashcardAtivo}".`;
+                document.getElementById('fcBadgeMateria').innerText = filtroFlashcardAtivo;
+                document.getElementById('fcBotoesAcao').style.display = 'none';
+                return;
+            }
+
+            // Seleção randômica dentro do deck filtrado
+            let randomIdx = Math.floor(Math.random() * deckFiltrado.length);
+            let cardSelecionado = deckFiltrado[randomIdx];
+            
+            // Acha o index real no banco de dados principal
+            fcIndexAtivo = bancoDados.flashcards.findIndex(f => f.id === cardSelecionado.id);
             fcLadoFrente = true;
 
             exibirCardAtual();
@@ -788,9 +926,7 @@
             exibirCardAtual();
         }
 
-        function avaliarCard(nivel) {
-            // Nível: 1=Dificil, 2=Medio, 3=Facil. 
-            // Em algoritmos complexos mudaria o tempo. Aqui atualizamos o status e saltamos pro próximo.
+        function evaluarCard(nivel) {
             if(bancoDados.flashcards[fcIndexAtivo]) {
                 bancoDados.flashcards[fcIndexAtivo].nivelRevisao = nivel;
             }
