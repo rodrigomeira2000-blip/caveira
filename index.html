@@ -17,7 +17,7 @@
             --border: #232a3b;          
             --gold: #eab308;            
             
-            /* NOVAS VARIÁVEIS DE DIMENSÃO */
+            /* VARIÁVEIS DE DIMENSÃO E ESPAÇAMENTO */
             --sidebar-width: 260px;
             --sidebar-collapsed-width: 68px;
             --main-padding: 2rem;
@@ -118,7 +118,7 @@
             overflow: hidden;
         }
 
-        /* Quando a sidebar estiver retraída */
+        /* Quando a sidebar estiver recolhida */
         .sidebar.collapsed {
             width: var(--sidebar-collapsed-width);
             align-items: center;
@@ -267,7 +267,23 @@
 
         .header-quote { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; text-align: right; }
 
-        /* CARDS RESUMO (KPIS) COM MELHORIA DE ESPAÇAMENTO */
+        /* SEÇÃO DE PATENTE COM ESPAÇAMENTO CORRIGIDO */
+        .patente-header-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(135deg, #121620 0%, #1e2538 100%);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--gold);
+            border-radius: 4px;
+            padding: 1.5rem;
+            margin-bottom: 0.75rem; /* Cria o respiro essencial para não colar nos elementos de baixo */
+        }
+        .patente-info h3 { font-size: 1.3rem; font-weight: 900; color: var(--gold); text-transform: uppercase; }
+        .patente-info p { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
+        .patente-proximo-requisito { text-align: right; font-size: 0.75rem; font-weight: 700; line-height: 1.4; }
+
+        /* CARDS RESUMO (KPIS) */
         .kpi-container { 
             display: grid; 
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
@@ -284,21 +300,6 @@
         }
         .kpi-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
         .kpi-value { font-size: 1.75rem; font-weight: 800; color: var(--text-main); }
-
-        /* SEÇÃO DE PATENTE */
-        .patente-header-box {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: linear-gradient(135deg, #121620 0%, #1e2538 100%);
-            border: 1px solid var(--border);
-            border-left: 4px solid var(--gold);
-            border-radius: 4px;
-            padding: 1.5rem;
-        }
-        .patente-info h3 { font-size: 1.3rem; font-weight: 900; color: var(--gold); text-transform: uppercase; }
-        .patente-info p { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
-        .patente-proximo-requisito { text-align: right; font-size: 0.75rem; font-weight: 700; line-height: 1.4; }
 
         /* GRIDS E SEÇÕES */
         .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: var(--card-gap); }
@@ -666,7 +667,7 @@
 
             <div class="form-militar-row">
                 <label>Agendar Próximas Revisões?</label>
-                <div class="revisao-grid-options" style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem;">
+                <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem;">
                     <label style="font-size:0.75rem;"><input type="checkbox" value="1" class="checkRevisao"> 24h</label>
                     <label style="font-size:0.75rem;"><input type="checkbox" value="7" class="checkRevisao"> 7d</label>
                     <label style="font-size:0.75rem;"><input type="checkbox" value="14" class="checkRevisao"> 14d</label>
@@ -705,7 +706,7 @@
 
     <script>
         // ==========================================
-        //  ESTRUTURA DE DADOS COMPARTILHADA E ISOLADA
+        //  LOGICA E NEGOCIO DO SISTEMA (JAVASCRIPT)
         // ==========================================
         let globalDB = {
             projetoAtivoId: "",
@@ -724,7 +725,6 @@
             sincronizarInterfaceProjetos();
             atualizarDashboard();
             
-            // Inicia o estado da sidebar baseado em uma preferência anterior ou padrão (expandido)
             if(localStorage.getItem('sidebar_recolhida') === 'true') {
                 document.getElementById('sidebarTatica').classList.add('collapsed');
                 document.body.classList.add('menu-colapsado');
@@ -776,7 +776,6 @@
             atualizarDashboard();
         }
 
-        // NOVA FUNÇÃO: PERMITE EDITAR O NOME DO PROJETO ATUAL DIRETAMENTE NA DASHBOARD
         function abrirJanelaEditarNomeProjeto() {
             const proj = obterProjetoAtivo();
             const novoNome = prompt("Insira o novo nome para este edital/projeto:", proj.nome);
@@ -790,7 +789,6 @@
 
         function atualizarDashboard() {
             const proj = obterProjetoAtivo();
-            
             document.getElementById('tituloEditalHeader').innerHTML = `${proj.nome.toUpperCase()} <span>CAVEIRA</span>`;
             
             renderizarTabelaHome(proj);
@@ -812,7 +810,6 @@
             seletor.value = globalDB.projetoAtivoId;
         }
 
-        // INTERRUPTOR DA SIDEBAR (TOGGLE TRABALHANDO COM CLASSES FIXAS)
         function toggleSidebar() {
             const sb = document.getElementById('sidebarTatica');
             const body = document.body;
@@ -871,7 +868,7 @@
         }
 
         function excluirProjetoObjeto(id) {
-            if(confirm("ATENÇÃO: Deletar este projeto apagará definitivamente todas as horas, matérias, erros e flashcards vinculados a ele. Confirma?")) {
+            if(confirm("ATENÇÃO: Deletar este projeto apagará definitivamente todos os dados. Confirma?")) {
                 globalDB.projetos = globalDB.projetos.filter(p => p.id !== id);
                 if (globalDB.projetoAtivoId === id) {
                     globalDB.projetoAtivoId = globalDB.projetos[0].id;
@@ -893,9 +890,6 @@
             atualizarDashboard();
         }
 
-        // ==========================================
-        //  CÁLCULO DINÂMICO DE OFENSIVA AND PATENTES
-        // ==========================================
         function calcularOfensivaStreak(proj) {
             if (!proj.historicoSessoes || proj.historicoSessoes.length === 0) {
                 document.getElementById('kpiOfensiva').innerText = "0 Dias"; return 0;
@@ -953,9 +947,6 @@
             }
         }
 
-        // ==========================================
-        //  GESTÃO DE EDITAL E DISCIPLINAS
-        // ==========================================
         function alterarMetaSemanalHoras() {
             const proj = obterProjetoAtivo();
             proj.metaSemanalHoras = parseInt(document.getElementById('inputMetaSemanal').value) || 20;
@@ -998,7 +989,7 @@
 
         function renderizarTabelaHome(proj) {
             const corpo = document.getElementById('tabelaMateriasCorpo'); if(!corpo) return;
-            if(!proj.materias || proj.materias.length === 0) { corpo.innerHTML = '<tr><td colspan="4">Nenhuma disciplina cadastrada neste projeto.</td></tr>'; return; }
+            if(!proj.materias || proj.materias.length === 0) { corpo.innerHTML = '<tr><td colspan="4">Nenhuma disciplina cadastrada.</td></tr>'; return; }
             corpo.innerHTML = proj.materias.map(m => {
                 const tot = m.topicos ? m.topicos.length : 0; const conc = m.topicos ? m.topicos.filter(t=>t.concluido).length : 0;
                 return `<tr><td style="font-weight:700;">${m.nome}</td><td style="font-family:monospace;">${Math.floor((m.tempoSegundos||0)/3600)}h ${Math.floor(((m.tempoSegundos||0)%3600)/60)}m</td><td>${conc}/${tot}</td><td><span class="badge-pct">${(m.questoesFeitas||0)>0?Math.round(((m.questoesAcertadas||0)/(m.questoesFeitas||0))*100):0}% acertos</span></td></tr>`;
@@ -1007,7 +998,7 @@
 
         function renderizarEditalGeral(proj) {
             const c = document.getElementById('editalContainer'); if(!c) return;
-            if(!proj.materias || proj.materias.length === 0) { c.innerHTML = '<p style="color:var(--text-muted); font-size:0.8rem;">Cadastre disciplinas acima.</p>'; return; }
+            if(!proj.materias || proj.materias.length === 0) { c.innerHTML = '<p style="color:var(--text-muted); font-size:0.8rem;">Cadastre disciplinas.</p>'; return; }
             c.innerHTML = proj.materias.map(m => `
                 <div style="margin-bottom:1rem; background:var(--bg-primary); border:1px solid var(--border); padding:1rem; border-radius:4px;">
                     <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:5px; margin-bottom:5px;">
@@ -1018,9 +1009,6 @@
             `).join('');
         }
 
-        // ==========================================
-        //  CRONÔMETRO DE ESTUDO POR PROJETO
-        // ==========================================
         function mudarModoLancamento(modo) {
             document.getElementById('subBtnCronometro').classList.remove('active'); document.getElementById('subBtnManual').classList.remove('active');
             document.getElementById('containerModoRelogio').style.display = 'none'; document.getElementById('containerModoManual').style.display = 'none';
@@ -1082,9 +1070,6 @@
             salvarBancoCompleto(); fecharModalSessao(); resetarCronometro(); atualizarDashboard();
         }
 
-        // ==========================================
-        //  CADERNO DE ERROS E REVISÕES
-        // ==========================================
         function salvarErroCaderno() {
             const proj = obterProjetoAtivo(); const mId = document.getElementById('errMateriaSelect').value; const aId = document.getElementById('errAssuntoSelect').value;
             const en = document.getElementById('errEnunciado').value.trim(); const mot = document.getElementById('errMotivo').value.trim();
@@ -1097,7 +1082,7 @@
 
         function renderizarCadernoErros(proj) {
             const container = document.getElementById('containerListaErros'); if(!container) return;
-            if(!proj.cadernoErros || proj.cadernoErros.length === 0) { container.innerHTML = '<p style="color:var(--text-muted); font-size:0.8rem;">Nenhum erro registrado neste edital.</p>'; return; }
+            if(!proj.cadernoErros || proj.cadernoErros.length === 0) { container.innerHTML = '<p style="color:var(--text-muted); font-size:0.8rem;">Nenhum erro registrado.</p>'; return; }
             container.innerHTML = proj.cadernoErros.map(err => `
                 <div class="erro-card-item">
                     <div class="erro-card-meta"><span>💀 ${err.materiaNome} ➔ ${err.assuntoNome}</span><div><span style="margin-right:10px;">${err.data}</span><span style="cursor:pointer; color:#ef4444;" onclick="excluirErro('${err.id}')">✖ EXPURGAR</span></div></div>
@@ -1110,7 +1095,7 @@
 
         function renderizarRevisoesEspacadas(proj) {
             const c = document.getElementById('containerFilaRevisoes'); if(!c) return;
-            if(!proj.revisoesAgendadas || proj.revisoesAgendadas.length===0) { c.innerHTML='<p style="color:var(--text-muted); font-size:0.8rem;">Nenhuma revisão ativa neste edital.</p>'; return; }
+            if(!proj.revisoesAgendadas || proj.revisoesAgendadas.length===0) { c.innerHTML='<p style="color:var(--text-muted); font-size:0.8rem;">Nenhuma revisão ativa.</p>'; return; }
             c.innerHTML = proj.revisoesAgendadas.map(r => `
                 <div style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-primary); border:1px solid var(--border); padding:0.75rem; border-radius:4px;">
                     <div><span style="font-size:0.6rem; background:var(--bg-tertiary); padding:2px 5px; color:var(--accent); font-weight:bold;">${r.tipoCiclo} (Até: ${r.dataLimite})</span><div style="font-weight:bold; font-size:0.8rem; margin-top:3px;">[${r.materiaNome}] - ${r.assuntoNome}</div></div>
@@ -1120,9 +1105,6 @@
         }
         function eliminarRevisao(id) { const proj = obterProjetoAtivo(); proj.revisoesAgendadas = proj.revisoesAgendadas.filter(r=>r.id!==id); salvarBancoCompleto(); atualizarDashboard(); }
 
-        // ==========================================
-        //  FLASHCARDS DENTRO DO CONTEXTO DO PROJETO
-        // ==========================================
         function salvarNovoFlashcard() {
             const proj = obterProjetoAtivo(); const mId = document.getElementById('fcMateriaSelect').value; const f = document.getElementById('fcFrente').value.trim(); const v = document.getElementById('fcVerso').value.trim();
             if(!mId || !f || !v) return alert("Preencha todos os campos do card.");
@@ -1134,7 +1116,7 @@
         function proximoFlashcard() {
             const proj = obterProjetoAtivo();
             if(!proj.flashcards || proj.flashcards.length === 0) {
-                document.getElementById('fcTextoPrincipal').innerText = "Cadastre cards para o projeto ativo.";
+                document.getElementById('fcTextoPrincipal').innerText = "Cadastre cards no projeto ativo.";
                 document.getElementById('fcBadgeMateria').innerText = "Vazio"; document.getElementById('fcBotoesAcao').style.display = 'none'; return;
             }
             fcIndexAtivo = Math.floor(Math.random() * proj.flashcards.length); fcLadoFrente = true; exibirCardAtual(proj);
@@ -1149,9 +1131,6 @@
         function virarFlashcard() { if(fcIndexAtivo === -1) return; fcLadoFrente = !fcLadoFrente; exibirCardAtual(obterProjetoAtivo()); }
         function avaliarCard(nivel) { proximoFlashcard(); }
 
-        // ==========================================
-        //  SELECTS COMPARTILHADOS E AUXILIARES
-        // ==========================================
         function atualizarSelectsMaterias(proj) {
             const sEdital = document.getElementById('selectMateriaAlvo'); const sCron = document.getElementById('sessaoMateria');
             const sErro = document.getElementById('errMateriaSelect'); const sFc = document.getElementById('fcMateriaSelect');
