@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>PROJETO CAVEIRA - Mentoria & Múltiplos Editais</title>
     
     <style>
@@ -17,7 +17,6 @@
             --border: #232a3b;          
             --gold: #eab308;            
             
-            /* VARIÁVEIS DE DIMENSÃO E ESPAÇAMENTO */
             --sidebar-width: 260px;
             --sidebar-collapsed-width: 68px;
             --main-padding: 2rem;
@@ -117,7 +116,7 @@
             letter-spacing: 0.5px;
         }
 
-        /* MENU LATERAL FIXO E RETRÁTIL (SIDEBAR) */
+        /* MENU LATERAL FIXO E RETRÁTIL (COMPUTADOR) */
         .sidebar {
             position: fixed;
             top: 65px;
@@ -135,7 +134,6 @@
             overflow: hidden;
         }
 
-        /* Quando a sidebar estiver recolhida */
         .sidebar.collapsed {
             width: var(--sidebar-collapsed-width);
             align-items: center;
@@ -149,7 +147,6 @@
             letter-spacing: 1px;
             margin: 0.75rem 0 0.25rem 0.75rem;
             white-space: nowrap;
-            transition: opacity 0.2s;
         }
         .sidebar.collapsed .sidebar-title {
             opacity: 0;
@@ -175,9 +172,7 @@
             gap: 0.75rem;
             white-space: nowrap;
         }
-        .sidebar-btn .btn-text {
-            transition: opacity 0.2s;
-        }
+
         .sidebar.collapsed .sidebar-btn {
             justify-content: center;
             padding: 0.8rem 0;
@@ -195,7 +190,6 @@
             border-color: var(--border);
         }
 
-        /* INTERRUPTOR DO MENU (TOGGLE) */
         .sidebar-toggle-container {
             display: flex;
             justify-content: flex-end;
@@ -219,12 +213,6 @@
             font-weight: bold;
             font-size: 0.8rem;
         }
-        .sidebar.collapsed .btn-toggle-trigger {
-            padding: 0.5rem;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-        }
 
         /* CONTAINER PRINCIPAL DINÂMICO */
         .container {
@@ -243,7 +231,7 @@
             width: calc(100% - var(--sidebar-collapsed-width));
         }
 
-        /* HEADER INTERNO COM BOTÃO DE EDIÇÃO */
+        /* CARD HEADER INTERNO */
         header {
             width: 100%;
             background-color: var(--bg-secondary);
@@ -275,16 +263,11 @@
             padding: 0.35rem 0.6rem;
             border-radius: 4px;
             font-size: 0.75rem;
-            transition: all 0.2s;
         }
-        .btn-editar-nome-projeto:hover {
-            color: var(--accent);
-            border-color: var(--accent);
-        }
-
+        .btn-editar-nome-projeto:hover { color: var(--accent); border-color: var(--accent); }
         .header-quote { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; text-align: right; }
 
-        /* SEÇÃO DE PATENTE */
+        /* PATENTE */
         .patente-header-box {
             display: flex;
             align-items: center;
@@ -294,13 +277,12 @@
             border-left: 4px solid var(--gold);
             border-radius: 4px;
             padding: 1.5rem;
-            margin-bottom: 0.75rem; 
         }
         .patente-info h3 { font-size: 1.3rem; font-weight: 900; color: var(--gold); text-transform: uppercase; }
         .patente-info p { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
         .patente-proximo-requisito { text-align: right; font-size: 0.75rem; font-weight: 700; line-height: 1.4; }
 
-        /* CARDS RESUMO (KPIS) */
+        /* CARDS KPI (ESTATÍSTICAS) */
         .kpi-container { 
             display: grid; 
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
@@ -318,13 +300,12 @@
         .kpi-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
         .kpi-value { font-size: 1.75rem; font-weight: 800; color: var(--text-main); }
 
-        /* GRIDS E SEÇÕES */
+        /* GRIDS */
         .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: var(--card-gap); }
-
         .card { background-color: var(--bg-secondary); border: 1px solid var(--border); border-radius: 4px; padding: 1.5rem; }
         .card h2 { font-size: 0.85rem; text-transform: uppercase; color: var(--text-main); margin-bottom: 1.25rem; font-weight: 800; border-left: 2px solid var(--text-muted); padding-left: 0.5rem; }
 
-        /* FORMULÁRIOS MILITARES */
+        /* FORMULÁRIOS */
         .form-militar-row { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
         .form-militar-row label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
         .form-militar-row input, .form-militar-row select, .form-militar-row textarea { padding: 0.7rem; background: var(--bg-primary); border: 1px solid var(--border); color: #fff; border-radius: 3px; font-size: 0.85rem; width: 100%; }
@@ -338,7 +319,7 @@
         .btn-militar-add:hover { background: var(--border); }
 
         /* TABELAS */
-        .materia-table-wrapper { overflow-x: auto; }
+        .materia-table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; }
         .materia-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem; }
         .materia-table th { color: var(--text-muted); padding: 0.75rem; border-bottom: 1px solid var(--border); font-weight: 700; text-transform: uppercase; font-size: 0.7rem; }
         .materia-table td { padding: 0.85rem 0.75rem; border-bottom: 1px solid var(--border); color: var(--text-main); }
@@ -351,7 +332,7 @@
         .btn-success { background: var(--text-main); color: var(--bg-primary); }
         .btn-danger { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
 
-        /* BARRAS DE CICLO */
+        /* PROGRESSO DO CICLO */
         .ciclo-bar-wrapper { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem; font-size: 0.75rem; text-transform: uppercase; font-weight: bold; }
         .ciclo-track { background: var(--bg-primary); height: 16px; border-radius: 3px; border: 1px solid var(--border); overflow: hidden; position: relative; display: flex; align-items: center; }
         .ciclo-fill { height: 100%; background: #22c55e; width: 0%; transition: width 0.4s ease; }
@@ -379,452 +360,198 @@
         .btn-delete-item { background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 0.75rem; }
         .btn-delete-item:hover { color: #fff; }
 
-        /* MODAIS POP-UP */
-        .modal-militar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); display: none; align-items: center; justify-content: center; z-index: 9999; padding: 1rem; }
+        /* MODAIS */
+        .modal-militar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); display: none; align-items: center; justify-content: center; z-index: 9999; padding: 1rem; }
         .modal-militar-box { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 4px; width: 100%; max-width: 500px; padding: 1.5rem; }
         .modal-militar-title { font-size: 0.9rem; text-transform: uppercase; font-weight: 800; color: var(--text-main); margin-bottom: 1.25rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;}
         .modal-militar-actions { display: flex; gap: 0.5rem; margin-top: 1.5rem; }
         .modal-militar-actions button { flex: 1; padding: 0.75rem; border-radius: 3px; font-weight: 700; text-transform: uppercase; font-size: 0.8rem; border: none; cursor: pointer; }
 
-        /* ABAS */
+        /* CHAVEADOR DE ABAS */
         .aba-conteudo { display: none; }
         .aba-conteudo.aba-ativa { display: block; }
         .sub-aba-btn-group { display: flex; gap: 0.5rem; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
         .sub-aba-btn { background: transparent; color: var(--text-muted); border: none; cursor: pointer; font-size: 0.8rem; padding: 0.25rem 0.5rem; font-weight: 700; text-transform: uppercase; }
         .sub-aba-btn.active { color: var(--text-main); border-bottom: 2px solid var(--text-main); }
 
-        /* =======================================================
-           REGRAS DE RESPONSIVIDADE (ADAPTAÇÃO PARA CELULAR)
-           ======================================================= */
+
+        /* ==================================================================
+           CORREÇÃO CRÍTICA DE RESPONSIVIDADE (RESTRUTURAÇÃO COMPLETA MOBILE)
+           ================================================================== */
         @media (max-width: 968px) {
-            .dashboard-grid { 
-                grid-template-columns: 1fr; 
-            } 
-            .header-quote { 
-                display: none; 
-            }
+            .dashboard-grid { grid-template-columns: 1fr; } 
+            .header-quote { display: none; }
         }
 
         @media (max-width: 768px) {
             :root {
-                --main-padding: 1rem;
-                --card-gap: 0.75rem;
+                --main-padding: 0.85rem;
+                --card-gap: 0.85rem;
             }
 
-            /* Barra de cima se adapta para telas menores */
+            /* Forçar tamanho correto sem zoom que quebra layouts */
+            html, body {
+                width: 100%;
+                overflow-x: hidden;
+            }
+
+            /* Barra de Projetos Superior Compacta */
             .workspace-bar {
                 padding: 0 0.75rem;
+                height: 60px;
             }
-            .workspace-label {
-                display: none; /* Esconde o texto fixo para dar espaço ao select */
-            }
-            .versao-tag {
-                display: none;
+            .workspace-label, .versao-tag {
+                display: none !important; /* Esconde lixos visuais para dar espaço */
             }
             .select-workspace {
                 max-width: 160px;
                 font-size: 0.75rem;
-                padding: 0.4rem 0.6rem;
+                padding: 0.4rem 0.5rem;
             }
 
-            /* TRANSFORMA A SIDEBAR EM MENU INFERIOR (ESTILO APP MOBILE) */
+            /* O MENU LATERAL ANTIGO SUMMA DO CELULAR PARA NÃO COBRIR TELA */
             .sidebar {
                 position: fixed;
-                top: auto;
-                bottom: 0;
-                left: 0;
-                right: 0;
+                top: auto !important;
+                bottom: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
                 width: 100% !important;
-                height: 60px;
-                flex-direction: row;
-                justify-content: space-around;
-                align-items: center;
-                padding: 0;
-                border-right: none;
-                border-top: 1px solid var(--border);
-                   background-color: var(--bg-primary);
-            color: var(--text-main);
-            min-height: 100vh;
-            display: flex;
-            overflow-x: hidden;
-        }
+                height: 65px !important;
+                flex-direction: row !important;
+                justify-content: space-around !important;
+                align-items: center !important;
+                padding: 0 !important;
+                border-right: none !important;
+                border-top: 1px solid var(--border) !important;
+                background: var(--bg-secondary) !important;
+                z-index: 9999 !important;
+            }
+            
+            .sidebar-title, .sidebar-toggle-container {
+                display: none !important; /* Remove títulos e botões de recolher antigos */
+            }
 
-        /* BARRA SUPERIOR DE CONTEXTO (WORKSPACES) */
-        .workspace-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 65px;
-            background: var(--bg-secondary);
-            border-bottom: 1px solid var(--border);
-            z-index: 1001;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 1.5rem;
-        }
+            /* Botões do Menu em Formato de App Moderno */
+            .sidebar-btn {
+                flex-direction: column !important;
+                justify-content: center !important;
+                align-items: center !important;
+                gap: 3px !important;
+                padding: 0 !important;
+                font-size: 0.6rem !important;
+                width: 60px !important;
+                height: 100% !important;
+                background: transparent !important;
+                border: none !important;
+                color: var(--text-muted) !important;
+            }
 
-        .workspace-selector-container {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
+            .sidebar-btn span:first-child {
+                font-size: 1.25rem !important; /* Destaca o ícone do botão */
+                margin: 0 !important;
+            }
 
-        .workspace-label {
-            font-size: 0.65rem;
-            text-transform: uppercase;
-            font-weight: 800;
-            color: var(--text-muted);
-            letter-spacing: 0.5px;
-        }
+            .sidebar-btn .btn-text {
+                display: block !important;
+                opacity: 1 !important;
+                font-size: 0.58rem !important;
+                font-weight: 600 !important;
+                text-transform: uppercase !important;
+            }
 
-        .select-workspace {
-            padding: 0.5rem 1rem;
-            background: var(--bg-primary);
-            border: 1px solid var(--border);
-            color: #fff;
-            font-weight: 700;
-            font-size: 0.8rem;
-            border-radius: 4px;
-            cursor: pointer;
-            text-transform: uppercase;
-        }
-        .select-workspace:focus {
-            border-color: var(--accent);
-            outline: none;
-        }
+            .sidebar-btn.active-link {
+                color: var(--accent) !important;
+                background: transparent !important;
+            }
 
-        .btn-militar-sm {
-            padding: 0.5rem 1rem;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border);
-            color: var(--text-main);
-            font-size: 0.7rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .btn-militar-sm:hover { background: var(--border); border-color: var(--text-muted); }
+            /* CONTENT CONTAINER (Sem margens esquerdas fantasmas) */
+            .container {
+                margin-left: 0 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                padding-top: 75px !important;    /* Espaço para a barra de cima */
+                padding-bottom: 85px !important; /* Espaço de segurança para a barra de baixo */
+            }
+            body.menu-colapsado .container {
+                margin-left: 0 !important;
+                width: 100% !important;
+            }
 
-        /* MENU LATERAL FIXO E RETRÁTIL (SIDEBAR) */
-        .sidebar {
-            position: fixed;
-            top: 65px;
-            left: 0;
-            width: var(--sidebar-width);
-            height: calc(100vh - 65px);
-            background: var(--bg-secondary);
-            border-right: 1px solid var(--border);
-            z-index: 999;
-            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            padding: 1.5rem 0.75rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.4rem;
-            overflow: hidden;
-        }
+            /* Ajustes Internos de Componentes */
+            header {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 0.75rem;
+                text-align: center;
+            }
+            .header-brand {
+                flex-direction: column;
+                width: 100%;
+                gap: 0.5rem;
+            }
+            .header-brand h1 { font-size: 1.2rem; }
 
-        /* Quando a sidebar estiver recolhida */
-        .sidebar.collapsed {
-            width: var(--sidebar-collapsed-width);
-            align-items: center;
-        }
+            .patente-header-box {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.75rem;
+                padding: 1rem;
+            }
+            .patente-proximo-requisito { text-align: center; }
 
-        .sidebar-title {
-            font-size: 0.65rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            font-weight: 800;
-            letter-spacing: 1px;
-            margin: 0.75rem 0 0.25rem 0.75rem;
-            white-space: nowrap;
-            transition: opacity 0.2s;
-        }
-        .sidebar.collapsed .sidebar-title {
-            opacity: 0;
-            height: 0;
-            margin: 0;
-        }
+            .kpi-container {
+                grid-template-columns: repeat(2, 1fr) !important; /* Força 2 por linha perfeitos */
+                gap: 0.5rem;
+            }
+            .kpi-card {
+                padding: 1rem 0.75rem;
+                text-align: center;
+            }
+            .kpi-value { font-size: 1.3rem; }
 
-        .sidebar-btn {
-            width: 100%;
-            text-align: left;
-            padding: 0.8rem 1rem;
-            font-size: 0.8rem;
-            background: transparent;
-            border: 1px solid transparent;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            font-weight: 700;
-            cursor: pointer;
-            border-radius: 4px;
-            transition: all 0.15s;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            white-space: nowrap;
+            .timer-display { font-size: 2.6rem; padding: 0.75rem 0; }
+            .input-group-militar div { min-width: 100%; }
+            .btn-militar-add { width: 100%; }
         }
-        .sidebar-btn .btn-text {
-            transition: opacity 0.2s;
-        }
-        .sidebar.collapsed .sidebar-btn {
-            justify-content: center;
-            padding: 0.8rem 0;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-        }
-        .sidebar.collapsed .sidebar-btn .btn-text {
-            display: none;
-        }
-
-        .sidebar-btn:hover, .sidebar-btn.active-link {
-            color: var(--text-main);
-            background-color: var(--bg-tertiary);
-            border-color: var(--border);
-        }
-
-        /* INTERRUPTOR DO MENU (TOGGLE) */
-        .sidebar-toggle-container {
-            display: flex;
-            justify-content: flex-end;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid var(--border);
-            margin-bottom: 0.5rem;
-            width: 100%;
-        }
-        .sidebar.collapsed .sidebar-toggle-container {
-            justify-content: center;
-            border-bottom: none;
-            margin-bottom: 0;
-        }
-        .btn-toggle-trigger {
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border);
-            color: var(--text-main);
-            padding: 0.4rem 0.75rem;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 0.8rem;
-        }
-        .sidebar.collapsed .btn-toggle-trigger {
-            padding: 0.5rem;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-        }
-
-        /* CONTAINER PRINCIPAL DINÂMICO */
-        .container {
-            flex: 1;
-            max-width: 1300px;
-            margin-left: var(--sidebar-width);
-            padding: calc(65px + var(--main-padding)) var(--main-padding) var(--main-padding) var(--main-padding);
-            display: flex;
-            flex-direction: column;
-            gap: var(--card-gap);
-            transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            width: calc(100% - var(--sidebar-width));
-        }
-        body.menu-colapsado .container { 
-            margin-left: var(--sidebar-collapsed-width); 
-            width: calc(100% - var(--sidebar-collapsed-width));
-        }
-
-        /* HEADER INTERNO COM BOTÃO DE EDIÇÃO */
-        header {
-            width: 100%;
-            background-color: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 1.5rem;
-        }
-        .header-brand {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-        .header-brand h1 { 
-            font-size: 1.4rem; 
-            font-weight: 900; 
-            letter-spacing: 1px; 
-            text-transform: uppercase; 
-        }
-        .header-brand h1 span { color: var(--text-muted); font-weight: 300; }
-        
-        .btn-editar-nome-projeto {
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border);
-            color: var(--text-muted);
-            cursor: pointer;
-            padding: 0.35rem 0.6rem;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            transition: all 0.2s;
-        }
-        .btn-editar-nome-projeto:hover {
-            color: var(--accent);
-            border-color: var(--accent);
-        }
-
-        .header-quote { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; text-align: right; }
-
-        /* SEÇÃO DE PATENTE COM ESPAÇAMENTO CORRIGIDO */
-        .patente-header-box {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: linear-gradient(135deg, #121620 0%, #1e2538 100%);
-            border: 1px solid var(--border);
-            border-left: 4px solid var(--gold);
-            border-radius: 4px;
-            padding: 1.5rem;
-            margin-bottom: 0.75rem; /* Cria o respiro essencial para não colar nos elementos de baixo */
-        }
-        .patente-info h3 { font-size: 1.3rem; font-weight: 900; color: var(--gold); text-transform: uppercase; }
-        .patente-info p { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
-        .patente-proximo-requisito { text-align: right; font-size: 0.75rem; font-weight: 700; line-height: 1.4; }
-
-        /* CARDS RESUMO (KPIS) */
-        .kpi-container { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
-            gap: var(--card-gap); 
-        }
-        .kpi-card { 
-            background-color: var(--bg-secondary); 
-            border: 1px solid var(--border); 
-            border-radius: 4px; 
-            padding: 1.5rem; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 0.5rem; 
-        }
-        .kpi-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
-        .kpi-value { font-size: 1.75rem; font-weight: 800; color: var(--text-main); }
-
-        /* GRIDS E SEÇÕES */
-        .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: var(--card-gap); }
-        @media (max-width: 968px) { .dashboard-grid { grid-template-columns: 1fr; } .header-quote { display: none; } }
-
-        .card { background-color: var(--bg-secondary); border: 1px solid var(--border); border-radius: 4px; padding: 1.5rem; }
-        .card h2 { font-size: 0.85rem; text-transform: uppercase; color: var(--text-main); margin-bottom: 1.25rem; font-weight: 800; border-left: 2px solid var(--text-muted); padding-left: 0.5rem; }
-
-        /* FORMULÁRIOS MILITARES */
-        .form-militar-row { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
-        .form-militar-row label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
-        .form-militar-row input, .form-militar-row select, .form-militar-row textarea { padding: 0.7rem; background: var(--bg-primary); border: 1px solid var(--border); color: #fff; border-radius: 3px; font-size: 0.85rem; width: 100%; }
-        
-        .input-group-militar { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); align-items: flex-end; }
-        .input-group-militar div { flex: 1; min-width: 200px; display: flex; flex-direction: column; gap: 0.35rem; }
-        .input-group-militar label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
-        .input-group-militar input, .input-group-militar select { padding: 0.65rem; background: var(--bg-primary); border: 1px solid var(--border); color: #fff; border-radius: 3px; }
-
-        .btn-militar-add { padding: 0.65rem 1.25rem; background: var(--bg-tertiary); border: 1px solid var(--border); color: var(--text-main); font-weight: 700; text-transform: uppercase; font-size: 0.75rem; border-radius: 3px; cursor: pointer; height: 36px; }
-        .btn-militar-add:hover { background: var(--border); }
-
-        /* TABELAS */
-        .materia-table-wrapper { overflow-x: auto; }
-        .materia-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem; }
-        .materia-table th { color: var(--text-muted); padding: 0.75rem; border-bottom: 1px solid var(--border); font-weight: 700; text-transform: uppercase; font-size: 0.7rem; }
-        .materia-table td { padding: 0.85rem 0.75rem; border-bottom: 1px solid var(--border); color: var(--text-main); }
-        .badge-pct { padding: 0.2rem 0.4rem; border-radius: 2px; font-weight: 700; font-size: 0.7rem; text-transform: uppercase; background: var(--bg-tertiary); color: var(--text-main); border: 1px solid var(--border); }
-
-        /* CRONÔMETRO */
-        .timer-display { font-size: 3.8rem; font-weight: 800; text-align: center; font-family: monospace; color: var(--text-main); margin: 1rem 0; background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 1rem 0; }
-        .timer-controls { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
-        .timer-controls button { padding: 0.75rem; border-radius: 3px; font-weight: 700; font-size: 0.8rem; text-transform: uppercase; border: none; cursor: pointer; width: 100%; }
-        .btn-success { background: var(--text-main); color: var(--bg-primary); }
-        .btn-danger { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
-
-        /* BARRAS DE CICLO */
-        .ciclo-bar-wrapper { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem; font-size: 0.75rem; text-transform: uppercase; font-weight: bold; }
-        .ciclo-track { background: var(--bg-primary); height: 16px; border-radius: 3px; border: 1px solid var(--border); overflow: hidden; position: relative; display: flex; align-items: center; }
-        .ciclo-fill { height: 100%; background: #22c55e; width: 0%; transition: width 0.4s ease; }
-        .ciclo-text-overlay { position: absolute; width: 100%; text-align: center; font-size: 0.65rem; font-weight: 900; color: #fff; }
-
-        /* FLASHCARDS */
-        .flashcard-box { background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 2rem; min-height: 180px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; cursor: pointer; position: relative; margin-bottom: 1rem; }
-        .flashcard-badge { position: absolute; top: 0.5rem; left: 0.5rem; font-size: 0.6rem; text-transform: uppercase; font-weight: 800; background: var(--bg-tertiary); padding: 2px 6px; border: 1px solid var(--border); border-radius: 2px; color: var(--text-muted); }
-        .flashcard-texto { font-size: 1.1rem; font-weight: 700; color: var(--text-main); }
-        .flashcard-actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
-        .btn-fc-facil { background: #16a34a; color: white; padding: 0.6rem; font-weight: bold; border: none; border-radius: 3px; cursor: pointer; text-transform: uppercase; font-size: 0.7rem; }
-        .btn-fc-medio { background: #ca8a04; color: white; padding: 0.6rem; font-weight: bold; border: none; border-radius: 3px; cursor: pointer; text-transform: uppercase; font-size: 0.7rem; }
-        .btn-fc-dificil { background: #dc2626; color: white; padding: 0.6rem; font-weight: bold; border: none; border-radius: 3px; cursor: pointer; text-transform: uppercase; font-size: 0.7rem; }
-
-        /* CADERNO DE ERROS */
-        .erro-card-item { background: var(--bg-primary); border: 1px solid var(--border); border-left: 4px solid #dc2626; border-radius: 0 4px 4px 0; padding: 1rem; margin-bottom: 0.75rem; }
-        .erro-card-meta { font-size: 0.65rem; color: var(--text-muted); font-weight: bold; text-transform: uppercase; margin-bottom: 0.35rem; display: flex; justify-content: space-between; }
-        .erro-card-enunciado { font-size: 0.85rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-main); }
-        .erro-card-motivo { font-size: 0.8rem; background: var(--bg-secondary); border: 1px solid var(--border); padding: 0.5rem; border-radius: 3px; color: #fca5a5; }
-
-        /* EDITAL VERTICAL */
-        .checklist-item { display: flex; align-items: center; justify-content: space-between; padding: 0.65rem 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
-        .checklist-checkbox-wrapper { display: flex; align-items: center; gap: 0.75rem; }
-        .checklist-checkbox { width: 15px; height: 15px; accent-color: var(--text-main); cursor: pointer; }
-        .btn-delete-item { background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 0.75rem; }
-        .btn-delete-item:hover { color: #fff; }
-
-        /* MODAIS POP-UP */
-        .modal-militar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); display: none; align-items: center; justify-content: center; z-index: 9999; padding: 1rem; }
-        .modal-militar-box { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 4px; width: 100%; max-width: 500px; padding: 1.5rem; }
-        .modal-militar-title { font-size: 0.9rem; text-transform: uppercase; font-weight: 800; color: var(--text-main); margin-bottom: 1.25rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;}
-        .modal-militar-actions { display: flex; gap: 0.5rem; margin-top: 1.5rem; }
-        .modal-militar-actions button { flex: 1; padding: 0.75rem; border-radius: 3px; font-weight: 700; text-transform: uppercase; font-size: 0.8rem; border: none; cursor: pointer; }
-
-        /* ABAS */
-        .aba-conteudo { display: none; }
-        .aba-conteudo.aba-ativa { display: block; }
-        .sub-aba-btn-group { display: flex; gap: 0.5rem; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
-        .sub-aba-btn { background: transparent; color: var(--text-muted); border: none; cursor: pointer; font-size: 0.8rem; padding: 0.25rem 0.5rem; font-weight: 700; text-transform: uppercase; }
-        .sub-aba-btn.active { color: var(--text-main); border-bottom: 2px solid var(--text-main); }
     </style>
 </head>
 <body>
 
     <div class="workspace-bar">
         <div class="workspace-selector-container">
-            <span class="workspace-label">Foco Operacional:</span>
-            <select id="seletorProjetosGlobal" class="select-workspace" onchange="alternarProjetoAtivo()"></select>
-            <button class="btn-militar-sm" onclick="abrirModalNovoProjeto()">+ Gerenciar Projetos</button>
+            <div class="workspace-wrapper-left">
+                <span class="workspace-label">Foco Operacional:</span>
+                <select id="seletorProjetosGlobal" class="select-workspace" onchange="alternarProjetoAtivo()"></select>
+            </div>
+            <button class="btn-militar-sm" onclick="abrirModalNovoProjeto()">+ Novo Edital</button>
         </div>
-        <div style="font-size: 0.7rem; font-weight: bold; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">
-            Quartel General de Estudos v2.0
-        </div>
+        <div class="versao-tag">Quartel General v2.5</div>
     </div>
 
     <nav class="sidebar" id="sidebarTatica">
         <div class="sidebar-toggle-container">
-            <button class="btn-toggle-trigger" onclick="toggleSidebar()" title="Expandir/Recolher Menu">☰</button>
+            <button class="btn-toggle-trigger" onclick="toggleSidebar()">☰</button>
         </div>
 
-        <div class="sidebar-title">Geral</div>
+        <div class="sidebar-title">Navegação</div>
         <button class="sidebar-btn active-link" id="btn_home" onclick="trocarAba('abaHome', 'btn_home')">
-            <span>📊</span><span class="btn-text">Visão Geral</span>
+            <span>📊</span><span class="btn-text">Painel</span>
         </button>
         <button class="sidebar-btn" id="btn_cronometro" onclick="trocarAba('abaCronometro', 'btn_cronometro')">
-            <span>⏱️</span><span class="btn-text">Cronômetro</span>
+            <span>⏱️</span><span class="btn-text">Foco</span>
         </button>
         <button class="sidebar-btn" id="btn_edital" onclick="trocarAba('abaEdital', 'btn_edital')">
-            <span>💀</span><span class="btn-text">Edital Vertical</span>
+            <span>💀</span><span class="btn-text">Edital</span>
         </button>
         <button class="sidebar-btn" id="btn_revisoes" onclick="trocarAba('abaRevisoes', 'btn_revisoes')">
-            <span>📋</span><span class="btn-text">Revisões</span>
+            <span>📋</span><span class="btn-text">Revisar</span>
         </button>
-        
-        <div class="sidebar-title">Arsenal</div>
         <button class="sidebar-btn" id="btn_erro" onclick="trocarAba('abaCadernoErro', 'btn_erro')">
             <span>📔</span><span class="btn-text">Erros</span>
         </button>
         <button class="sidebar-btn" id="btn_flashcards" onclick="trocarAba('abaFlashcards', 'btn_flashcards')">
-            <span>🗂️</span><span class="btn-text">Flashcards</span>
+            <span>🗂️</span><span class="btn-text">Cards</span>
         </button>
     </nav>
 
@@ -833,7 +560,7 @@
         <header>
             <div class="header-brand">
                 <h1 id="tituloEditalHeader">PROJETO <span>CAVEIRA</span></h1>
-                <button class="btn-editar-nome-projeto" onclick="abrirJanelaEditarNomeProjeto()" title="Editar Nome do Edital">✏️ Editar</button>
+                <button class="btn-editar-nome-projeto" onclick="abrirJanelaEditarNomeProjeto()">✏️ Mudar Nome</button>
             </div>
             <div class="header-quote">"A FARDA CUSTA CARO, MAS O PREÇO DO FRACASSO É PERMANENTE."</div>
         </header>
@@ -845,20 +572,20 @@
                     <p>Hierarquia Funcional do Projeto Ativo</p>
                     <h3 id="patenteNome">Soldado</h3>
                 </div>
-                <div class="patente-proximo-requisito" id="patenteProximoNivel">Carregando diretrizes...</div>
+                <div class="patente-proximo-requisito" id="patenteProximoNivel">Diretrizes...</div>
             </div>
 
-            <div class="kpi-container">
+            <div class="kpi-container" style="margin-top: 0.5rem;">
                 <div class="kpi-card" style="border-color: #f97316;">
-                    <span class="kpi-label" style="color: #f97316;">🔥 Ofensiva Constante</span>
+                    <span class="kpi-label" style="color: #f97316;">🔥 Ofensiva</span>
                     <span class="kpi-value" id="kpiOfensiva">0 Dias</span>
                 </div>
                 <div class="kpi-card">
-                    <span class="kpi-label">Tempo no Edital Atual</span>
-                    <span class="kpi-value" id="kpiTempoTotal">00h 00min</span>
+                    <span class="kpi-label">Tempo Total</span>
+                    <span class="kpi-value" id="kpiTempoTotal">00h 00m</span>
                 </div>
                 <div class="kpi-card">
-                    <span class="kpi-label">Rendimento de Questões</span>
+                    <span class="kpi-label">Questões</span>
                     <span class="kpi-value" id="kpiDesempenhoQuestoes">0%</span>
                 </div>
                 <div class="kpi-card">
@@ -868,19 +595,16 @@
             </div>
 
             <div class="card" style="margin-top: 0.5rem;">
-                <h2>📅 Ciclo Operacional Semanal (Deste Projeto)</h2>
+                <h2>📅 Meta Operacional Semanal</h2>
                 <div class="input-group-militar" style="border-bottom:none; margin-bottom:0; padding-bottom:0;">
                     <div>
-                        <label>Meta de Horas Semanais</label>
+                        <label>Meta de Horas</label>
                         <input type="number" id="inputMetaSemanal" value="20" onchange="alterarMetaSemanalHoras()">
-                    </div>
-                    <div style="flex:2; color:var(--text-muted); font-size:0.75rem; padding-bottom:0.5rem;">
-                        O progresso abaixo reflete exclusivamente as missões cumpridas no projeto selecionado.
                     </div>
                 </div>
                 <div class="ciclo-progress-container">
                     <div class="ciclo-bar-wrapper">
-                        <span>Progresso da Meta</span>
+                        <span>Progresso</span>
                         <span id="textoCicloHoras">0h / 20h</span>
                     </div>
                     <div class="ciclo-track">
@@ -893,15 +617,15 @@
             <div class="dashboard-grid" style="margin-top: 0.5rem;">
                 <div class="left-column">
                     <div class="card">
-                        <h2>Disciplinas Estratégicas do Edital</h2>
+                        <h2>Disciplinas Estratégicas</h2>
                         <div class="materia-table-wrapper">
                             <table class="materia-table">
                                <thead>
                                    <tr>
-                                       <th>Disciplina</th>
-                                       <th>Horas Líquidas</th>
-                                       <th>Progresso Tópicos</th>
-                                       <th>Rendimento</th>
+                                       <th>Matéria</th>
+                                       <th>Horas</th>
+                                       <th>Top.</th>
+                                       <th>% Q.</th>
                                    </tr>
                                </thead>
                                <tbody id="tabelaMateriasCorpo"></tbody>
@@ -913,8 +637,7 @@
                     <div class="card">
                         <h2>Diretrizes de Inteligência</h2>
                         <div style="font-size:0.8rem; color:var(--text-muted); line-height: 1.6;">
-                            • Alterne seus projetos na barra superior para focar em outros editais.<br>
-                            • O histórico de horas, revisões e erros é totalmente isolado por projeto.<br>
+                            • Alterne seus projetos na barra superior para isolar editais.<br>
                             • Mantenha a consistência diária para evitar o rebaixamento de patente.
                         </div>
                     </div>
@@ -926,23 +649,23 @@
             <div class="card" style="max-width: 600px; margin: 0 auto;">
                 <div class="sub-aba-btn-group">
                     <button id="subBtnCronometro" class="sub-aba-btn active" onclick="mudarModoLancamento('modoRelogio')">⏱️ Tempo Real</button>
-                    <button id="subBtnManual" class="sub-aba-btn" onclick="mudarModoLancamento('modoManual')">📝 Lançar Manualmente</button>
+                    <button id="subBtnManual" class="sub-aba-btn" onclick="mudarModoLancamento('modoManual')">📝 Manual</button>
                 </div>
 
                 <div style="background: var(--bg-primary); padding: 1.25rem; border-radius: 4px; border: 1px solid var(--border); margin-bottom: 1.25rem;">
-                    <h4 style="font-size: 0.7rem; color: var(--text-main); text-transform: uppercase; margin-bottom: 0.8rem;">🎯 ALVO DO PROJETO SELECIONADO</h4>
+                    <h4 style="font-size: 0.7rem; color: var(--text-main); text-transform: uppercase; margin-bottom: 0.8rem;">🎯 ALVO DA MISSÃO</h4>
                     <div class="form-militar-row">
                         <label>Matéria</label>
                         <select id="sessaoMateria" onchange="atualizarSelectAssuntosCronometro()"></select>
                     </div>
                     <div class="form-militar-row" style="margin-bottom: 0;">
-                        <label>Assunto / Tópico</label>
+                        <label>Tópico Vinculado</label>
                         <select id="sessaoAssunto"></select>
                     </div>
                 </div>
 
                 <div id="containerModoRelogio">
-                    <h2>Cronômetro Ativo</h2>
+                    <h2>Cronômetro Operacional</h2>
                     <div class="timer-display" id="timerVisual">00:00:00</div>
                     <div class="timer-controls">
                         <button class="btn-success" id="btnPlayPause" onclick="alternarCronometro()">Iniciar Foco</button>
@@ -952,61 +675,61 @@
                 </div>
 
                 <div id="containerModoManual" style="display: none;">
-                    <h2>Lançar Atividade Concluída</h2>
+                    <h2>Lançamento Manual</h2>
                     <div style="display: flex; gap: 0.5rem; margin-bottom: 1.25rem;">
                         <div class="form-militar-row" style="flex: 1;"><label>Horas</label><input type="number" id="manualHoras" placeholder="0"></div>
                         <div class="form-militar-row" style="flex: 1;"><label>Minutos</label><input type="number" id="manualMinutos" placeholder="0"></div>
                     </div>
-                    <button onclick="dispararRegistroSessao(true)" style="width:100%; padding:0.8rem; background:var(--bg-tertiary); border:1px solid var(--border); color:#fff; font-weight:700; text-transform:uppercase; font-size:0.75rem; cursor:pointer;">Salvar Lançamento Manual</button>
+                    <button onclick="dispararRegistroSessao(true)" style="width:100%; padding:0.8rem; background:var(--bg-tertiary); border:1px solid var(--border); color:#fff; font-weight:700; text-transform:uppercase; font-size:0.75rem; cursor:pointer;">Gravar Atividade</button>
                 </div>
             </div>
         </div>
 
         <div id="abaEdital" class="aba-conteudo">
             <div class="card">
-                <h2>Alimentação do Banco de Dados (Edital do Projeto)</h2>
+                <h2>Alimentação do Banco de Dados</h2>
                 <div class="input-group-militar">
-                    <div><label>Cadastrar Nova Disciplina</label><input type="text" id="novaMateriaNome" placeholder="Ex: Direito Penal"></div>
+                    <div><label>Nova Disciplina</label><input type="text" id="novaMateriaNome" placeholder="Ex: Direito Penal"></div>
                     <button class="btn-militar-add" onclick="adicionarNovaMateria()">+ Matéria</button>
                 </div>
                 <div class="input-group-militar" style="border-bottom: none; margin-bottom: 0; padding-bottom: 0;">
-                    <div style="flex: 1;"><label>Vincular à Disciplina</label><select id="selectMateriaAlvo"></select></div>
-                    <div style="flex: 2;"><label>Cadastrar Conteúdo Programático</label><input type="text" id="novoAssuntoNome" placeholder="Ex: Art. 144 - Segurança Pública"></div>
+                    <div style="flex: 1;"><label>Vincular Disciplina</label><select id="selectMateriaAlvo"></select></div>
+                    <div style="flex: 2;"><label>Nome do Tópico</label><input type="text" id="novoAssuntoNome" placeholder="Ex: Art. 5º da CF"></div>
                     <button class="btn-militar-add" onclick="adicionarNovoAssunto()">+ Tópico</button>
                 </div>
             </div>
-            <div class="card"><h2>Edital Verticalizado Operacional</h2><div id="editalContainer"></div></div>
+            <div class="card"><h2>Edital Verticalizado Atual</h2><div id="editalContainer"></div></div>
         </div>
 
         <div id="abaRevisoes" class="aba-conteudo">
             <div class="card">
-                <h2>Cronograma Ativo de Revisões Espaçadas</h2>
+                <h2>Cronograma de Revisões</h2>
                 <div style="display: flex; flex-direction: column; gap: 1rem;" id="containerFilaRevisoes"></div>
             </div>
         </div>
 
         <div id="abaCadernoErro" class="aba-conteudo">
             <div class="card">
-                <h2>📔 Alimentar Caderno de Erros (Deste Projeto)</h2>
+                <h2>📔 Registrar Erros Mapeados</h2>
                 <div class="input-group-militar">
                     <div>
-                        <label>Disciplina Origem</label>
+                        <label>Disciplina</label>
                         <select id="errMateriaSelect" onchange="atualizarSelectAssuntosErro()"></select>
                     </div>
                     <div>
-                        <label>Tópico / Conteúdo</label>
+                        <label>Tópico</label>
                         <select id="errAssuntoSelect"></select>
                     </div>
                 </div>
                 <div class="form-militar-row">
-                    <label>Enunciado Simplificado ou Gatilho da Questão</label>
-                    <input type="text" id="errEnunciado" placeholder="Gatilho da questão...">
+                    <label>Enunciado / Pegadinha da Questão</label>
+                    <input type="text" id="errEnunciado" placeholder="O que a banca cobrou...">
                 </div>
                 <div class="form-militar-row">
-                    <label>Motivo do Erro / Fundamentação Correta</label>
-                    <textarea id="errMotivo" rows="2" placeholder="Fundamentação jurídica ou pegadinha mapeada..."></textarea>
+                    <label>Fundamentação e Correção</label>
+                    <textarea id="errMotivo" rows="2" placeholder="Explicação legal ou erro cometido..."></textarea>
                 </div>
-                <button class="btn-militar-add" onclick="salvarErroCaderno()">Gravar Erro no Caderno</button>
+                <button class="btn-militar-add" onclick="salvarErroCaderno()">Gravar no Caderno</button>
             </div>
 
             <div class="card">
@@ -1019,13 +742,13 @@
             <div class="dashboard-grid">
                 <div class="left-column">
                     <div class="card">
-                        <h2>🗂️ Revisão Ativa por Flashcards</h2>
+                        <h2>🗂️ Memorização Ativa</h2>
                         <div id="containerDeckFoco">
                             <div class="flashcard-box" id="caixaFlashcard" onclick="virarFlashcard()">
-                                <div class="flashcard-badge" id="fcBadgeMateria">Disciplina</div>
+                                <div class="flashcard-badge" id="fcBadgeMateria">Matéria</div>
                                 <div id="fcLadoInfo">
                                     <div style="font-size: 0.65rem; color: var(--text-muted); font-weight: bold; margin-bottom: 0.5rem;" id="fcLadoTitulo">FRENTE</div>
-                                    <div class="flashcard-texto" id="fcTextoPrincipal">Carregando...</div>
+                                    <div class="flashcard-texto" id="fcTextoPrincipal">Aguardando...</div>
                                 </div>
                             </div>
                             
@@ -1040,9 +763,9 @@
 
                 <div class="right-column">
                     <div class="card">
-                        <h2>🛠️ Injetar Novo Flashcard</h2>
+                        <h2>🛠️ Injetar Flashcard</h2>
                         <div class="form-militar-row">
-                            <label>Disciplina Vinculada</label>
+                            <label>Disciplina</label>
                             <select id="fcMateriaSelect"></select>
                         </div>
                         <div class="form-militar-row">
@@ -1050,7 +773,7 @@
                             <textarea id="fcFrente" rows="2"></textarea>
                         </div>
                         <div class="form-militar-row">
-                            <label>Verso (Resposta)</label>
+                            <label>Verso (Resposta / Lei)</label>
                             <textarea id="fcVerso" rows="2"></textarea>
                         </div>
                         <button class="btn-militar-add" style="width: 100%;" onclick="salvarNovoFlashcard()">Criar Card</button>
@@ -1063,19 +786,19 @@
 
     <div class="modal-militar-overlay" id="modalRegistroSessao">
         <div class="modal-militar-box">
-            <div class="modal-militar-title">Relatório de Fechamento de Missão</div>
+            <div class="modal-militar-title">Relatório de Foco Concluído</div>
             <div style="font-size: 0.8rem; margin-bottom: 1.25rem; color: var(--text-muted);">
-                DISCIPLINA: <span id="modalAlvoTexto" style="color: #fff; font-weight: 700;">-</span><br>
-                TEMPO ESTUDADO: <span id="modalTempoTexto" style="color: #fff; font-weight: 700;">-</span>
+                MATÉRIA: <span id="modalAlvoTexto" style="color: #fff; font-weight: 700;">-</span><br>
+                TEMPO: <span id="modalTempoTexto" style="color: #fff; font-weight: 700;">-</span>
             </div>
 
             <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
                 <div class="form-militar-row" style="flex: 1;"><label>Questões Feitas</label><input type="number" id="popQuestoesFeitas" value="0"></div>
-                <div class="form-militar-row" style="flex: 1;"><label>Questões Acertadas</label><input type="number" id="popQuestoesAcertadas" value="0"></div>
+                <div class="form-militar-row" style="flex: 1;"><label>Acertos</label><input type="number" id="popQuestoesAcertadas" value="0"></div>
             </div>
 
             <div class="form-militar-row">
-                <label>Agendar Próximas Revisões?</label>
+                <label>Criar Alertas de Revisão?</label>
                 <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem;">
                     <label style="font-size:0.75rem;"><input type="checkbox" value="1" class="checkRevisao"> 24h</label>
                     <label style="font-size:0.75rem;"><input type="checkbox" value="7" class="checkRevisao"> 7d</label>
@@ -1086,25 +809,25 @@
 
             <div class="modal-militar-actions">
                 <button class="btn-danger" onclick="fecharModalSessao()">Descartar</button>
-                <button class="btn-success" onclick="salvarRelatorioSessaoFinal()">Gravar Missão</button>
+                <button class="btn-success" onclick="salvarRelatorioSessaoFinal()">Salvar Missão</button>
             </div>
         </div>
     </div>
 
     <div class="modal-militar-overlay" id="modalGerenciarProjetos">
         <div class="modal-militar-box">
-            <div class="modal-militar-title">Painel de Controle de Projetos</div>
+            <div class="modal-militar-title">Painel de Editais</div>
             
             <div style="background: var(--bg-primary); padding: 1rem; border-radius:4px; border: 1px solid var(--border); margin-bottom: 1.25rem;">
-                <h3 style="font-size:0.75rem; text-transform:uppercase; margin-bottom:0.5rem;">⚡ Implantar Novo Projeto (Concurso)</h3>
+                <h3 style="font-size:0.75rem; text-transform:uppercase; margin-bottom:0.5rem;">⚡ Adicionar Edital</h3>
                 <div class="form-militar-row">
-                    <label>Nome do Projeto Operacional</label>
-                    <input type="text" id="novoProjetoNome" placeholder="Ex: Polícia de São Paulo, PRF, PC-SP">
+                    <label>Nome do Concurso</label>
+                    <input type="text" id="novoProjetoNome" placeholder="Ex: Guarda Municipal, PM, PC">
                 </div>
-                <button class="btn-militar-add" style="width:100%;" onclick="criarNovoProjetoObjeto()">Criar Novo Projeto</button>
+                <button class="btn-militar-add" style="width:100%;" onclick="criarNovoProjetoObjeto()">Criar Novo</button>
             </div>
 
-            <h3 style="font-size:0.75rem; text-transform:uppercase; margin-bottom:0.5rem; color:var(--text-muted);">Projetos Ativos no Sistema</h3>
+            <h3 style="font-size:0.75rem; text-transform:uppercase; margin-bottom:0.5rem; color:var(--text-muted);">Ativos</h3>
             <div id="listaProjetosGerenciador" style="max-height: 150px; overflow-y:auto; display:flex; flex-direction:column; gap:0.5rem;"></div>
 
             <div class="modal-militar-actions">
@@ -1114,14 +837,7 @@
     </div>
 
     <script>
-        // ==========================================
-        //  LOGICA E NEGOCIO DO SISTEMA (JAVASCRIPT)
-        // ==========================================
-        let globalDB = {
-            projetoAtivoId: "",
-            projetos: [] 
-        };
-
+        let globalDB = { projetoAtivoId: "", projetos: [] };
         let cronometroSegundos = 0;
         let tInterval = null;
         let tRodando = false;
@@ -1133,23 +849,13 @@
             carregarBancoCompleto();
             sincronizarInterfaceProjetos();
             atualizarDashboard();
-            
-            if(localStorage.getItem('sidebar_recolhida') === 'true') {
-                document.getElementById('sidebarTatica').classList.add('collapsed');
-                document.body.classList.add('menu-colapsado');
-            }
         };
 
         function carregarBancoCompleto() {
             const localData = localStorage.getItem('projeto_caveira_multiprojetos');
             if (localData) {
-                try {
-                    globalDB = JSON.parse(localData);
-                } catch (e) {
-                    console.error("Erro estrutural no banco, reiniciando.");
-                }
+                try { globalDB = JSON.parse(localData); } catch (e) { console.error("Reiniciando banco."); }
             }
-
             if (!globalDB.projetos || globalDB.projetos.length === 0) {
                 globalDB.projetos = [{
                     id: "proj_default",
@@ -1164,18 +870,11 @@
                 globalDB.projetoAtivoId = "proj_default";
                 salvarBancoCompleto();
             }
-            if(!globalDB.projetoAtivoId) {
-                globalDB.projetoAtivoId = globalDB.projetos[0].id;
-            }
+            if(!globalDB.projetoAtivoId) globalDB.projetoAtivoId = globalDB.projetos[0].id;
         }
 
-        function salvarBancoCompleto() {
-            localStorage.setItem('projeto_caveira_multiprojetos', JSON.stringify(globalDB));
-        }
-
-        function obterProjetoAtivo() {
-            return globalDB.projetos.find(p => p.id === globalDB.projetoAtivoId) || globalDB.projetos[0];
-        }
+        function salvarBancoCompleto() { localStorage.setItem('projeto_caveira_multiprojetos', JSON.stringify(globalDB)); }
+        function obterProjetoAtivo() { return globalDB.projetos.find(p => p.id === globalDB.projetoAtivoId) || globalDB.projetos[0]; }
 
         function alternarProjetoAtivo() {
             globalDB.projetoAtivoId = document.getElementById('seletorProjetosGlobal').value;
@@ -1187,7 +886,7 @@
 
         function abrirJanelaEditarNomeProjeto() {
             const proj = obterProjetoAtivo();
-            const novoNome = prompt("Insira o novo nome para este edital/projeto:", proj.nome);
+            const novoNome = prompt("Nome do edital/projeto:", proj.nome);
             if(novoNome && novoNome.trim() !== "") {
                 proj.nome = novoNome.trim();
                 salvarBancoCompleto();
@@ -1220,72 +919,41 @@
         }
 
         function toggleSidebar() {
+            if (window.innerWidth <= 768) return;
             const sb = document.getElementById('sidebarTatica');
-            const body = document.body;
-            
             if(sb.classList.contains('collapsed')) {
                 sb.classList.remove('collapsed');
-                body.classList.remove('menu-colapsado');
-                localStorage.setItem('sidebar_recolhida', 'false');
+                document.body.classList.remove('menu-colapsado');
             } else {
                 sb.classList.add('collapsed');
-                body.classList.add('menu-colapsado');
-                localStorage.setItem('sidebar_recolhida', 'true');
+                document.body.classList.add('menu-colapsado');
             }
         }
 
-        function abrirModalNovoProjeto() {
-            document.getElementById('modalGerenciarProjetos').style.display = 'flex';
-            renderizarListaGerenciadorProjetos();
-        }
+        function abrirModalNovoProjeto() { document.getElementById('modalGerenciarProjetos').style.display = 'flex'; renderizarListaGerenciadorProjetos(); }
         function fecharModalNovoProjeto() { document.getElementById('modalGerenciarProjetos').style.display = 'none'; }
 
         function criarNovoProjetoObjeto() {
-            const inp = document.getElementById('novoProjetoNome');
-            const nome = inp.value.trim();
-            if (!nome) return alert("Insira uma designação válida para o projeto.");
-
-            const novoProj = {
-                id: "proj_" + Date.now(),
-                nome: nome,
-                materias: [],
-                revisoesAgendadas: [],
-                historicoSessoes: [],
-                cadernoErros: [],
-                flashcards: [],
-                metaSemanalHoras: 20
-            };
-
-            globalDB.projetos.push(novoProj);
-            globalDB.projetoAtivoId = novoProj.id;
-            salvarBancoCompleto();
-            
-            inp.value = "";
-            sincronizarInterfaceProjetos();
-            fecharModalNovoProjeto();
-            atualizarDashboard();
+            const inp = document.getElementById('novoProjetoNome'); const nome = inp.value.trim(); if (!nome) return;
+            const n = { id: "proj_" + Date.now(), nome: nome, materias: [], revisoesAgendadas: [], historicoSessoes: [], cadernoErros: [], flashcards: [], metaSemanalHoras: 20 };
+            globalDB.projetos.push(n); globalDB.projetoAtivoId = n.id;
+            salvarBancoCompleto(); inp.value = ""; sincronizarInterfaceProjetos(); fecharModalNovoProjeto(); atualizarDashboard();
         }
 
         function renderizarListaGerenciadorProjetos() {
-            const container = document.getElementById('listaProjetosGerenciador');
-            container.innerHTML = globalDB.projetos.map(p => `
+            document.getElementById('listaProjetosGerenciador').innerHTML = globalDB.projetos.map(p => `
                 <div style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-primary); border:1px solid var(--border); padding:0.6rem; border-radius:3px;">
                     <span style="font-size:0.8rem; font-weight:bold;">${p.nome}</span>
-                    ${globalDB.projetos.length > 1 ? `<button class="btn-delete-item" style="color:#ef4444; font-weight:bold;" onclick="excluirProjetoObjeto('${p.id}')">DELETAR</button>` : '<span style="font-size:0.6rem; color:var(--text-muted);">PADRÃO</span>'}
+                    ${globalDB.projetos.length > 1 ? `<button class="btn-delete-item" style="color:#ef4444;" onclick="excluirProjetoObjeto('${p.id}')">DELETAR</button>` : '<span style="font-size:0.6rem; color:var(--text-muted);">PADRÃO</span>'}
                 </div>
             `).join('');
         }
 
         function excluirProjetoObjeto(id) {
-            if(confirm("ATENÇÃO: Deletar este projeto apagará definitivamente todos os dados. Confirma?")) {
+            if(confirm("Confirmar exclusão de dados permanentes?")) {
                 globalDB.projetos = globalDB.projetos.filter(p => p.id !== id);
-                if (globalDB.projetoAtivoId === id) {
-                    globalDB.projetoAtivoId = globalDB.projetos[0].id;
-                }
-                salvarBancoCompleto();
-                sincronizarInterfaceProjetos();
-                renderizarListaGerenciadorProjetos();
-                atualizarDashboard();
+                if (globalDB.projetoAtivoId === id) globalDB.projetoAtivoId = globalDB.projetos[0].id;
+                salvarBancoCompleto(); sincronizarInterfaceProjetos(); renderizarListaGerenciadorProjetos(); atualizarDashboard();
             }
         }
 
@@ -1297,111 +965,83 @@
             
             if(idAba === 'abaFlashcards') { fcIndexAtivo = -1; proximoFlashcard(); }
             atualizarDashboard();
+            window.scrollTo({ top: 0, behavior: 'instant' });
         }
 
         function calcularOfensivaStreak(proj) {
-            if (!proj.historicoSessoes || proj.historicoSessoes.length === 0) {
-                document.getElementById('kpiOfensiva').innerText = "0 Dias"; return 0;
-            }
-            let datas = proj.historicoSessoes.map(s => {
-                let d = new Date(s.timestamp); return d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
-            });
+            if (!proj.historicoSessoes || proj.historicoSessoes.length === 0) { document.getElementById('kpiOfensiva').innerText = "0 Dias"; return 0; }
+            let datas = proj.historicoSessoes.map(s => { let d = new Date(s.timestamp); return d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate(); });
             datas = [...new Set(datas)].sort((a, b) => new Date(b) - new Date(a));
-            
             let hoje = new Date(); let sHoje = hoje.getFullYear() + "-" + (hoje.getMonth() + 1) + "-" + hoje.getDate();
             let ontem = new Date(); ontem.setDate(hoje.getDate() - 1); let sOntem = ontem.getFullYear() + "-" + (ontem.getMonth() + 1) + "-" + ontem.getDate();
-
-            if (!datas.includes(sHoje) && !datas.includes(sOntem)) {
-                document.getElementById('kpiOfensiva').innerText = "0 Dias"; return 0;
-            }
+            if (!datas.includes(sHoje) && !datas.includes(sOntem)) { document.getElementById('kpiOfensiva').innerText = "0 Dias"; return 0; }
             let streak = 0; let check = datas.includes(sHoje) ? hoje : ontem;
             while (true) {
                 let sCheck = check.getFullYear() + "-" + (check.getMonth() + 1) + "-" + check.getDate();
-                if (datas.includes(sCheck)) { streak++; check.setDate(check.getDate() - 1); } else { break; }
+                if (datas.includes(sCheck)) { streak++; check.setDate(check.getDate() - 1); } else break;
             }
-            document.getElementById('kpiOfensiva').innerText = streak === 1 ? "1 Dia" : `${streak} Dias`;
-            return streak;
+            document.getElementById('kpiOfensiva').innerText = `${streak} Dias`; return streak;
         }
 
         function calcularPatenteMilitar(proj, streak) {
-            let tSeg = 0; proj.materias.forEach(m => { tSeg += (m.tempoSegundos || 0); });
-            const horas = tSeg / 3600;
-
+            let tSeg = 0; proj.materias.forEach(m => { tSeg += (m.tempoSegundos || 0); }); const horas = tSeg / 3600;
             const patentes = [
-                { nome: "Soldado",           horas: 0,   ofensiva: 0 },
-                { nome: "Cabo",              horas: 5,   ofensiva: 2 },
-                { nome: "3º Sargento",       horas: 15,  ofensiva: 4 },
-                { nome: "2º Sargento",       horas: 30,  ofensiva: 6 },
-                { nome: "1º Sargento",       horas: 50,  ofensiva: 8 },
-                { nome: "Subtenente",        horas: 75,  ofensiva: 10 },
-                { nome: "2º Tenente",        horas: 100, ofensiva: 12 },
-                { nome: "1º Tenente",        horas: 135, ofensiva: 15 },
-                { nome: "Capitão",           horas: 180, ofensiva: 20 },
-                { nome: "Major",             horas: 240, ofensiva: 25 },
-                { nome: "Tenente-Coronel",   horas: 320, ofensiva: 30 },
-                { nome: "Coronel (Caveira)", horas: 420, ofensiva: 40 }
+                { nome: "Soldado", horas: 0, ofensiva: 0 }, { nome: "Cabo", horas: 5, ofensiva: 2 },
+                { nome: "3º Sargento", horas: 15, ofensiva: 4 }, { nome: "2º Sargento", horas: 30, ofensiva: 6 },
+                { nome: "1º Sargento", horas: 50, ofensiva: 8 }, { nome: "Subtenente", horas: 75, ofensiva: 10 },
+                { nome: "2º Tenente", horas: 100, ofensiva: 12 }, { nome: "1º Tenente", horas: 135, ofensiva: 15 },
+                { nome: "Capitão", horas: 180, ofensiva: 20 }, { nome: "Major", horas: 240, ofensiva: 25 },
+                { nome: "Tenente-Coronel", horas: 320, ofensiva: 30 }, { nome: "Coronel (Caveira)", horas: 420, ofensiva: 40 }
             ];
-
             let atual = patentes[0];
-            for (let i = 0; i < patentes.length; i++) {
-                if (horas >= patentes[i].horas && streak >= patentes[i].ofensiva) { atual = patentes[i]; } else { break; }
-            }
+            for (let i = 0; i < patentes.length; i++) { if (horas >= patentes[i].horas && streak >= patentes[i].ofensiva) { atual = patentes[i]; } else break; }
             document.getElementById('patenteNome').innerText = atual.nome;
             let idx = patentes.indexOf(atual);
             if (idx < patentes.length - 1) {
                 let prox = patentes[idx + 1];
-                document.getElementById('patenteProximoNivel').innerHTML = `Próxima Patente: <span style="color:var(--accent);">${prox.nome}</span><br><span style="color:var(--text-muted); font-size:0.7rem;">Faltam ${(prox.horas - horas).toFixed(1)}h e ${Math.max(0, prox.ofensiva - streak)}d de ofensiva</span>`;
+                document.getElementById('patenteProximoNivel').innerHTML = `Próxima: <span style="color:var(--accent);">${prox.nome}</span><br><span style="color:var(--text-muted); font-size:0.65rem;">Faltam ${(prox.horas - horas).toFixed(1)}h e ${Math.max(0, prox.ofensiva - streak)}d</span>`;
             } else {
-                document.getElementById('patenteProximoNivel').innerHTML = `<span style="color:var(--gold);">👑 CORONEL DO EDITAL</span>`;
+                document.getElementById('patenteProximoNivel').innerHTML = `<span style="color:var(--gold);">👑 CORONEL</span>`;
             }
         }
 
         function alterarMetaSemanalHoras() {
-            const proj = obterProjetoAtivo();
-            proj.metaSemanalHoras = parseInt(document.getElementById('inputMetaSemanal').value) || 20;
-            salvarBancoCompleto();
-            calcularCicloSemanal(proj);
+            const proj = obterProjetoAtivo(); proj.metaSemanalHoras = parseInt(document.getElementById('inputMetaSemanal').value) || 20;
+            salvarBancoCompleto(); calcularCicloSemanal(proj);
         }
 
         function calcularCicloSemanal(proj) {
-            let tSeg = 0; proj.materias.forEach(m => { tSeg += (m.tempoSegundos || 0); });
-            const hEstudadas = tSeg / 3600; const mHoras = proj.metaSemanalHoras;
+            let tSeg = 0; proj.materias.forEach(m => { tSeg += (m.tempoSegundos || 0); }); const hEstudadas = tSeg / 3600; const mHoras = proj.metaSemanalHoras;
             let pct = mHoras > 0 ? Math.min(100, Math.round((hEstudadas / mHoras) * 100)) : 0;
             document.getElementById('textoCicloHoras').innerText = `${hEstudadas.toFixed(1)}h / ${mHoras}h`;
-            document.getElementById('barraCicloFill').style.width = pct + '%';
-            document.getElementById('barraCicloPct').innerText = pct + '%';
-            document.getElementById('inputMetaSemanal').value = mHoras;
+            document.getElementById('barraCicloFill').style.width = pct + '%'; document.getElementById('barraCicloPct').innerText = pct + '%';
         }
 
         function adicionarNovaMateria() {
-            const proj = obterProjetoAtivo();
-            const inp = document.getElementById('novaMateriaNome'); const n = inp.value.trim(); if(!n) return;
+            const proj = obterProjetoAtivo(); const inp = document.getElementById('novaMateriaNome'); const n = inp.value.trim(); if(!n) return;
             proj.materias.push({ id:"m_"+Date.now(), nome:n, tempoSegundos:0, questoesFeitas:0, questoesAcertadas:0, topicos:[] });
             salvarBancoCompleto(); inp.value = ""; atualizarDashboard();
         }
 
         function adicionarNovoAssunto() {
-            const proj = obterProjetoAtivo();
-            const idM = document.getElementById('selectMateriaAlvo').value; const inp = document.getElementById('novoAssuntoNome'); const n = inp.value.trim(); if(!idM || !n) return;
-            const m = proj.materias.find(x => x.id === idM);
-            if(m) { if(!m.topicos) m.topicos = []; m.topicos.push({ id:"t_"+Date.now(), nome:n, concluido:false }); salvarBancoCompleto(); inp.value = ""; atualizarDashboard(); }
+            const proj = obterProjetoAtivo(); const idM = document.getElementById('selectMateriaAlvo').value; const inp = document.getElementById('novoAssuntoNome'); const n = inp.value.trim(); if(!idM || !n) return;
+            const m = proj.materias.find(x => x.id === idM); if(m) { if(!m.topicos) m.topicos = []; m.topicos.push({ id:"t_"+Date.now(), nome:n, concluido:false }); salvarBancoCompleto(); inp.value = ""; atualizarDashboard(); }
         }
 
         function marcarConclusaoTopico(mId, tId) {
-            const proj = obterProjetoAtivo();
-            const m = proj.materias.find(x=>x.id===mId); if(m && m.topicos) { const t = m.topicos.find(y=>y.id===tId); if(t) t.concluido = !t.concluido; }
+            const proj = obterProjetoAtivo(); const m = proj.materias.find(x=>x.id===mId); if(m && m.topicos) { const t = m.topicos.find(y=>y.id===tId); if(t) t.concluido = !t.concluido; }
             salvarBancoCompleto(); atualizarDashboard();
         }
 
-        function excluirMateria(id) { if(confirm("Deseja expurgar esta disciplina?")) { const proj = obterProjetoAtivo(); proj.materias = proj.materias.filter(m=>m.id!==id); salvarBancoCompleto(); atualizarDashboard(); } }
+        function excluirMateria(id) { if(confirm("Deseja expurgar disciplina?")) { const proj = obterProjetoAtivo(); proj.materias = proj.materias.filter(m=>m.id!==id); salvarBancoCompleto(); atualizarDashboard(); } }
         function excluirTopico(mId, tId) { const proj = obterProjetoAtivo(); const m = proj.materias.find(x=>x.id===mId); if(m && m.topicos) { m.topicos = m.topicos.filter(t=>t.id!==tId); salvarBancoCompleto(); atualizarDashboard(); } }
 
         function renderizarTabelaHome(proj) {
             const corpo = document.getElementById('tabelaMateriasCorpo'); if(!corpo) return;
-            if(!proj.materias || proj.materias.length === 0) { corpo.innerHTML = '<tr><td colspan="4">Nenhuma disciplina cadastrada.</td></tr>'; return; }
+            if(!proj.materias || proj.materias.length === 0) { corpo.innerHTML = '<tr><td colspan="4">Vazio.</td></tr>'; return; }
             corpo.innerHTML = proj.materias.map(m => {
                 const tot = m.topicos ? m.topicos.length : 0; const conc = m.topicos ? m.topicos.filter(t=>t.concluido).length : 0;
-                return `<tr><td style="font-weight:700;">${m.nome}</td><td style="font-family:monospace;">${Math.floor((m.tempoSegundos||0)/3600)}h ${Math.floor(((m.tempoSegundos||0)%3600)/60)}m</td><td>${conc}/${tot}</td><td><span class="badge-pct">${(m.questoesFeitas||0)>0?Math.round(((m.questoesAcertadas||0)/(m.questoesFeitas||0))*100):0}% acertos</span></td></tr>`;
+                return `<tr><td style="font-weight:700; max-width:90px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${m.nome}</td><td>${Math.floor((m.tempoSegundos||0)/3600)}h</td><td>${conc}/${tot}</td><td><span class="badge-pct">${(m.questoesFeitas||0)>0?Math.round(((m.questoesAcertadas||0)/(m.questoesFeitas||0))*100):0}%</span></td></tr>`;
             }).join('');
         }
 
@@ -1411,7 +1051,7 @@
             c.innerHTML = proj.materias.map(m => `
                 <div style="margin-bottom:1rem; background:var(--bg-primary); border:1px solid var(--border); padding:1rem; border-radius:4px;">
                     <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:5px; margin-bottom:5px;">
-                        <h3 style="font-size:0.8rem; text-transform:uppercase;">${m.nome}</h3><button class="btn-delete-item" onclick="excluirMateria('${m.id}')">✖ DELETAR MATÉRIA</button>
+                        <h3 style="font-size:0.8rem; text-transform:uppercase;">${m.nome}</h3><button class="btn-delete-item" onclick="excluirMateria('${m.id}')">✖</button>
                     </div>
                     ${m.topicos ? m.topicos.map(t => `<div class="checklist-item"><div class="checklist-checkbox-wrapper"><input type="checkbox" class="checklist-checkbox" ${t.concluido?'checked':''} onchange="marcarConclusaoTopico('${m.id}','${t.id}')"><span style="${t.concluido?'text-decoration:line-through; color:var(--text-muted);':''}">${t.nome}</span></div><button class="btn-delete-item" onclick="excluirTopico('${m.id}','${t.id}')">🗑️</button></div>`).join('') : ''}
                 </div>
@@ -1436,19 +1076,17 @@
         }
 
         function resetarCronometro() {
-            clearInterval(tInterval); tRodando = false; cronometroSegundos = 0;
-            document.getElementById('timerVisual').innerText = "00:00:00";
+            clearInterval(tInterval); tRodando = false; cronometroSegundos = 0; document.getElementById('timerVisual').innerText = "00:00:00";
             const btn = document.getElementById('btnPlayPause'); if(btn) { btn.innerText = "Iniciar Foco"; btn.className = "btn-success"; }
         }
 
         function dispararRegistroSessao(isManual) {
             const proj = obterProjetoAtivo(); const matId = document.getElementById('sessaoMateria').value; const assId = document.getElementById('sessaoAssunto').value;
-            let segs = 0; if(!matId) return alert("Selecione uma disciplina base.");
+            let segs = 0; if(!matId) return alert("Selecione uma disciplina.");
             if(isManual) {
                 const h = parseInt(document.getElementById('manualHoras').value) || 0; const m = parseInt(document.getElementById('manualMinutos').value) || 0;
-                segs = (h * 3600) + (m * 60); if(segs <= 0) return alert("Defina um tempo válido.");
-            } else { segs = cronometroSegundos; if(segs < 5) return alert("Tempo muito curto para registro."); }
-            
+                segs = (h * 3600) + (m * 60); if(segs <= 0) return alert("Defina o tempo.");
+            } else { segs = cronometroSegundos; if(segs < 5) return alert("Tempo insuficiente."); }
             const matNome = proj.materias.find(m => m.id === matId)?.nome || "Geral";
             sessaoAtivaTemp = { mId: matId, aId: assId, segundos: segs };
             document.getElementById('modalAlvoTexto').innerText = matNome;
@@ -1459,17 +1097,12 @@
         function fecharModalSessao() { document.getElementById('modalRegistroSessao').style.display = 'none'; }
 
         function salvarRelatorioSessaoFinal() {
-            const proj = obterProjetoAtivo();
-            const qF = parseInt(document.getElementById('popQuestoesFeitas').value) || 0; const qA = parseInt(document.getElementById('popQuestoesAcertadas').value) || 0;
-            if(qA > qF) return alert("Acertos maiores que o total.");
-
+            const proj = obterProjetoAtivo(); const qF = parseInt(document.getElementById('popQuestoesFeitas').value) || 0; const qA = parseInt(document.getElementById('popQuestoesAcertadas').value) || 0;
+            if(qA > qF) return alert("Incoerência nas questões.");
             const m = proj.materias.find(x => x.id === sessaoAtivaTemp.mId);
             if(m) {
-                m.tempoSegundos = (m.tempoSegundos || 0) + sessaoAtivaTemp.segundos;
-                m.questoesFeitas = (m.questoesFeitas || 0) + qF; m.questoesAcertadas = (m.questoesAcertadas || 0) + qA;
-                
+                m.tempoSegundos = (m.tempoSegundos || 0) + sessaoAtivaTemp.segundos; m.questoesFeitas = (m.questoesFeitas || 0) + qF; m.questoesAcertadas = (m.questoesAcertadas || 0) + qA;
                 proj.historicoSessoes.push({ timestamp: Date.now(), materiaId: m.id, materiaNome: m.nome, segundos: sessaoAtivaTemp.segundos, questoesFeitas: qF, questoesAcertadas: qA });
-                
                 const aObj = m.topicos ? m.topicos.find(t => t.id === sessaoAtivaTemp.aId) : null; const nA = aObj ? aObj.nome : "Geral";
                 document.querySelectorAll('.checkRevisao:checked').forEach(cb => {
                     const dias = parseInt(cb.value); const dAlvo = new Date(); dAlvo.setDate(dAlvo.getDate() + dias);
@@ -1482,8 +1115,7 @@
         function salvarErroCaderno() {
             const proj = obterProjetoAtivo(); const mId = document.getElementById('errMateriaSelect').value; const aId = document.getElementById('errAssuntoSelect').value;
             const en = document.getElementById('errEnunciado').value.trim(); const mot = document.getElementById('errMotivo').value.trim();
-            if(!mId || !en || !mot) return alert("Preencha todos os dados básicos.");
-            
+            if(!mId || !en || !mot) return alert("Campos incompletos.");
             const mObj = proj.materias.find(x => x.id === mId); const aNome = mObj?.topicos?.find(t => t.id === aId)?.nome || "Geral";
             proj.cadernoErros.push({ id: "err_"+Date.now(), materiaNome: mObj.nome, assuntoNome: aNome, enunciado: en, motivo: mot, data: new Date().toLocaleDateString('pt-BR') });
             salvarBancoCompleto(); document.getElementById('errEnunciado').value = ""; document.getElementById('errMotivo').value = ""; atualizarDashboard();
@@ -1494,21 +1126,20 @@
             if(!proj.cadernoErros || proj.cadernoErros.length === 0) { container.innerHTML = '<p style="color:var(--text-muted); font-size:0.8rem;">Nenhum erro registrado.</p>'; return; }
             container.innerHTML = proj.cadernoErros.map(err => `
                 <div class="erro-card-item">
-                    <div class="erro-card-meta"><span>💀 ${err.materiaNome} ➔ ${err.assuntoNome}</span><div><span style="margin-right:10px;">${err.data}</span><span style="cursor:pointer; color:#ef4444;" onclick="excluirErro('${err.id}')">✖ EXPURGAR</span></div></div>
+                    <div class="erro-card-meta"><span>💀 ${err.materiaNome} ➔ ${err.assuntoNome}</span><div><span style="margin-right:10px;">${err.data}</span><span style="cursor:pointer; color:#ef4444;" onclick="excluirErro('${err.id}')">✖</span></div></div>
                     <div class="erro-card-enunciado">${err.enunciado}</div><div class="erro-card-motivo"><strong>Correção:</strong> ${err.motivo}</div>
                 </div>
             `).join('');
         }
-
         function excluirErro(id) { const proj = obterProjetoAtivo(); proj.cadernoErros = proj.cadernoErros.filter(e=>e.id!==id); salvarBancoCompleto(); atualizarDashboard(); }
 
         function renderizarRevisoesEspacadas(proj) {
             const c = document.getElementById('containerFilaRevisoes'); if(!c) return;
             if(!proj.revisoesAgendadas || proj.revisoesAgendadas.length===0) { c.innerHTML='<p style="color:var(--text-muted); font-size:0.8rem;">Nenhuma revisão ativa.</p>'; return; }
             c.innerHTML = proj.revisoesAgendadas.map(r => `
-                <div style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-primary); border:1px solid var(--border); padding:0.75rem; border-radius:4px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-primary); border:1px solid var(--border); padding:0.75rem; border-radius:4px; gap: 10px;">
                     <div><span style="font-size:0.6rem; background:var(--bg-tertiary); padding:2px 5px; color:var(--accent); font-weight:bold;">${r.tipoCiclo} (Até: ${r.dataLimite})</span><div style="font-weight:bold; font-size:0.8rem; margin-top:3px;">[${r.materiaNome}] - ${r.assuntoNome}</div></div>
-                    <button class="btn-militar-add" style="height:28px; font-size:0.65rem;" onclick="eliminarRevisao('${r.id}')">CONCLUÍDO ✓</button>
+                    <button class="btn-militar-add" style="height:28px; font-size:0.65rem; white-space:nowrap;" onclick="eliminarRevisao('${r.id}')">✓</button>
                 </div>
             `).join('');
         }
@@ -1516,7 +1147,7 @@
 
         function salvarNovoFlashcard() {
             const proj = obterProjetoAtivo(); const mId = document.getElementById('fcMateriaSelect').value; const f = document.getElementById('fcFrente').value.trim(); const v = document.getElementById('fcVerso').value.trim();
-            if(!mId || !f || !v) return alert("Preencha todos os campos do card.");
+            if(!mId || !f || !v) return alert("Campos incompletos.");
             const mNome = proj.materias.find(m => m.id === mId)?.nome || "Geral";
             proj.flashcards.push({ id: "fc_"+Date.now(), materiaNome: mNome, frente: f, verso: v });
             salvarBancoCompleto(); document.getElementById('fcFrente').value = ""; document.getElementById('fcVerso').value = ""; alert("Card alocado!"); proximoFlashcard();
@@ -1534,7 +1165,7 @@
         function exibirCardAtual(proj) {
             const card = proj.flashcards[fcIndexAtivo]; if(!card) return;
             document.getElementById('fcBadgeMateria').innerText = card.materiaNome; document.getElementById('fcBotoesAcao').style.display = 'none';
-            if(fcLadoFrente) { document.getElementById('fcLadoTitulo').innerText = "FRENTE - CLIQUE PARA VIRAR"; document.getElementById('fcTextoPrincipal').innerText = card.frente; document.getElementById('caixaFlashcard').style.borderColor = "var(--border)"; }
+            if(fcLadoFrente) { document.getElementById('fcLadoTitulo').innerText = "FRENTE - TOQUE PARA VIRAR"; document.getElementById('fcTextoPrincipal').innerText = card.frente; document.getElementById('caixaFlashcard').style.borderColor = "var(--border)"; }
             else { document.getElementById('fcLadoTitulo').innerText = "VERSO - AUTOAVALIAÇÃO"; document.getElementById('fcTextoPrincipal').innerText = card.verso; document.getElementById('caixaFlashcard').style.borderColor = "var(--accent)"; document.getElementById('fcBotoesAcao').style.display = 'grid'; }
         }
         function virarFlashcard() { if(fcIndexAtivo === -1) return; fcLadoFrente = !fcLadoFrente; exibirCardAtual(obterProjetoAtivo()); }
