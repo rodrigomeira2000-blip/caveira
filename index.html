@@ -5,8 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>PROJETO CAVEIRA - Mentoria & Múltiplos Editais</title>
     
-    <!-- Biblioteca para gerar o gráfico igual ao da foto 1000213264.jpg -->
+    <!-- Biblioteca do Gráfico -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Script Oficial da API da Google para Sincronização Nativa -->
+    <script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
+    <script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
     
     <style>
         /* PALETA DE CORES MILITAR / OPERACIONAL */
@@ -96,6 +99,12 @@
             outline: none;
         }
 
+        .workspace-wrapper-right {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
         .btn-militar-sm {
             padding: 0.5rem 1rem;
             background: var(--bg-tertiary);
@@ -111,6 +120,18 @@
         }
         .btn-militar-sm:hover { background: var(--border); border-color: var(--text-muted); }
 
+        /* Botão de Sincronização Dinâmico */
+        .btn-sync-cloud {
+            background: #0f172a;
+            border: 1px solid #22c55e;
+            color: #22c55e;
+        }
+        .btn-sync-cloud.sync-active {
+            background: #15803d;
+            color: #fff;
+            border-color: #15803d;
+        }
+
         .versao-tag {
             font-size: 0.7rem; 
             font-weight: bold; 
@@ -119,7 +140,7 @@
             letter-spacing: 0.5px;
         }
 
-        /* MENU LATERAL FIXO E RETRÁTIL (COMPUTADOR) */
+        /* MENU LATERAL FIXO E RETRÁTIL */
         .sidebar {
             position: fixed;
             top: 65px;
@@ -151,11 +172,7 @@
             margin: 0.75rem 0 0.25rem 0.75rem;
             white-space: nowrap;
         }
-        .sidebar.collapsed .sidebar-title {
-            opacity: 0;
-            height: 0;
-            margin: 0;
-        }
+        .sidebar.collapsed .sidebar-title { opacity: 0; height: 0; margin: 0; }
 
         .sidebar-btn {
             width: 100%;
@@ -175,49 +192,15 @@
             gap: 0.75rem;
             white-space: nowrap;
         }
+        .sidebar.collapsed .sidebar-btn { justify-content: center; padding: 0.8rem 0; width: 44px; height: 44px; border-radius: 50%; }
+        .sidebar.collapsed .sidebar-btn .btn-text { display: none; }
+        .sidebar-btn:hover, .sidebar-btn.active-link { color: var(--text-main); background-color: var(--bg-tertiary); border-color: var(--border); }
 
-        .sidebar.collapsed .sidebar-btn {
-            justify-content: center;
-            padding: 0.8rem 0;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-        }
-        .sidebar.collapsed .sidebar-btn .btn-text {
-            display: none;
-        }
+        .sidebar-toggle-container { display: flex; justify-content: flex-end; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); margin-bottom: 0.5rem; width: 100%; }
+        .sidebar.collapsed .sidebar-toggle-container { justify-content: center; border-bottom: none; margin-bottom: 0; }
+        .btn-toggle-trigger { background: var(--bg-tertiary); border: 1px solid var(--border); color: var(--text-main); padding: 0.4rem 0.75rem; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 0.8rem; }
 
-        .sidebar-btn:hover, .sidebar-btn.active-link {
-            color: var(--text-main);
-            background-color: var(--bg-tertiary);
-            border-color: var(--border);
-        }
-
-        .sidebar-toggle-container {
-            display: flex;
-            justify-content: flex-end;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid var(--border);
-            margin-bottom: 0.5rem;
-            width: 100%;
-        }
-        .sidebar.collapsed .sidebar-toggle-container {
-            justify-content: center;
-            border-bottom: none;
-            margin-bottom: 0;
-        }
-        .btn-toggle-trigger {
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border);
-            color: var(--text-main);
-            padding: 0.4rem 0.75rem;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 0.8rem;
-        }
-
-        /* CONTAINER PRINCIPAL DINÂMICO */
+        /* CONTAINER PRINCIPAL */
         .container {
             flex: 1;
             max-width: 1300px;
@@ -229,81 +212,28 @@
             transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             width: calc(100% - var(--sidebar-width));
         }
-        body.menu-colapsado .container { 
-            margin-left: var(--sidebar-collapsed-width); 
-            width: calc(100% - var(--sidebar-collapsed-width));
-        }
+        body.menu-colapsado .container { margin-left: var(--sidebar-collapsed-width); width: calc(100% - var(--sidebar-collapsed-width)); }
 
-        /* CARD HEADER INTERNO */
-        header {
-            width: 100%;
-            background-color: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 1.5rem;
-        }
-        .header-brand {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-        .header-brand h1 { 
-            font-size: 1.4rem; 
-            font-weight: 900; 
-            letter-spacing: 1px; 
-            text-transform: uppercase; 
-        }
+        header { width: 100%; background-color: var(--bg-secondary); border: 1px solid var(--border); border-radius: 4px; display: flex; align-items: center; justify-content: space-between; padding: 1.5rem; }
+        .header-brand { display: flex; align-items: center; gap: 0.75rem; }
+        .header-brand h1 { font-size: 1.4rem; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; }
         .header-brand h1 span { color: var(--text-muted); font-weight: 300; }
-        
-        .btn-editar-nome-projeto {
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border);
-            color: var(--text-muted);
-            cursor: pointer;
-            padding: 0.35rem 0.6rem;
-            border-radius: 4px;
-            font-size: 0.75rem;
-        }
+        .btn-editar-nome-projeto { background: var(--bg-tertiary); border: 1px solid var(--border); color: var(--text-muted); cursor: pointer; padding: 0.35rem 0.6rem; border-radius: 4px; font-size: 0.75rem; }
         .btn-editar-nome-projeto:hover { color: var(--accent); border-color: var(--accent); }
         .header-quote { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; text-align: right; }
 
         /* PATENTE */
-        .patente-header-box {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: linear-gradient(135deg, #121620 0%, #1e2538 100%);
-            border: 1px solid var(--border);
-            border-left: 4px solid var(--gold);
-            border-radius: 4px;
-            padding: 1.5rem;
-        }
+        .patente-header-box { display: flex; align-items: center; justify-content: space-between; background: linear-gradient(135deg, #121620 0%, #1e2538 100%); border: 1px solid var(--border); border-left: 4px solid var(--gold); border-radius: 4px; padding: 1.5rem; }
         .patente-info h3 { font-size: 1.3rem; font-weight: 900; color: var(--gold); text-transform: uppercase; }
         .patente-info p { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
         .patente-proximo-requisito { text-align: right; font-size: 0.75rem; font-weight: 700; line-height: 1.4; }
 
-        /* CARDS KPI (ESTATÍSTICAS) */
-        .kpi-container { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
-            gap: var(--card-gap); 
-        }
-        .kpi-card { 
-            background-color: var(--bg-secondary); 
-            border: 1px solid var(--border); 
-            border-radius: 4px; 
-            padding: 1.5rem; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 0.5rem; 
-        }
+        /* KPI */
+        .kpi-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--card-gap); }
+        .kpi-card { background-color: var(--bg-secondary); border: 1px solid var(--border); border-radius: 4px; padding: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
         .kpi-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
         .kpi-value { font-size: 1.75rem; font-weight: 800; color: var(--text-main); }
 
-        /* GRIDS */
         .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: var(--card-gap); }
         .card { background-color: var(--bg-secondary); border: 1px solid var(--border); border-radius: 4px; padding: 1.5rem; }
         .card h2 { font-size: 0.85rem; text-transform: uppercase; color: var(--text-main); margin-bottom: 1.25rem; font-weight: 800; border-left: 2px solid var(--text-muted); padding-left: 0.5rem; }
@@ -317,7 +247,6 @@
         .input-group-militar div { flex: 1; min-width: 200px; display: flex; flex-direction: column; gap: 0.35rem; }
         .input-group-militar label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
         .input-group-militar input, .input-group-militar select { padding: 0.65rem; background: var(--bg-primary); border: 1px solid var(--border); color: #fff; border-radius: 3px; }
-
         .btn-militar-add { padding: 0.65rem 1.25rem; background: var(--bg-tertiary); border: 1px solid var(--border); color: var(--text-main); font-weight: 700; text-transform: uppercase; font-size: 0.75rem; border-radius: 3px; cursor: pointer; height: 36px; }
         .btn-militar-add:hover { background: var(--border); }
 
@@ -370,204 +299,46 @@
         .modal-militar-actions { display: flex; gap: 0.5rem; margin-top: 1.5rem; }
         .modal-militar-actions button { flex: 1; padding: 0.75rem; border-radius: 3px; font-weight: 700; text-transform: uppercase; font-size: 0.8rem; border: none; cursor: pointer; }
 
-        /* CHAVEADOR DE ABAS */
         .aba-conteudo { display: none; }
         .aba-conteudo.aba-ativa { display: block; }
         .sub-aba-btn-group { display: flex; gap: 0.5rem; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
         .sub-aba-btn { background: transparent; color: var(--text-muted); border: none; cursor: pointer; font-size: 0.8rem; padding: 0.25rem 0.5rem; font-weight: 700; text-transform: uppercase; }
         .sub-aba-btn.active { color: var(--text-main); border-bottom: 2px solid var(--text-main); }
 
-        /* ESTILOS INJETADOS PARA DESIGN DO "APROVADO" (FOTO 1000213264.jpg) */
-        .aprovado-filter-tabs {
-            display: flex;
-            justify-content: space-around;
-            border-bottom: 2px solid var(--border);
-            margin-bottom: 1rem;
-        }
-        .aprovado-filter-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            padding: 0.75rem 1rem;
-            font-size: 0.85rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.2s;
-        }
-        .aprovado-filter-btn.active {
-            color: #ef4444; /* Vermelho destacado igual da foto */
-            border-bottom: 3px solid #ef4444;
-        }
-        .aprovado-chart-wrapper {
-            max-width: 280px;
-            margin: 1.5rem auto;
-            position: relative;
-        }
-        .aprovado-total-time {
-            font-size: 2.2rem;
-            font-weight: 800;
-            text-align: center;
-            color: var(--text-main);
-            margin: 1rem 0;
-            font-family: monospace;
-        }
-        .aprovado-legend-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0.65rem;
-            margin-top: 1rem;
-        }
-        .aprovado-legend-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.85rem;
-            padding: 0.4rem 0;
-            border-bottom: 1px dashed var(--border);
-        }
-        .aprovado-legend-left {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-weight: 700;
-        }
-        .aprovado-color-box {
-            width: 14px;
-            height: 14px;
-            border-radius: 2px;
-        }
+        /* DESIGN DO "APROVADO" */
+        .aprovado-filter-tabs { display: flex; justify-content: space-around; border-bottom: 2px solid var(--border); margin-bottom: 1rem; }
+        .aprovado-filter-btn { background: transparent; border: none; color: var(--text-muted); padding: 0.75rem 1rem; font-size: 0.85rem; font-weight: 800; text-transform: uppercase; cursor: pointer; width: 100%; transition: all 0.2s; }
+        .aprovado-filter-btn.active { color: #ef4444; border-bottom: 3px solid #ef4444; }
+        .aprovado-chart-wrapper { max-width: 280px; margin: 1.5rem auto; position: relative; }
+        .aprovado-total-time { font-size: 2.2rem; font-weight: 800; text-align: center; color: var(--text-main); margin: 1rem 0; font-family: monospace; }
+        .aprovado-legend-list { display: flex; flex-direction: column; gap: 0.65rem; margin-top: 1rem; }
+        .aprovado-legend-item { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; padding: 0.4rem 0; border-bottom: 1px dashed var(--border); }
+        .aprovado-legend-left { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; }
+        .aprovado-color-box { width: 14px; height: 14px; border-radius: 2px; }
 
-        /* ==================================================================
-           CORREÇÃO CRÍTICA DE RESPONSIVIDADE (RESTRUTURAÇÃO COMPLETA MOBILE)
-           ================================================================== */
-        @media (max-width: 968px) {
-            .dashboard-grid { grid-template-columns: 1fr; } 
-            .header-quote { display: none; }
-        }
-
+        @media (max-width: 968px) { .dashboard-grid { grid-template-columns: 1fr; } .header-quote { display: none; } }
         @media (max-width: 768px) {
-            :root {
-                --main-padding: 0.85rem;
-                --card-gap: 0.85rem;
-            }
-
-            html, body {
-                width: 100%;
-                overflow-x: hidden;
-            }
-
-            .workspace-bar {
-                padding: 0 0.75rem;
-                height: 60px;
-            }
-            .workspace-label, .versao-tag {
-                display: none !important;
-            }
-            .select-workspace {
-                max-width: 160px;
-                font-size: 0.75rem;
-                padding: 0.4rem 0.5rem;
-            }
-
-            .sidebar {
-                position: fixed;
-                top: auto !important;
-                bottom: 0 !important;
-                left: 0 !important;
-                right: 0 !important;
-                width: 100% !important;
-                height: 65px !important;
-                flex-direction: row !important;
-                justify-content: space-around !important;
-                align-items: center !important;
-                padding: 0 !important;
-                border-right: none !important;
-                border-top: 1px solid var(--border) !important;
-                background: var(--bg-secondary) !important;
-                z-index: 9999 !important;
-            }
-            
-            .sidebar-title, .sidebar-toggle-container {
-                display: none !important;
-            }
-
-            .sidebar-btn {
-                flex-direction: column !important;
-                justify-content: center !important;
-                align-items: center !important;
-                gap: 3px !important;
-                padding: 0 !important;
-                font-size: 0.6rem !important;
-                width: 55px !important;
-                height: 100% !important;
-                background: transparent !important;
-                border: none !important;
-                color: var(--text-muted) !important;
-            }
-
-            .sidebar-btn span:first-child {
-                font-size: 1.25rem !important;
-                margin: 0 !important;
-            }
-
-            .sidebar-btn .btn-text {
-                display: block !important;
-                opacity: 1 !important;
-                font-size: 0.58rem !important;
-                font-weight: 600 !important;
-                text-transform: uppercase !important;
-            }
-
-            .sidebar-btn.active-link {
-                color: var(--accent) !important;
-                background: transparent !important;
-            }
-
-            .container {
-                margin-left: 0 !important;
-                width: 100% !important;
-                max-width: 100% !important;
-                padding-top: 75px !important;    
-                padding-bottom: 85px !important; 
-            }
-            body.menu-colapsado .container {
-                margin-left: 0 !important;
-                width: 100% !important;
-            }
-
-            header {
-                padding: 1rem;
-                flex-direction: column;
-                gap: 0.75rem;
-                text-align: center;
-            }
-            .header-brand {
-                flex-direction: column;
-                width: 100%;
-                gap: 0.5rem;
-            }
+            :root { --main-padding: 0.85rem; --card-gap: 0.85rem; }
+            html, body { width: 100%; overflow-x: hidden; }
+            .workspace-bar { padding: 0 0.75rem; height: 60px; }
+            .workspace-label, .versao-tag { display: none !important; }
+            .select-workspace { max-width: 130px; font-size: 0.75rem; padding: 0.4rem 0.5rem; }
+            .sidebar { position: fixed; top: auto !important; bottom: 0 !important; left: 0 !important; right: 0 !important; width: 100% !important; height: 65px !important; flex-direction: row !important; justify-content: space-around !important; align-items: center !important; padding: 0 !important; border-right: none !important; border-top: 1px solid var(--border) !important; background: var(--bg-secondary) !important; z-index: 9999 !important; }
+            .sidebar-title, .sidebar-toggle-container { display: none !important; }
+            .sidebar-btn { flex-direction: column !important; justify-content: center !important; align-items: center !important; gap: 3px !important; padding: 0 !important; font-size: 0.6rem !important; width: 55px !important; height: 100% !important; background: transparent !important; border: none !important; color: var(--text-muted) !important; }
+            .sidebar-btn span:first-child { font-size: 1.25rem !important; margin: 0 !important; }
+            .sidebar-btn .btn-text { display: block !important; opacity: 1 !important; font-size: 0.58rem !important; font-weight: 600 !important; text-transform: uppercase !important; }
+            .sidebar-btn.active-link { color: var(--accent) !important; background: transparent !important; }
+            .container { margin-left: 0 !important; width: 100% !important; max-width: 100% !important; padding-top: 75px !important; padding-bottom: 85px !important; }
+            body.menu-colapsado .container { margin-left: 0 !important; width: 100% !important; }
+            header { padding: 1rem; flex-direction: column; gap: 0.75rem; text-align: center; }
+            .header-brand { flex-direction: column; width: 100%; gap: 0.5rem; }
             .header-brand h1 { font-size: 1.2rem; }
-
-            .patente-header-box {
-                flex-direction: column;
-                text-align: center;
-                gap: 0.75rem;
-                padding: 1rem;
-            }
+            .patente-header-box { flex-direction: column; text-align: center; gap: 0.75rem; padding: 1rem; }
             .patente-proximo-requisito { text-align: center; }
-
-            .kpi-container {
-                grid-template-columns: repeat(2, 1fr) !important; 
-                gap: 0.5rem;
-            }
-            .kpi-card {
-                padding: 1rem 0.75rem;
-                text-align: center;
-            }
+            .kpi-container { grid-template-columns: repeat(2, 1fr) !important; gap: 0.5rem; }
+            .kpi-card { padding: 1rem 0.75rem; text-align: center; }
             .kpi-value { font-size: 1.3rem; }
-
             .timer-display { font-size: 2.6rem; padding: 0.75rem 0; }
             .input-group-militar div { min-width: 100%; }
             .btn-militar-add { width: 100%; }
@@ -583,44 +354,32 @@
                 <span class="workspace-label">Foco Operacional:</span>
                 <select id="seletorProjetosGlobal" class="select-workspace" onchange="alternarProjetoAtivo()"></select>
             </div>
-            <button class="btn-militar-sm" onclick="abrirModalNovoProjeto()">+ Novo Edital</button>
+            <div class="workspace-wrapper-right">
+                <!-- Botão Estratégico de Sincronização em Nuvem (Drive API) -->
+                <button class="btn-militar-sm btn-sync-cloud" id="btnSincronizacaoNuvem" onclick="solicitarAutenticacaoDrive()">Sincronizar Nuvem</button>
+                <button class="btn-militar-sm" onclick="abrirModalNovoProjeto()">+ Novo Edital</button>
+            </div>
         </div>
-        <div class="versao-tag">Quartel General v2.6</div>
+        <div class="versao-tag">Caveira Cloud v3.0</div>
     </div>
 
-    <!-- GESTÃO DE NAVEGAÇÃO DA PLATAFORMA -->
+    <!-- MENU LATERAL -->
     <nav class="sidebar" id="sidebarTatica">
         <div class="sidebar-toggle-container">
             <button class="btn-toggle-trigger" onclick="toggleSidebar()">☰</button>
         </div>
-
         <div class="sidebar-title">Navegação</div>
-        <button class="sidebar-btn active-link" id="btn_home" onclick="trocarAba('abaHome', 'btn_home')">
-            <span>🏠</span><span class="btn-text">Painel</span>
-        </button>
-        <button class="sidebar-btn" id="btn_stats" onclick="trocarAba('abaStats', 'btn_stats')">
-            <span>📊</span><span class="btn-text">Tempo</span>
-        </button>
-        <button class="sidebar-btn" id="btn_cronometro" onclick="trocarAba('abaCronometro', 'btn_cronometro')">
-            <span>⏱️</span><span class="btn-text">Foco</span>
-        </button>
-        <button class="sidebar-btn" id="btn_edital" onclick="trocarAba('abaEdital', 'btn_edital')">
-            <span>💀</span><span class="btn-text">Edital</span>
-        </button>
-        <button class="sidebar-btn" id="btn_revisoes" onclick="trocarAba('abaRevisoes', 'btn_revisoes')">
-            <span>📋</span><span class="btn-text">Revisar</span>
-        </button>
-        <button class="sidebar-btn" id="btn_erro" onclick="trocarAba('abaCadernoErro', 'btn_erro')">
-            <span>📔</span><span class="btn-text">Erros</span>
-        </button>
-        <button class="sidebar-btn" id="btn_flashcards" onclick="trocarAba('abaFlashcards', 'btn_flashcards')">
-            <span>🗂️</span><span class="btn-text">Cards</span>
-        </button>
+        <button class="sidebar-btn active-link" id="btn_home" onclick="trocarAba('abaHome', 'btn_home')"><span>🏠</span><span class="btn-text">Painel</span></button>
+        <button class="sidebar-btn" id="btn_stats" onclick="trocarAba('abaStats', 'btn_stats')"><span>📊</span><span class="btn-text">Tempo</span></button>
+        <button class="sidebar-btn" id="btn_cronometro" onclick="trocarAba('abaCronometro', 'btn_cronometro')"><span>⏱️</span><span class="btn-text">Foco</span></button>
+        <button class="sidebar-btn" id="btn_edital" onclick="trocarAba('abaEdital', 'btn_edital')"><span>💀</span><span class="btn-text">Edital</span></button>
+        <button class="sidebar-btn" id="btn_revisoes" onclick="trocarAba('abaRevisoes', 'btn_revisoes')"><span>📋</span><span class="btn-text">Revisar</span></button>
+        <button class="sidebar-btn" id="btn_erro" onclick="trocarAba('abaCadernoErro', 'btn_erro')"><span>📔</span><span class="btn-text">Erros</span></button>
+        <button class="sidebar-btn" id="btn_flashcards" onclick="trocarAba('abaFlashcards', 'btn_flashcards')"><span>🗂️</span><span class="btn-text">Cards</span></button>
     </nav>
 
     <!-- AREA DE CONTEUDO PRINCIPAL -->
     <div class="container">
-        
         <header>
             <div class="header-brand">
                 <h1 id="tituloEditalHeader">PROJETO <span>CAVEIRA</span></h1>
@@ -629,9 +388,8 @@
             <div class="header-quote">"A FARDA CUSTA CARO, MAS O PREÇO DO FRACASSO É PERMANENTE."</div>
         </header>
 
-        <!-- ==================== ABA 1: VISÃO GERAL ==================== -->
+        <!-- ABA 1: VISÃO GERAL -->
         <div id="abaHome" class="aba-conteudo aba-ativa">
-            
             <div class="patente-header-box">
                 <div class="patente-info">
                     <p>Hierarquia Funcional do Projeto Ativo</p>
@@ -641,37 +399,19 @@
             </div>
 
             <div class="kpi-container" style="margin-top: 0.5rem;">
-                <div class="kpi-card" style="border-color: #f97316;">
-                    <span class="kpi-label" style="color: #f97316;">🔥 Ofensiva</span>
-                    <span class="kpi-value" id="kpiOfensiva">0 Dias</span>
-                </div>
-                <div class="kpi-card">
-                    <span class="kpi-label">Tempo Total</span>
-                    <span class="kpi-value" id="kpiTempoTotal">00h 00m</span>
-                </div>
-                <div class="kpi-card">
-                    <span class="kpi-label">Questões</span>
-                    <span class="kpi-value" id="kpiDesempenhoQuestoes">0%</span>
-                </div>
-                <div class="kpi-card">
-                    <span class="kpi-label">Varrer Edital</span>
-                    <span class="kpi-value" id="kpiEditalPct">0%</span>
-                </div>
+                <div class="kpi-card" style="border-color: #f97316;"><span class="kpi-label" style="color: #f97316;">🔥 Ofensiva</span><span class="kpi-value" id="kpiOfensiva">0 Dias</span></div>
+                <div class="kpi-card"><span class="kpi-label">Tempo Total</span><span class="kpi-value" id="kpiTempoTotal">00h 00m</span></div>
+                <div class="kpi-card"><span class="kpi-label">Questões</span><span class="kpi-value" id="kpiDesempenhoQuestoes">0%</span></div>
+                <div class="kpi-card"><span class="kpi-label">Varrer Edital</span><span class="kpi-value" id="kpiEditalPct">0%</span></div>
             </div>
 
             <div class="card" style="margin-top: 0.5rem;">
                 <h2>📅 Meta Operacional Semanal</h2>
                 <div class="input-group-militar" style="border-bottom:none; margin-bottom:0; padding-bottom:0;">
-                    <div>
-                        <label>Meta de Horas</label>
-                        <input type="number" id="inputMetaSemanal" value="20" onchange="alterarMetaSemanalHoras()">
-                    </div>
+                    <div><label>Meta de Horas</label><input type="number" id="inputMetaSemanal" value="20" onchange="alterarMetaSemanalHoras()"></div>
                 </div>
                 <div class="ciclo-progress-container">
-                    <div class="ciclo-bar-wrapper">
-                        <span>Progresso</span>
-                        <span id="textoCicloHoras">0h / 20h</span>
-                    </div>
+                    <div class="ciclo-bar-wrapper"><span>Progresso</span><span id="textoCicloHoras">0h / 20h</span></div>
                     <div class="ciclo-track">
                         <div class="ciclo-fill" id="barraCicloFill"></div>
                         <div class="ciclo-text-overlay" id="barraCicloPct">0%</div>
@@ -685,14 +425,7 @@
                         <h2>Disciplinas Estratégicas</h2>
                         <div class="materia-table-wrapper">
                             <table class="materia-table">
-                               <thead>
-                                   <tr>
-                                       <th>Matéria</th>
-                                       <th>Horas</th>
-                                       <th>Top.</th>
-                                       <th>% Q.</th>
-                                   </tr>
-                               </thead>
+                               <thead><tr><th>Matéria</th><th>Horas</th><th>Top.</th><th>% Q.</th></tr></thead>
                                <tbody id="tabelaMateriasCorpo"></tbody>
                             </table>
                         </div>
@@ -703,45 +436,29 @@
                         <h2>Diretrizes de Inteligência</h2>
                         <div style="font-size:0.8rem; color:var(--text-muted); line-height: 1.6;">
                             • Alterne seus projetos na barra superior para isolar editais.<br>
-                            • Mantenha a consistência diária para evitar o rebaixamento de patente.
+                            • A sincronização em nuvem salva automaticamente os dados ao final de cada ação.
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- ==================== NOVA ABA: TEMPO DE ESTUDO (ESTILO APP APROVADO) ==================== -->
+        <!-- ABA 2: TEMPO DE ESTUDO (APP APROVADO) -->
         <div id="abaStats" class="aba-conteudo">
             <div class="card" style="max-width: 550px; margin: 0 auto; padding: 1.25rem;">
-                
-                <!-- Abas de Filtro da Imagem 1000213264.jpg -->
                 <div class="aprovado-filter-tabs">
                     <button class="aprovado-filter-btn active" id="btnFiltroDia" onclick="mudarFiltroTempo('dia')">Dia</button>
                     <button class="aprovado-filter-btn" id="btnFiltroSemana" onclick="mudarFiltroTempo('semana')">Seman</button>
                     <button class="aprovado-filter-btn" id="btnFiltroMes" onclick="mudarFiltroTempo('mes')">Mês</button>
                 </div>
-
-                <div style="text-align: center; color: var(--text-muted); font-size: 0.8rem; font-weight: bold; text-transform: uppercase;">
-                    Materias do Projeto Ativo
-                </div>
-
-                <!-- Gráfico de Pizza Dinâmico -->
-                <div class="aprovado-chart-wrapper">
-                    <canvas id="aprovadoChartCanvas"></canvas>
-                </div>
-
-                <!-- Display Digital de Tempo Geral -->
+                <div style="text-align: center; color: var(--text-muted); font-size: 0.8rem; font-weight: bold; text-transform: uppercase;">Materias do Projeto Ativo</div>
+                <div class="aprovado-chart-wrapper"><canvas id="aprovadoChartCanvas"></canvas></div>
                 <div class="aprovado-total-time" id="aprovadoDisplayCronometro">0h 00m 00s</div>
-
-                <!-- Lista de Legendas e Percentuais -->
-                <div class="aprovado-legend-list" id="aprovadoListaLegendas">
-                    <!-- Gerado dinamicamente via JS -->
-                </div>
-
+                <div class="aprovado-legend-list" id="aprovadoListaLegendas"></div>
             </div>
         </div>
 
-        <!-- ==================== ABA 3: CRONÔMETRO ==================== -->
+        <!-- ABA 3: CRONÔMETRO -->
         <div id="abaCronometro" class="aba-conteudo">
             <div class="card" style="max-width: 600px; margin: 0 auto;">
                 <div class="sub-aba-btn-group">
@@ -751,14 +468,8 @@
 
                 <div style="background: var(--bg-primary); padding: 1.25rem; border-radius: 4px; border: 1px solid var(--border); margin-bottom: 1.25rem;">
                     <h4 style="font-size: 0.7rem; color: var(--text-main); text-transform: uppercase; margin-bottom: 0.8rem;">🎯 ALVO DA MISSÃO</h4>
-                    <div class="form-militar-row">
-                        <label>Matéria</label>
-                        <select id="sessaoMateria" onchange="atualizarSelectAssuntosCronometro()"></select>
-                    </div>
-                    <div class="form-militar-row" style="margin-bottom: 0;">
-                        <label>Tópico Vinculado</label>
-                        <select id="sessaoAssunto"></select>
-                    </div>
+                    <div class="form-militar-row"><label>Matéria</label><select id="sessaoMateria" onchange="atualizarSelectAssuntosCronometro()"></select></div>
+                    <div class="form-militar-row" style="margin-bottom: 0;"><label>Tópico Vinculado</label><select id="sessaoAssunto"></select></div>
                     <div class="form-militar-row" style="margin-top: 0.8rem; margin-bottom: 0;">
                         <label>Tipo de Atividade</label>
                         <select id="sessaoTipoAtividade">
@@ -790,7 +501,7 @@
             </div>
         </div>
 
-        <!-- ==================== ABA 4: EDITAL VERTICAL ==================== -->
+        <!-- ABA 4: EDITAL VERTICAL -->
         <div id="abaEdital" class="aba-conteudo">
             <div class="card">
                 <h2>Alimentação do Banco de Dados</h2>
@@ -807,7 +518,7 @@
             <div class="card"><h2>Edital Verticalizado Atual</h2><div id="editalContainer"></div></div>
         </div>
 
-        <!-- ==================== ABA 5: REVISÕES ==================== -->
+        <!-- ABA 5: REVISÕES -->
         <div id="abaRevisoes" class="aba-conteudo">
             <div class="card">
                 <h2>Cronograma de Revisões</h2>
@@ -815,38 +526,22 @@
             </div>
         </div>
 
-        <!-- ==================== ABA 6: CADERNO DE ERROS ==================== -->
+        <!-- ABA 6: CADERNO DE ERROS -->
         <div id="abaCadernoErro" class="aba-conteudo">
             <div class="card">
                 <h2>📔 Registrar Erros Mapeados</h2>
                 <div class="input-group-militar">
-                    <div>
-                        <label>Disciplina</label>
-                        <select id="errMateriaSelect" onchange="atualizarSelectAssuntosErro()"></select>
-                    </div>
-                    <div>
-                        <label>Tópico</label>
-                        <select id="errAssuntoSelect"></select>
-                    </div>
+                    <div><label>Disciplina</label><select id="errMateriaSelect" onchange="atualizarSelectAssuntosErro()"></select></div>
+                    <div><label>Tópico</label><select id="errAssuntoSelect"></select></div>
                 </div>
-                <div class="form-militar-row">
-                    <label>Enunciado / Pegadinha da Questão</label>
-                    <input type="text" id="errEnunciado" placeholder="O que a banca cobrou...">
-                </div>
-                <div class="form-militar-row">
-                    <label>Fundamentação e Correção</label>
-                    <textarea id="errMotivo" rows="2" placeholder="Explicação legal ou erro cometido..."></textarea>
-                </div>
+                <div class="form-militar-row"><label>Enunciado / Pegadinha da Questão</label><input type="text" id="errEnunciado" placeholder="O que a banca cobrou..."></div>
+                <div class="form-militar-row"><label>Fundamentação e Correção</label><textarea id="errMotivo" rows="2" placeholder="Explicação legal ou erro cometido..."></textarea></div>
                 <button class="btn-militar-add" onclick="salvarErroCaderno()">Gravar no Caderno</button>
             </div>
-
-            <div class="card">
-                <h2>📋 Seus Erros Mapeados</h2>
-                <div id="containerListaErros"></div>
-            </div>
+            <div class="card"><h2>📋 Seus Erros Mapeados</h2><div id="containerListaErros"></div></div>
         </div>
 
-        <!-- ==================== ABA 7: FLASHCARDS ==================== -->
+        <!-- ABA 7: FLASHCARDS -->
         <div id="abaFlashcards" class="aba-conteudo">
             <div class="dashboard-grid">
                 <div class="left-column">
@@ -860,7 +555,6 @@
                                     <div class="flashcard-texto" id="fcTextoPrincipal">Aguardando...</div>
                                 </div>
                             </div>
-                            
                             <div class="flashcard-actions" id="fcBotoesAcao" style="display: none;">
                                 <button class="btn-fc-dificil" onclick="avaliarCard(1)">❌ Errei</button>
                                 <button class="btn-fc-medio" onclick="avaliarCard(2)">🟡 Médio</button>
@@ -869,28 +563,17 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="right-column">
                     <div class="card">
                         <h2>🛠️ Injetar Flashcard</h2>
-                        <div class="form-militar-row">
-                            <label>Disciplina</label>
-                            <select id="fcMateriaSelect"></select>
-                        </div>
-                        <div class="form-militar-row">
-                            <label>Frente (Pergunta)</label>
-                            <textarea id="fcFrente" rows="2"></textarea>
-                        </div>
-                        <div class="form-militar-row">
-                            <label>Verso (Resposta / Lei)</label>
-                            <textarea id="fcVerso" rows="2"></textarea>
-                        </div>
+                        <div class="form-militar-row"><label>Disciplina</label><select id="fcMateriaSelect"></select></div>
+                        <div class="form-militar-row"><label>Frente (Pergunta)</label><textarea id="fcFrente" rows="2"></textarea></div>
+                        <div class="form-militar-row"><label>Verso (Resposta / Lei)</label><textarea id="fcVerso" rows="2"></textarea></div>
                         <button class="btn-militar-add" style="width: 100%;" onclick="salvarNovoFlashcard()">Criar Card</button>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
 
     <!-- MODAIS OPERACIONAIS -->
@@ -901,12 +584,10 @@
                 MATÉRIA: <span id="modalAlvoTexto" style="color: #fff; font-weight: 700;">-</span><br>
                 TEMPO: <span id="modalTempoTexto" style="color: #fff; font-weight: 700;">-</span>
             </div>
-
             <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
                 <div class="form-militar-row" style="flex: 1;"><label>Questões Feitas</label><input type="number" id="popQuestoesFeitas" value="0"></div>
                 <div class="form-militar-row" style="flex: 1;"><label>Acertos</label><input type="number" id="popQuestoesAcertadas" value="0"></div>
             </div>
-
             <div class="form-militar-row">
                 <label>Criar Alertas de Revisão?</label>
                 <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem;">
@@ -916,7 +597,6 @@
                     <label style="font-size:0.75rem;"><input type="checkbox" value="30" class="checkRevisao"> 30d</label>
                 </div>
             </div>
-
             <div class="modal-militar-actions">
                 <button class="btn-danger" onclick="fecharModalSessao()">Descartar</button>
                 <button class="btn-success" onclick="salvarRelatorioSessaoFinal()">Salvar Missão</button>
@@ -927,27 +607,29 @@
     <div class="modal-militar-overlay" id="modalGerenciarProjetos">
         <div class="modal-militar-box">
             <div class="modal-militar-title">Painel de Editais</div>
-            
             <div style="background: var(--bg-primary); padding: 1rem; border-radius:4px; border: 1px solid var(--border); margin-bottom: 1.25rem;">
                 <h3 style="font-size:0.75rem; text-transform:uppercase; margin-bottom:0.5rem;">⚡ Adicionar Edital</h3>
-                <div class="form-militar-row">
-                    <label>Nome do Concurso</label>
-                    <input type="text" id="novoProjetoNome" placeholder="Ex: Guarda Municipal, PM, PC">
-                </div>
+                <div class="form-militar-row"><label>Nome do Concurso</label><input type="text" id="novoProjetoNome" placeholder="Ex: Guarda Municipal"></div>
                 <button class="btn-militar-add" style="width:100%;" onclick="criarNovoProjetoObjeto()">Criar Novo</button>
             </div>
-
             <h3 style="font-size:0.75rem; text-transform:uppercase; margin-bottom:0.5rem; color:var(--text-muted);">Ativos</h3>
             <div id="listaProjetosGerenciador" style="max-height: 150px; overflow-y:auto; display:flex; flex-direction:column; gap:0.5rem;"></div>
-
-            <div class="modal-militar-actions">
-                <button class="btn-danger" style="background:var(--bg-tertiary); color:#fff;" onclick="fecharModalNovoProjeto()">Fechar</button>
-            </div>
+            <div class="modal-militar-actions"><button class="btn-danger" style="background:var(--bg-tertiary); color:#fff;" onclick="fecharModalNovoProjeto()">Fechar</button></div>
         </div>
     </div>
 
-    <!-- LOGICA SCRIPT -->
+    <!-- LOGICA SCRIPT COM INTEGRAÇÃO GOOGLE DRIVE CLOUD NATIVA -->
     <script>
+        // CONFIGURAÇÃO DA API GOOGLE DRIVE (Escopo restrito ao próprio app para privacidade)
+        const CLIENT_ID = '332349141042-4quv5u3m8b9f6h9t6mfa8km91qg2vfe3.apps.googleusercontent.com'; 
+        const SCOPES = 'https://www.googleapis.com/auth/drive.appdata';
+        
+        let tokenClient;
+        let gapiInited = false;
+        let gisInited = false;
+        let driveToken = null;
+        let googleFileId = null;
+
         let globalDB = { projetoAtivoId: "", projetos: [] };
         let cronometroSegundos = 0;
         let tInterval = null;
@@ -956,21 +638,21 @@
         let fcIndexAtivo = -1;
         let fcLadoFrente = true;
         
-        // Controle de gráfico do App Aprovado
         let aprovadoChartInstance = null;
         let filtroTempoAtual = 'dia'; 
         const coresAprovadoPaleta = ['#ff9faa', '#ff9233', '#e0e0e0', '#38bdf8', '#a855f7', '#22c55e', '#f43f5e', '#eab308'];
 
         window.onload = function() {
-            carregarBancoCompleto();
+            carregarBancoLocalInicial();
             sincronizarInterfaceProjetos();
             atualizarDashboard();
         };
 
-        function carregarBancoCompleto() {
+        // Carrega do navegador enquanto a nuvem não entra em ação
+        function carregarBancoLocalInicial() {
             const localData = localStorage.getItem('projeto_caveira_multiprojetos');
             if (localData) {
-                try { globalDB = JSON.parse(localData); } catch (e) { console.error("Reiniciando banco."); }
+                try { globalDB = JSON.parse(localData); } catch (e) { console.error("Erro local"); }
             }
             if (!globalDB.projetos || globalDB.projetos.length === 0) {
                 globalDB.projetos = [{
@@ -984,17 +666,95 @@
                     metaSemanalHoras: 20
                 }];
                 globalDB.projetoAtivoId = "proj_default";
-                salvarBancoCompleto();
+                salvarBancoLocal();
             }
             if(!globalDB.projetoAtivoId) globalDB.projetoAtivoId = globalDB.projetos[0].id;
         }
 
-        function salvarBancoCompleto() { localStorage.setItem('projeto_caveira_multiprojetos', JSON.stringify(globalDB)); }
+        function salvarBancoLocal() {
+            localStorage.setItem('projeto_caveira_multiprojetos', JSON.stringify(globalDB));
+            // Dispara upload invisível e assíncrono se estiver logado na nuvem
+            if (driveToken) { uploadBancoParaNuvem(); }
+        }
+
+        /* LÓGICA DE INFRAESTRUTURA DA API GOOGLE DRIVE */
+        function gapiLoaded() { gapi.load('client', () => { gapiInited = true; verificarProntidaoAutenticacao(); }); }
+        function gisLoaded() { tokenClient = google.accounts.oauth2.initTokenClient({ client_id: CLIENT_ID, scope: SCOPES, callback: (resp) => { if (resp.error !== undefined) { throw (resp); } driveToken = resp.access_token; marcarInterfaceNuvemAtiva(); baixarBancoDaNuvem(); } }); gisInited = true; verificarProntidaoAutenticacao(); }
+        function verificarProntidaoAutenticacao() { if(gapiInited && gisInited) { document.getElementById('btnSincronizacaoNuvem').style.borderColor = varColor('--accent'); } }
+        function varColor(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+
+        function solicitarAutenticacaoDrive() {
+            if (!driveToken) { tokenClient.requestAccessToken({prompt: 'consent'}); } 
+            else { baixarBancoDaNuvem(); }
+        }
+
+        function marcarInterfaceNuvemAtiva() {
+            const btn = document.getElementById('btnSincronizacaoNuvem');
+            btn.innerText = "☁️ Nuvem Ativa";
+            btn.classList.add('sync-active');
+        }
+
+        // Procura ou cria o arquivo caveira_banco.json na pasta oculta do app no Drive
+        function baixarBancoDaNuvem() {
+            gapi.client.setToken({ access_token: driveToken });
+            fetch('https://www.googleapis.com/drive/v3/files?spaces=appDataFolder', {
+                headers: { 'Authorization': 'Bearer ' + driveToken }
+            })
+            .then(res => res.json())
+            .then(data => {
+                const file = data.files.find(f => f.name === 'caveira_banco.json');
+                if (file) {
+                    googleFileId = file.id;
+                    // Faz o download do conteúdo
+                    fetch(`https://www.googleapis.com/drive/v3/files/${googleFileId}?alt=media`, {
+                        headers: { 'Authorization': 'Bearer ' + driveToken }
+                    })
+                    .then(r => r.json())
+                    .then(nuvemDB => {
+                        if(nuvemDB && nuvemDB.projetos) {
+                            globalDB = nuvemDB;
+                            localStorage.setItem('projeto_caveira_multiprojetos', JSON.stringify(globalDB));
+                            sincronizarInterfaceProjetos();
+                            atualizarDashboard();
+                        }
+                    });
+                } else {
+                    // Arquivo não existe na nuvem, faz o primeiro upload estrutural
+                    criarArquivoBancoNaNuvem();
+                }
+            });
+        }
+
+        function criarArquivoBancoNaNuvem() {
+            const metadata = { name: 'caveira_banco.json', parents: ['appDataFolder'] };
+            const formData = new FormData();
+            formData.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+            formData.append('file', new Blob([JSON.stringify(globalDB)], { type: 'application/json' }));
+
+            fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
+                method: 'POST',
+                headers: { 'Authorization': 'Bearer ' + driveToken },
+                body: formData
+            })
+            .then(res => res.json())
+            .then(file => { googleFileId = file.id; });
+        }
+
+        function uploadBancoParaNuvem() {
+            if (!googleFileId || !driveToken) return;
+            fetch(`https://www.googleapis.com/upload/drive/v3/files/${googleFileId}?uploadType=media`, {
+                method: 'PATCH',
+                headers: { 'Authorization': 'Bearer ' + driveToken, 'Content-Type': 'application/json' },
+                body: JSON.stringify(globalDB)
+            });
+        }
+
+        /* REGRAS DE NEGÓCIO E INTERFACE */
         function obterProjetoAtivo() { return globalDB.projetos.find(p => p.id === globalDB.projetoAtivoId) || globalDB.projetos[0]; }
 
         function alternarProjetoAtivo() {
             globalDB.projetoAtivoId = document.getElementById('seletorProjetosGlobal').value;
-            salvarBancoCompleto();
+            salvarBancoLocal();
             resetarCronometro();
             fcIndexAtivo = -1;
             atualizarDashboard();
@@ -1005,7 +765,7 @@
             const novoNome = prompt("Nome do edital/projeto:", proj.nome);
             if(novoNome && novoNome.trim() !== "") {
                 proj.nome = novoNome.trim();
-                salvarBancoCompleto();
+                salvarBancoLocal();
                 sincronizarInterfaceProjetos();
                 atualizarDashboard();
             }
@@ -1054,7 +814,7 @@
             const inp = document.getElementById('novoProjetoNome'); const nome = inp.value.trim(); if (!nome) return;
             const n = { id: "proj_" + Date.now(), nome: nome, materias: [], revisoesAgendadas: [], historicoSessoes: [], cadernoErros: [], flashcards: [], metaSemanalHoras: 20 };
             globalDB.projetos.push(n); globalDB.projetoAtivoId = n.id;
-            salvarBancoCompleto(); inp.value = ""; sincronizarInterfaceProjetos(); fecharModalNovoProjeto(); atualizarDashboard();
+            salvarBancoLocal(); inp.value = ""; sincronizarInterfaceProjetos(); fecharModalNovoProjeto(); atualizarDashboard();
         }
 
         function renderizarListaGerenciadorProjetos() {
@@ -1070,7 +830,7 @@
             if(confirm("Confirmar exclusão de dados permanentes?")) {
                 globalDB.projetos = globalDB.projetos.filter(p => p.id !== id);
                 if (globalDB.projetoAtivoId === id) globalDB.projetoAtivoId = globalDB.projetos[0].id;
-                salvarBancoCompleto(); sincronizarInterfaceProjetos(); renderizarListaGerenciadorProjetos(); atualizarDashboard();
+                salvarBancoLocal(); sincronizarInterfaceProjetos(); renderizarListaGerenciadorProjetos(); atualizarDashboard();
             }
         }
 
@@ -1124,7 +884,7 @@
 
         function alterarMetaSemanalHoras() {
             const proj = obterProjetoAtivo(); proj.metaSemanalHoras = parseInt(document.getElementById('inputMetaSemanal').value) || 20;
-            salvarBancoCompleto(); calcularCicloSemanal(proj);
+            salvarBancoLocal(); calcularCicloSemanal(proj);
         }
 
         function calcularCicloSemanal(proj) {
@@ -1137,21 +897,21 @@
         function adicionarNovaMateria() {
             const proj = obterProjetoAtivo(); const inp = document.getElementById('novaMateriaNome'); const n = inp.value.trim(); if(!n) return;
             proj.materias.push({ id:"m_"+Date.now(), nome:n, tempoSegundos:0, questoesFeitas:0, questoesAcertadas:0, topicos:[] });
-            salvarBancoCompleto(); inp.value = ""; atualizarDashboard();
+            salvarBancoLocal(); inp.value = ""; atualizarDashboard();
         }
 
         function adicionarNovoAssunto() {
             const proj = obterProjetoAtivo(); const idM = document.getElementById('selectMateriaAlvo').value; const inp = document.getElementById('novoAssuntoNome'); const n = inp.value.trim(); if(!idM || !n) return;
-            const m = proj.materias.find(x => x.id === idM); if(m) { if(!m.topicos) m.topicos = []; m.topicos.push({ id:"t_"+Date.now(), nome:n, concluido:false }); salvarBancoCompleto(); inp.value = ""; atualizarDashboard(); }
+            const m = proj.materias.find(x => x.id === idM); if(m) { if(!m.topicos) m.topicos = []; m.topicos.push({ id:"t_"+Date.now(), nome:n, concluido:false }); salvarBancoLocal(); inp.value = ""; atualizarDashboard(); }
         }
 
         function marcarConclusaoTopico(mId, tId) {
             const proj = obterProjetoAtivo(); const m = proj.materias.find(x=>x.id===mId); if(m && m.topicos) { const t = m.topicos.find(y=>y.id===tId); if(t) t.concluido = !t.concluido; }
-            salvarBancoCompleto(); atualizarDashboard();
+            salvarBancoLocal(); atualizarDashboard();
         }
 
-        function excluirMateria(id) { if(confirm("Deseja expurgar disciplina?")) { const proj = obterProjetoAtivo(); proj.materias = proj.materias.filter(m=>m.id!==id); salvarBancoCompleto(); atualizarDashboard(); } }
-        function excluirTopico(mId, tId) { const proj = obterProjetoAtivo(); const m = proj.materias.find(x=>x.id===mId); if(m && m.topicos) { m.topicos = m.topicos.filter(t=>t.id!==tId); salvarBancoCompleto(); atualizarDashboard(); } }
+        function excluirMateria(id) { if(confirm("Deseja expurgar disciplina?")) { const proj = obterProjetoAtivo(); proj.materias = proj.materias.filter(m=>m.id!==id); salvarBancoLocal(); atualizarDashboard(); } }
+        function excluirTopico(mId, tId) { const proj = obterProjetoAtivo(); const m = proj.materias.find(x=>x.id===mId); if(m && m.topicos) { m.topicos = m.topicos.filter(t=>t.id!==tId); salvarBancoLocal(); atualizarDashboard(); } }
 
         function renderizarTabelaHome(proj) {
             const corpo = document.getElementById('tabelaMateriasCorpo'); if(!corpo) return;
@@ -1237,7 +997,7 @@
                     proj.revisoesAgendadas.push({ id: "rev_"+Date.now()+"_"+Math.random().toString(36).substr(2,5), materiaNome: m.nome, assuntoNome: nA, tipoCiclo: dias+"d", dataLimite: dAlvo.toLocaleDateString('pt-BR') });
                 });
             }
-            salvarBancoCompleto(); fecharModalSessao(); resetarCronometro(); atualizarDashboard();
+            salvarBancoLocal(); fecharModalSessao(); resetarCronometro(); atualizarDashboard();
         }
 
         function salvarErroCaderno() {
@@ -1246,7 +1006,7 @@
             if(!mId || !en || !mot) return alert("Campos incompletos.");
             const mObj = proj.materias.find(x => x.id === mId); const aNome = mObj?.topicos?.find(t => t.id === aId)?.nome || "Geral";
             proj.cadernoErros.push({ id: "err_"+Date.now(), materiaNome: mObj.nome, assuntoNome: aNome, enunciado: en, motivo: mot, data: new Date().toLocaleDateString('pt-BR') });
-            salvarBancoCompleto(); document.getElementById('errEnunciado').value = ""; document.getElementById('errMotivo').value = ""; atualizarDashboard();
+            salvarBancoLocal(); document.getElementById('errEnunciado').value = ""; document.getElementById('errMotivo').value = ""; atualizarDashboard();
         }
 
         function renderizarCadernoErros(proj) {
@@ -1259,11 +1019,11 @@
                 </div>
             `).join('');
         }
-        function excluirErro(id) { const proj = obterProjetoAtivo(); proj.cadernoErros = proj.cadernoErros.filter(e=>e.id!==id); salvarBancoCompleto(); atualizarDashboard(); }
+        function excluirErro(id) { const proj = obterProjetoAtivo(); proj.cadernoErros = proj.cadernoErros.filter(e=>e.id!==id); salvarBancoLocal(); atualizarDashboard(); }
 
         function renderizarRevisoesEspacadas(proj) {
             const c = document.getElementById('containerFilaRevisoes'); if(!c) return;
-            if(!proj.revisoesAgendadas || proj.revisoesAgendadas.length===0) { c.innerHTML='<p style="color:var(--text-muted); font-size:0.8rem;">Nenhuma revisão ativa.</p>'; return; }
+            if(!proj.revisoesAgendadas || proj.revisoesAgendadas.length===0) { c.innerHTML='<p style="color:var(--text-muted); font-size:0.8rem;">Nenhuma revisão activa.</p>'; return; }
             c.innerHTML = proj.revisoesAgendadas.map(r => `
                 <div style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-primary); border:1px solid var(--border); padding:0.75rem; border-radius:4px; gap: 10px;">
                     <div><span style="font-size:0.6rem; background:var(--bg-tertiary); padding:2px 5px; color:var(--accent); font-weight:bold;">${r.tipoCiclo} (Até: ${r.dataLimite})</span><div style="font-weight:bold; font-size:0.8rem; margin-top:3px;">[${r.materiaNome}] - ${r.assuntoNome}</div></div>
@@ -1271,14 +1031,14 @@
                 </div>
             `).join('');
         }
-        function eliminarRevisao(id) { const proj = obterProjetoAtivo(); proj.revisoesAgendadas = proj.revisoesAgendadas.filter(r=>r.id!==id); salvarBancoCompleto(); atualizarDashboard(); }
+        function eliminarRevisao(id) { const proj = obterProjetoAtivo(); proj.revisoesAgendadas = proj.revisoesAgendadas.filter(r=>r.id!==id); salvarBancoLocal(); atualizarDashboard(); }
 
         function salvarNovoFlashcard() {
             const proj = obterProjetoAtivo(); const mId = document.getElementById('fcMateriaSelect').value; const f = document.getElementById('fcFrente').value.trim(); const v = document.getElementById('fcVerso').value.trim();
             if(!mId || !f || !v) return alert("Campos incompletos.");
             const mNome = proj.materias.find(m => m.id === mId)?.nome || "Geral";
             proj.flashcards.push({ id: "fc_"+Date.now(), materiaNome: mNome, frente: f, verso: v });
-            salvarBancoCompleto(); document.getElementById('fcFrente').value = ""; document.getElementById('fcVerso').value = ""; alert("Card alocado!"); proximoFlashcard();
+            salvarBancoLocal(); document.getElementById('fcFrente').value = ""; document.getElementById('fcVerso').value = ""; alert("Card alocado!"); proximoFlashcard();
         }
 
         function proximoFlashcard() {
@@ -1332,19 +1092,14 @@
             if(document.getElementById('kpiDesempenhoQuestoes')) document.getElementById('kpiDesempenhoQuestoes').innerText = tF>0?Math.round((tA/tF)*100)+'%':'0%';
         }
 
-        /* ==================================================================
-           LOGICA DE FILTRO E GRAFICO REPLICADA DO APP APROVADO (FOTO 1000213264.jpg)
-           ================================================================== */
         function mudarFiltroTempo(tipo) {
             filtroTempoAtual = tipo;
             document.getElementById('btnFiltroDia').classList.remove('active');
             document.getElementById('btnFiltroSemana').classList.remove('active');
             document.getElementById('btnFiltroMes').classList.remove('active');
-            
             if(tipo === 'dia') document.getElementById('btnFiltroDia').classList.add('active');
             if(tipo === 'semana') document.getElementById('btnFiltroSemana').classList.add('active');
             if(tipo === 'mes') document.getElementById('btnFiltroMes').classList.add('active');
-            
             processarEMostrarGraficoAprovado(obterProjetoAtivo());
         }
 
@@ -1352,102 +1107,40 @@
             const hoje = new Date();
             let sessoesFiltradas = proj.historicoSessoes || [];
 
-            // Filtragem real por timestamp
             sessoesFiltradas = sessoesFiltradas.filter(s => {
                 const dataSessao = new Date(s.timestamp);
-                if (filtroTempoAtual === 'dia') {
-                    return dataSessao.toDateString() === hoje.toDateString();
-                } else if (filtroTempoAtual === 'semana') {
-                    const umaSemanaAtras = new Date();
-                    umaSemanaAtras.setDate(hoje.getDate() - 7);
-                    return dataSessao >= umaSemanaAtras;
-                } else if (filtroTempoAtual === 'mes') {
-                    return dataSessao.getMonth() === hoje.getMonth() && dataSessao.getFullYear() === hoje.getFullYear();
-                }
+                if (filtroTempoAtual === 'dia') return dataSessao.toDateString() === hoje.toDateString();
+                if (filtroTempoAtual === 'semana') { const uSem = new Date(); uSem.setDate(hoje.getDate() - 7); return dataSessao >= uSem; }
+                if (filtroTempoAtual === 'mes') return dataSessao.getMonth() === hoje.getMonth() && dataSessao.getFullYear() === hoje.getFullYear();
                 return true;
             });
 
-            // Agrupar tempos por Matéria/Atividade para bater com o layout da legenda
-            let mapaDados = {};
-            let totalSegundosGeral = 0;
-
+            let mapaDados = {}; let totalSegundosGeral = 0;
             sessoesFiltradas.forEach(s => {
-                // Se a sessão tiver tipo de atividade específica (Revisão/Questões), categoriza igual ao app "Aprovado"
                 let chave = s.materiaNome;
-                if(s.tipoAtividade === 'Revisão' || s.tipoAtividade === 'Questões') {
-                    chave = s.tipoAtividade;
-                }
+                if(s.tipoAtividade === 'Revisão' || s.tipoAtividade === 'Questões') chave = s.tipoAtividade;
                 mapaDados[chave] = (mapaDados[chave] || 0) + s.segundos;
                 totalSegundosGeral += s.segundos;
             });
 
-            // Converter total geral para formato digital da foto
-            const hGeral = Math.floor(totalSegundosGeral / 3600);
-            const mGeral = Math.floor((totalSegundosGeral % 3600) / 60);
-            const sGeral = totalSegundosGeral % 60;
-            document.getElementById('aprovadoDisplayCronometro').innerText = `${hGeral}h ${mGeral}m ${sGeral}s`;
+            document.getElementById('aprovadoDisplayCronometro').innerText = `${Math.floor(totalSegundosGeral/3600)}h ${Math.floor((totalSegundosGeral%3600)/60)}m ${totalSegundosGeral%60}s`;
 
-            // Preparar arrays estruturados para renderização do Chart.js
-            const labels = Object.keys(mapaDados);
-            const valores = Object.values(mapaDados);
-            
-            // Renderização do HTML da Legenda Dinâmica
+            const labels = Object.keys(mapaDados); const valores = Object.values(mapaDados);
             const containerLegenda = document.getElementById('aprovadoListaLegendas');
-            if(labels.length === 0) {
-                containerLegenda.innerHTML = `<p style="text-align:center; font-size:0.8rem; color:var(--text-muted); margin-top:1rem;">Nenhum registro encontrado neste período.</p>`;
-            } else {
+            if(labels.length === 0) { containerLegenda.innerHTML = `<p style="text-align:center; font-size:0.8rem; color:var(--text-muted); margin-top:1rem;">Nenhum registro encontrado.</p>`; }
+            else {
                 containerLegenda.innerHTML = labels.map((label, idx) => {
                     const segs = mapaDados[label];
-                    const h = Math.floor(segs / 3600);
-                    const m = Math.floor((segs % 3600) / 60);
-                    const s = segs % 60;
-                    const pct = totalSegundosGeral > 0 ? ((segs / totalSegundosGeral) * 100).toFixed(2) : 0;
-                    const cor = coresAprovadoPaleta[idx % coresAprovadoPaleta.length];
-                    
-                    return `
-                        <div class="aprovado-legend-item">
-                            <div class="aprovado-legend-left">
-                                <div class="aprovado-color-box" style="background: ${cor};"></div>
-                                <span>${label}</span>
-                            </div>
-                            <div style="color: var(--text-main); font-weight:bold; font-family:monospace;">
-                                ${h}h ${m}m ${s}s (${pct}%)
-                            </div>
-                        </div>
-                    `;
+                    return `<div class="aprovado-legend-item"><div class="aprovado-legend-left"><div class="aprovado-color-box" style="background: ${coresAprovadoPaleta[idx % coresAprovadoPaleta.length]};"></div><span>${label}</span></div><div style="color: var(--text-main); font-weight:bold; font-family:monospace;">${Math.floor(segs/3600)}h ${Math.floor((segs%3600)/60)}m (${totalSegundosGeral>0?((segs/totalSegundosGeral)*100).toFixed(1):0}%)</div></div>`;
                 }).join('');
             }
 
-            // Destruir gráfico antigo para reconstruir o novo sem bugar o canvas
-            if (aprovadoChartInstance) {
-                aprovadoChartInstance.destroy();
-            }
-
+            if (aprovadoChartInstance) aprovadoChartInstance.destroy();
             const ctx = document.getElementById('aprovadoChartCanvas').getContext('2d');
-            
-            // Se não houver dados, exibe gráfico cinza vazio padrão
-            const finalLabels = labels.length > 0 ? labels : ['Sem Dados'];
-            const finalValores = valores.length > 0 ? valores : [1];
-            const finalCores = labels.length > 0 ? coresAprovadoPaleta.slice(0, labels.length) : ['#1a202c'];
-
             aprovadoChartInstance = new Chart(ctx, {
                 type: 'pie',
-                data: {
-                    labels: finalLabels,
-                    datasets: [{
-                        data: finalValores,
-                        backgroundColor: finalCores,
-                        borderWidth: 1,
-                        borderColor: '#121620'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    plugins: {
-                        legend: { display: false } // Oculta a legenda padrão feia do chart.js para usar a customizada idêntica à foto
-                    }
-                }
+                data: { labels: labels.length>0?labels:['Sem Dados'], datasets: [{ data: valores.length>0?valores:[1], backgroundColor: labels.length>0?coresAprovadoPaleta.slice(0, labels.length):['#1a202c'], borderWidth: 1, borderColor: '#121620' }] },
+                options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { display: false } } }
             });
         }
     </script>
