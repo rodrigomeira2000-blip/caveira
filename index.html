@@ -221,7 +221,7 @@
         }
         .sidebar-btn:hover, .sidebar-btn.active-link { color: var(--text-main); background-color: var(--bg-tertiary); border-color: var(--border); }
 
-        /* MÁSCA DE FUNDO */
+        /* MÁSCARA DE FUNDO */
         .sidebar-overlay {
             position: fixed;
             top: 0;
@@ -436,4 +436,337 @@
                             <span>PROGRESSO SEMANAL</span>
                             <span id="meta-texto-progresso">0.0H / 20H</span>
                         </div>
-        
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" id="meta-fill-bar" style="width: 0%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>DISCIPLINAS ESTRATÉGICAS</h2>
+                    <div class="materia-table-wrapper">
+                        <table class="materia-table">
+                            <thead>
+                                <tr>
+                                    <th>MATÉRIA</th>
+                                    <th>HORAS</th>
+                                    <th>TOP.</th>
+                                    <th>% Q.</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>LÍNGUA PORTUGUESA</td><td>0h</td><td>0/0</td><td><span class="badge-pct">0%</span></td></tr>
+                                <tr><td>RLM</td><td>0h</td><td>0/0</td><td><span class="badge-pct">0%</span></td></tr>
+                                <tr><td>INFORMÁTICA</td><td>0h</td><td>0/0</td><td><span class="badge-pct">0%</span></td></tr>
+                                <tr><td>DIREITO CONSTITUCIONAL</td><td>0h</td><td>0/0</td><td><span class="badge-pct">0%</span></td></tr>
+                                <tr><td>DIREITO ADMINISTRATIVO</td><td>0h</td><td>0/0</td><td><span class="badge-pct">0%</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ABA 2: TEMPO -->
+        <section id="aba-tempo" class="aba-conteudo">
+            <div class="card">
+                <h2>📊 RELATÓRIO DE TEMPO DE ESTUDO</h2>
+                <div class="form-militar-row">
+                    <label>REGISTRAR SESSÃO MANUAL (MINUTOS)</label>
+                    <input type="number" id="input-tempo-manual" placeholder="Ex: 60">
+                </div>
+                <button class="btn-militar-add" style="width: 100%;" onclick="adicionarTempoManual()">SALVAR SESSÃO DE ESTUDO</button>
+            </div>
+        </section>
+
+        <!-- ABA 3: FOCO -->
+        <section id="aba-foco" class="aba-conteudo">
+            <div class="card">
+                <h2>⏱️ CRONÔMETRO DE FOCO OPERACIONAL</h2>
+                <div class="timer-display" id="foco-timer">00:00:00</div>
+                <div class="timer-controls">
+                    <button class="btn-success" onclick="iniciarCronometro()">INICIAR</button>
+                    <button class="btn-danger" onclick="pausarCronometro()">PAUSAR</button>
+                    <button class="btn-militar-add" onclick="zerarCronometro()">ZERAR</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABA 4: EDITAL -->
+        <section id="aba-edital" class="aba-conteudo">
+            <div class="card">
+                <h2>💀 GESTÃO DE EDITAL VERTICALIZADO</h2>
+                <div class="input-group-militar">
+                    <div>
+                        <label>TÓPICO DO EDITAL</label>
+                        <input type="text" id="input-novo-topico" placeholder="Ex: Crimes Contra a Administração Pública">
+                    </div>
+                    <button class="btn-militar-add" onclick="adicionarTopicoEdital()">ADICIONAR</button>
+                </div>
+                <div id="lista-edital">
+                    <div class="checklist-item">
+                        <div class="checklist-checkbox-wrapper">
+                            <input type="checkbox" class="checklist-checkbox" onchange="atualizarProgressoEdital()">
+                            <span>Língua Portuguesa - Compreensão de Texto</span>
+                        </div>
+                        <button class="btn-delete-item" onclick="removerTopico(this)">✕</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABA 5: REVISAR -->
+        <section id="aba-revisar" class="aba-conteudo">
+            <div class="card">
+                <h2>📋 CICLO DE REVISÕES REGISTRADAS</h2>
+                <div class="input-group-militar">
+                    <div>
+                        <label>CONTEÚDO PARA REVISAR</label>
+                        <input type="text" id="input-novo-revisar" placeholder="Ex: Tabela Verdade e Diagramas">
+                    </div>
+                    <button class="btn-militar-add" onclick="adicionarRevisao()">AGENDAR</button>
+                </div>
+                <div id="lista-revisoes"></div>
+            </div>
+        </section>
+
+        <!-- ABA 6: ERROS -->
+        <section id="aba-erros" class="aba-conteudo">
+            <div class="card">
+                <h2>📙 CADERNO DE ERROS DA BANCA</h2>
+                <div class="form-militar-row">
+                    <label>ENUNCIADO / QUESTÃO</label>
+                    <input type="text" id="erro-enunciado" placeholder="Insira o texto da questão...">
+                </div>
+                <div class="form-militar-row">
+                    <label>MOTIVO DO ERRO / JUSTIFICATIVA</label>
+                    <textarea id="erro-motivo" rows="2" placeholder="Por que errou? (Ex: Pegadinha de interpretação)"></textarea>
+                </div>
+                <button class="btn-militar-add" style="width: 100%;" onclick="adicionarErro()">REGISTRAR ERRO</button>
+                
+                <div style="margin-top: 1.5rem;" id="lista-erros"></div>
+            </div>
+        </section>
+
+        <!-- ABA 7: CARDS -->
+        <section id="aba-cards" class="aba-conteudo">
+            <div class="card">
+                <h2>📇 REVISÃO POR FLASHCARDS</h2>
+                <div class="flashcard-box" onclick="virarFlashcard()">
+                    <span class="flashcard-badge" id="fc-materia">DIREITO CONSTITUCIONAL</span>
+                    <div class="flashcard-texto" id="fc-conteudo">Clique para revelar a resposta...</div>
+                </div>
+                <div class="flashcard-actions">
+                    <button class="btn-fc-dificil" onclick="proximoCard('DIFÍCIL')">DIFÍCIL</button>
+                    <button class="btn-fc-medio" onclick="proximoCard('MÉDIO')">MÉDIO</button>
+                    <button class="btn-fc-facil" onclick="proximoCard('FÁCIL')">FÁCIL</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // CONTROLE DO MENU LATERAL (DRAWER)
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        }
+
+        // TROCA DE ABAS E NAVEGAÇÃO
+        function mudarAba(idAba, elemento) {
+            const abas = document.querySelectorAll('.aba-conteudo');
+            abas.forEach(aba => {
+                aba.classList.remove('aba-ativa');
+            });
+
+            const abaAlvo = document.getElementById('aba-' + idAba);
+            if (abaAlvo) {
+                abaAlvo.classList.add('aba-ativa');
+            }
+
+            const botoes = document.querySelectorAll('.sidebar-btn');
+            botoes.forEach(btn => {
+                btn.classList.remove('active-link');
+            });
+
+            if (elemento) {
+                elemento.classList.add('active-link');
+            }
+
+            closeSidebar();
+        }
+
+        // CRONÔMETRO
+        var timerInterval = null;
+        var segundosDecorridos = 0;
+
+        function atualizarDisplayTimer() {
+            const hrs = String(Math.floor(segundosDecorridos / 3600)).padStart(2, '0');
+            const mins = String(Math.floor((segundosDecorridos % 3600) / 60)).padStart(2, '0');
+            const segs = String(segundosDecorridos % 60).padStart(2, '0');
+            document.getElementById('foco-timer').innerText = `${hrs}:${mins}:${segs}`;
+        }
+
+        function iniciarCronometro() {
+            if (!timerInterval) {
+                timerInterval = setInterval(() => {
+                    segundosDecorridos++;
+                    atualizarDisplayTimer();
+                }, 1000);
+            }
+        }
+
+        function pausarCronometro() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+        }
+
+        function zerarCronometro() {
+            pausarCronometro();
+            segundosDecorridos = 0;
+            atualizarDisplayTimer();
+        }
+
+        // SESSÃO MANUAL E METAS
+        var minutosAcumulados = 0;
+        function adicionarTempoManual() {
+            const campo = document.getElementById('input-tempo-manual');
+            const val = parseInt(campo.value);
+            if (val > 0) {
+                minutosAcumulados += val;
+                const hrs = Math.floor(minutosAcumulados / 60);
+                const mins = minutosAcumulados % 60;
+                
+                document.getElementById('kpi-tempo-total').innerText = `${hrs}h ${mins}m`;
+                
+                const pct = Math.min(100, Math.round((minutosAcumulados / 1200) * 100));
+                document.getElementById('meta-fill-bar').style.width = pct + '%';
+                document.getElementById('meta-texto-progresso').innerText = `${(minutosAcumulados / 60).toFixed(1)}H / 20H`;
+
+                campo.value = '';
+                alert("Sessão salva com sucesso!");
+            }
+        }
+
+        // EDITAL VERTICALIZADO
+        function adicionarTopicoEdital() {
+            const input = document.getElementById('input-novo-topico');
+            if (input.value.trim() !== "") {
+                const div = document.createElement('div');
+                div.className = 'checklist-item';
+                div.innerHTML = `
+                    <div class="checklist-checkbox-wrapper">
+                        <input type="checkbox" class="checklist-checkbox" onchange="atualizarProgressoEdital()">
+                        <span>${input.value}</span>
+                    </div>
+                    <button class="btn-delete-item" onclick="removerTopico(this)">✕</button>
+                `;
+                document.getElementById('lista-edital').appendChild(div);
+                input.value = "";
+                atualizarProgressoEdital();
+            }
+        }
+
+        function removerTopico(btn) {
+            btn.parentElement.remove();
+            atualizarProgressoEdital();
+        }
+
+        function atualizarProgressoEdital() {
+            const todos = document.querySelectorAll('#lista-edital .checklist-checkbox');
+            if (todos.length === 0) {
+                document.getElementById('kpi-edital-pct').innerText = '0%';
+                return;
+            }
+            const checados = document.querySelectorAll('#lista-edital .checklist-checkbox:checked');
+            const pct = Math.round((checados.length / todos.length) * 100);
+            document.getElementById('kpi-edital-pct').innerText = pct + '%';
+        }
+
+        // REVISÕES
+        function adicionarRevisao() {
+            const input = document.getElementById('input-novo-revisar');
+            if (input.value.trim() !== "") {
+                const div = document.createElement('div');
+                div.className = 'checklist-item';
+                div.innerHTML = `
+                    <span>📌 ${input.value} (24h / 7d / 30d)</span>
+                    <button class="btn-delete-item" onclick="this.parentElement.remove()">✕</button>
+                `;
+                document.getElementById('lista-revisoes').appendChild(div);
+                input.value = "";
+            }
+        }
+
+        // CADERNO DE ERROS
+        function adicionarErro() {
+            const enunc = document.getElementById('erro-enunciado').value;
+            const mot = document.getElementById('erro-motivo').value;
+            if (enunc.trim() !== "" && mot.trim() !== "") {
+                const div = document.createElement('div');
+                div.className = 'erro-card-item';
+                div.innerHTML = `
+                    <div class="erro-card-meta"><span>REGISTRO DE ERRO</span><span>PENDENTE</span></div>
+                    <div class="erro-card-enunciado">${enunc}</div>
+                    <div class="erro-card-motivo"><strong>MOTIVO:</strong> ${mot}</div>
+                `;
+                document.getElementById('lista-erros').prepend(div);
+                document.getElementById('erro-enunciado').value = "";
+                document.getElementById('erro-motivo').value = "";
+            }
+        }
+
+        // FLASHCARDS
+        const cardsData = [
+            { materia: "DIREITO CONSTITUCIONAL", pergunta: "Qual o artigo dos Direitos e Garantias Fundamentais na CF/88?", resposta: "Artigo 5º da CF/88." },
+            { materia: "DIREITO PENAL", pergunta: "O que diz o Princípio da Legalidade?", resposta: "Não há crime sem lei anterior que o defina, nem pena sem prévia cominação legal." },
+            { materia: "LÍNGUA PORTUGUESA", pergunta: "Qual a regra geral do uso da crase?", resposta: "Ocorre diante de palavras femininas aceitando o artigo 'a' e regidas por preposição 'a'." }
+        ];
+        var cardAtual = 0;
+        var mostrandoResposta = false;
+
+        function carregarCard() {
+            document.getElementById('fc-materia').innerText = cardsData[cardAtual].materia;
+            document.getElementById('fc-conteudo').innerText = cardsData[cardAtual].pergunta;
+            document.getElementById('fc-conteudo').style.color = 'var(--text-main)';
+            mostrandoResposta = false;
+        }
+
+        function virarFlashcard() {
+            const elem = document.getElementById('fc-conteudo');
+            if (!mostrandoResposta) {
+                elem.innerText = cardsData[cardAtual].resposta;
+                elem.style.color = 'var(--gold)';
+                mostrandoResposta = true;
+            } else {
+                elem.innerText = cardsData[cardAtual].pergunta;
+                elem.style.color = 'var(--text-main)';
+                mostrandoResposta = false;
+            }
+        }
+
+        function proximoCard(dificuldade) {
+            cardAtual = (cardAtual + 1) % cardsData.length;
+            carregarCard();
+        }
+
+        function sincronizarNuvem() {
+            alert("Dados sincronizados com sucesso!");
+        }
+
+        // Inicializar visualização do primeiro Flashcard ao carregar
+        carregarCard();
+    </script>
+</body>
+</html>
