@@ -221,7 +221,7 @@
         }
         .sidebar-btn:hover, .sidebar-btn.active-link { color: var(--text-main); background-color: var(--bg-tertiary); border-color: var(--border); }
 
-        /* MASCARA DE FUNDO */
+        /* MÁSCA DE FUNDO */
         .sidebar-overlay {
             position: fixed;
             top: 0;
@@ -332,9 +332,9 @@
         .btn-delete-item { background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 0.85rem; padding: 0 0.5rem; }
         .btn-delete-item:hover { color: #ef4444; }
 
-        /* VISIBILIDADE DAS ABAS (CORREÇÃO DE FUNCIONALIDADE) */
-        .aba-conteudo { display: none !important; }
-        .aba-conteudo.aba-ativa { display: block !important; }
+        /* CONTROLE DE EXIBIÇÃO DAS ABAS */
+        .aba-conteudo { display: none; }
+        .aba-conteudo.aba-ativa { display: block; }
 
         @media (max-width: 768px) {
             :root { --main-padding: 0.85rem; --card-gap: 0.85rem; }
@@ -369,12 +369,12 @@
     </div>
 
     <!-- MÁSCARA E MENU LATERAL (DRAWER) -->
-    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
     
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <h2>PAINEL DE NAVEGAÇÃO</h2>
-            <button class="btn-close-sidebar" onclick="toggleSidebar()">✕</button>
+            <button class="btn-close-sidebar" onclick="closeSidebar()">✕</button>
         </div>
         <div class="sidebar-section">
             <span class="sidebar-title">Navegação Principal</span>
@@ -434,4 +434,6 @@
                     <div style="margin-top: 1rem;">
                         <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: bold; text-transform: uppercase;">
                             <span>PROGRESSO SEMANAL</span>
-                            <span id="meta-texto-progresso">0.0H / 20H
+                            <span id="meta-texto-progresso">0.0H / 20H</span>
+                        </div>
+        
