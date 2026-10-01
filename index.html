@@ -179,7 +179,6 @@
             text-transform: uppercase;
             width: 100%;
         }
-        .select-workspace-menu:focus { border-color: var(--accent); outline: none; }
 
         .btn-militar-sm {
             padding: 0.6rem 1rem;
@@ -202,11 +201,6 @@
             border: 1px solid #ef4444;
             color: #ef4444;
         }
-        .btn-sync-cloud.sync-active {
-            background: #15803d;
-            color: #fff;
-            border-color: #15803d;
-        }
 
         .sidebar-btn {
             width: 100%;
@@ -227,7 +221,7 @@
         }
         .sidebar-btn:hover, .sidebar-btn.active-link { color: var(--text-main); background-color: var(--bg-tertiary); border-color: var(--border); }
 
-        /* MASCARA/OVERLAY DE FUNDO DO MENU LATERAL */
+        /* MASCARA DE FUNDO */
         .sidebar-overlay {
             position: fixed;
             top: 0;
@@ -261,7 +255,7 @@
         .patente-info p { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
         .patente-proximo-requisito { text-align: right; font-size: 0.75rem; font-weight: 700; line-height: 1.4; }
 
-        /* KPI - GRID DE 2 COLUNAS LADO A LADO */
+        /* KPI - GRID LADO A LADO */
         .kpi-container { 
             display: grid; 
             grid-template-columns: repeat(2, 1fr); 
@@ -278,14 +272,11 @@
             text-align: center;
             align-items: center;
         }
-        .kpi-card.active-border {
-            border-color: #f97316;
-        }
+        .kpi-card.active-border { border-color: #f97316; }
         .kpi-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
         .kpi-card.active-border .kpi-label { color: #f97316; }
         .kpi-value { font-size: 1.5rem; font-weight: 800; color: var(--text-main); }
 
-        .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: var(--card-gap); }
         .card { background-color: var(--bg-secondary); border: 1px solid var(--border); border-radius: 4px; padding: 1.5rem; }
         .card h2 { font-size: 0.85rem; text-transform: uppercase; color: var(--text-main); margin-bottom: 1.25rem; font-weight: 800; border-left: 2px solid var(--text-muted); padding-left: 0.5rem; }
 
@@ -297,8 +288,8 @@
         .input-group-militar { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); align-items: flex-end; }
         .input-group-militar div { flex: 1; min-width: 200px; display: flex; flex-direction: column; gap: 0.35rem; }
         .input-group-militar label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
-        .input-group-militar input, .input-group-militar select { padding: 0.65rem; background: var(--bg-primary); border: 1px solid var(--border); color: #fff; border-radius: 3px; }
-        .btn-militar-add { padding: 0.65rem 1.25rem; background: var(--bg-tertiary); border: 1px solid var(--border); color: var(--text-main); font-weight: 700; text-transform: uppercase; font-size: 0.75rem; border-radius: 3px; cursor: pointer; height: 36px; }
+        .input-group-militar input { padding: 0.65rem; background: var(--bg-primary); border: 1px solid var(--border); color: #fff; border-radius: 3px; }
+        .btn-militar-add { padding: 0.65rem 1.25rem; background: var(--bg-tertiary); border: 1px solid var(--border); color: var(--text-main); font-weight: 700; text-transform: uppercase; font-size: 0.75rem; border-radius: 3px; cursor: pointer; height: 38px; }
         .btn-militar-add:hover { background: var(--border); }
 
         /* TABELAS */
@@ -309,25 +300,24 @@
         .badge-pct { padding: 0.2rem 0.4rem; border-radius: 2px; font-weight: 700; font-size: 0.7rem; text-transform: uppercase; background: var(--bg-tertiary); color: var(--text-main); border: 1px solid var(--border); }
 
         /* CRONÔMETRO */
-        .timer-display { font-size: 3.8rem; font-weight: 800; text-align: center; font-family: monospace; color: var(--text-main); margin: 1rem 0; background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 1rem 0; }
+        .timer-display { font-size: 3.5rem; font-weight: 800; text-align: center; font-family: monospace; color: var(--text-main); margin: 1rem 0; background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 1rem 0; }
         .timer-controls { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
         .timer-controls button { padding: 0.75rem; border-radius: 3px; font-weight: 700; font-size: 0.8rem; text-transform: uppercase; border: none; cursor: pointer; width: 100%; }
         .btn-success { background: var(--text-main); color: var(--bg-primary); }
         .btn-danger { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
 
-        /* PROGRESSO DO CICLO */
-        .ciclo-bar-wrapper { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem; font-size: 0.75rem; text-transform: uppercase; font-weight: bold; }
-        .progress-bar-bg { width: 100%; height: 6px; background-color: var(--bg-primary); border-radius: 3px; overflow: hidden; margin-top: 6px; border: 1px solid var(--border); }
-        .progress-bar-fill { width: 0%; height: 100%; background-color: var(--accent); border-radius: 3px; }
+        /* PROGRESSO BAR */
+        .progress-bar-bg { width: 100%; height: 8px; background-color: var(--bg-primary); border-radius: 4px; overflow: hidden; margin-top: 6px; border: 1px solid var(--border); }
+        .progress-bar-fill { width: 0%; height: 100%; background-color: var(--accent); border-radius: 4px; transition: width 0.3s; }
 
         /* FLASHCARDS */
-        .flashcard-box { background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 2rem; min-height: 180px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; cursor: pointer; position: relative; margin-bottom: 1rem; }
-        .flashcard-badge { position: absolute; top: 0.5rem; left: 0.5rem; font-size: 0.6rem; text-transform: uppercase; font-weight: 800; background: var(--bg-tertiary); padding: 2px 6px; border: 1px solid var(--border); border-radius: 2px; color: var(--text-muted); }
+        .flashcard-box { background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 2.5rem 1.5rem; min-height: 180px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; cursor: pointer; position: relative; margin-bottom: 1rem; }
+        .flashcard-badge { position: absolute; top: 0.75rem; left: 0.75rem; font-size: 0.65rem; text-transform: uppercase; font-weight: 800; background: var(--bg-tertiary); padding: 3px 8px; border: 1px solid var(--border); border-radius: 2px; color: var(--text-muted); }
         .flashcard-texto { font-size: 1.1rem; font-weight: 700; color: var(--text-main); }
         .flashcard-actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
-        .btn-fc-facil { background: #16a34a; color: white; padding: 0.6rem; font-weight: bold; border: none; border-radius: 3px; cursor: pointer; text-transform: uppercase; font-size: 0.7rem; }
-        .btn-fc-medio { background: #ca8a04; color: white; padding: 0.6rem; font-weight: bold; border: none; border-radius: 3px; cursor: pointer; text-transform: uppercase; font-size: 0.7rem; }
-        .btn-fc-dificil { background: #dc2626; color: white; padding: 0.6rem; font-weight: bold; border: none; border-radius: 3px; cursor: pointer; text-transform: uppercase; font-size: 0.7rem; }
+        .btn-fc-facil { background: #16a34a; color: white; padding: 0.75rem; font-weight: bold; border: none; border-radius: 3px; cursor: pointer; text-transform: uppercase; font-size: 0.75rem; }
+        .btn-fc-medio { background: #ca8a04; color: white; padding: 0.75rem; font-weight: bold; border: none; border-radius: 3px; cursor: pointer; text-transform: uppercase; font-size: 0.75rem; }
+        .btn-fc-dificil { background: #dc2626; color: white; padding: 0.75rem; font-weight: bold; border: none; border-radius: 3px; cursor: pointer; text-transform: uppercase; font-size: 0.75rem; }
 
         /* CADERNO DE ERROS */
         .erro-card-item { background: var(--bg-primary); border: 1px solid var(--border); border-left: 4px solid #dc2626; border-radius: 0 4px 4px 0; padding: 1rem; margin-bottom: 0.75rem; }
@@ -338,18 +328,16 @@
         /* EDITAL VERTICAL */
         .checklist-item { display: flex; align-items: center; justify-content: space-between; padding: 0.65rem 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
         .checklist-checkbox-wrapper { display: flex; align-items: center; gap: 0.75rem; }
-        .checklist-checkbox { width: 15px; height: 15px; accent-color: var(--text-main); cursor: pointer; }
-        .btn-delete-item { background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 0.75rem; }
-        .btn-delete-item:hover { color: #fff; }
+        .checklist-checkbox { width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer; }
+        .btn-delete-item { background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 0.85rem; padding: 0 0.5rem; }
+        .btn-delete-item:hover { color: #ef4444; }
 
-        /* ABAS E NAVEGAÇÃO */
-        .aba-conteudo { display: none; }
-        .aba-conteudo.aba-ativa { display: block; }
+        /* VISIBILIDADE DAS ABAS (CORREÇÃO DE FUNCIONALIDADE) */
+        .aba-conteudo { display: none !important; }
+        .aba-conteudo.aba-ativa { display: block !important; }
 
-        @media (max-width: 968px) { .dashboard-grid { grid-template-columns: 1fr; } }
         @media (max-width: 768px) {
             :root { --main-padding: 0.85rem; --card-gap: 0.85rem; }
-            html, body { width: 100%; overflow-x: hidden; }
             .workspace-bar { padding: 0 0.75rem; height: 60px; }
             .versao-tag { display: none !important; }
             .container { padding-top: calc(60px + var(--main-padding)); }
@@ -369,19 +357,18 @@
             </div>
             
             <div class="workspace-wrapper-right">
-                <select class="select-workspace-menu" onchange="selecionarProjeto(this.value)">
+                <select class="select-workspace-menu">
                     <option value="PRF">PRF</option>
                     <option value="PF">PF</option>
                     <option value="PM">PM</option>
                 </select>
-                <button class="btn-militar-sm btn-sync-cloud" onclick="sincronizarNuvem()">SINCRONIZAR NUVEM</button>
-                <button class="btn-militar-sm" onclick="novoEdital()">+ NOVO EDITAL</button>
+                <button class="btn-militar-sm btn-sync-cloud" onclick="sincronizarNuvem()">SINCRONIZAR</button>
                 <span class="versao-tag">v2.0</span>
             </div>
         </div>
     </div>
 
-    <!-- MÁSCARA DE FUNDO E MENU LATERAL -->
+    <!-- MÁSCARA E MENU LATERAL (DRAWER) -->
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
     
     <aside class="sidebar" id="sidebar">
@@ -408,7 +395,6 @@
         <section id="aba-painel" class="aba-conteudo aba-ativa">
             <div style="display: flex; flex-direction: column; gap: var(--card-gap);">
                 
-                <!-- HIERARQUIA FUNCIONAL -->
                 <div class="patente-header-box">
                     <div class="patente-info">
                         <p>HIERARQUIA FUNCIONAL DO PROJETO ATIVO</p>
@@ -420,11 +406,10 @@
                     </div>
                 </div>
 
-                <!-- CARDS DE ESTATÍSTICAS -->
                 <div class="kpi-container">
                     <div class="kpi-card active-border">
                         <div class="kpi-label">🔥 OFENSIVA</div>
-                        <div class="kpi-value">0 Dias</div>
+                        <div class="kpi-value">1 Dia</div>
                     </div>
                     <div class="kpi-card">
                         <div class="kpi-label">TEMPO TOTAL</div>
@@ -433,4 +418,20 @@
                     <div class="kpi-card">
                         <div class="kpi-label">QUESTÕES</div>
                         <div class="kpi-value">0%</div>
-                    </d
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">VARRER EDITAL</div>
+                        <div class="kpi-value" id="kpi-edital-pct">0%</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>📅 META OPERACIONAL SEMANAL</h2>
+                    <div class="form-militar-row">
+                        <label>META DE HORAS</label>
+                        <input type="text" value="20 Horas" readonly>
+                    </div>
+                    <div style="margin-top: 1rem;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: bold; text-transform: uppercase;">
+                            <span>PROGRESSO SEMANAL</span>
+                            <span id="meta-texto-progresso">0.0H / 20H
