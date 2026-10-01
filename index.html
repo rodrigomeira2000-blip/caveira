@@ -417,7 +417,7 @@
                     </div>
                     <div class="kpi-card">
                         <div class="kpi-label">QUESTÕES</div>
-                        <div class="kpi-value">0%</div>
+                        <div class="kpi-value" id="kpi-questoes-pct">0%</div>
                     </div>
                     <div class="kpi-card">
                         <div class="kpi-label">VARRER EDITAL</div>
@@ -470,13 +470,98 @@
 
         <!-- ABA 2: TEMPO -->
         <section id="aba-tempo" class="aba-conteudo">
-            <div class="card">
-                <h2>📊 RELATÓRIO DE TEMPO DE ESTUDO</h2>
-                <div class="form-militar-row">
-                    <label>REGISTRAR SESSÃO MANUAL (MINUTOS)</label>
-                    <input type="number" id="input-tempo-manual" placeholder="Ex: 60">
+            <div style="display: flex; flex-direction: column; gap: var(--card-gap);">
+                
+                <!-- CARD DE CADASTRO RÁPIDO DE MATÉRIAS/ASSUNTOS -->
+                <div class="card">
+                    <h2>➕ ADICIONAR MATÉRIA & ASSUNTO AO EDITAL</h2>
+                    <div class="input-group-militar">
+                        <div>
+                            <label>NOME DA MATÉRIA</label>
+                            <input type="text" id="tempo-nova-materia-input" placeholder="Ex: DIREITO PENAL">
+                        </div>
+                        <div>
+                            <label>ASSUNTO / TÓPICO</label>
+                            <input type="text" id="tempo-novo-assunto-input" placeholder="Ex: Crimes Contra a Vida">
+                        </div>
+                        <button class="btn-militar-add" onclick="cadastrarMateriaAssuntoTempo()">CADASTRAR NO EDITAL</button>
+                    </div>
                 </div>
-                <button class="btn-militar-add" style="width: 100%;" onclick="adicionarTempoManual()">SALVAR SESSÃO DE ESTUDO</button>
+
+                <!-- CARD DE REGISTRO COMPLETO DA SESSÃO -->
+                <div class="card">
+                    <h2>📊 REGISTRAR SESSÃO DE ESTUDO DETALHADA</h2>
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        
+                        <div class="input-group-militar" style="border-bottom: none; padding-bottom: 0; margin-bottom: 0;">
+                            <div>
+                                <label>MATÉRIA</label>
+                                <select id="tempo-select-materia" class="select-workspace-menu" style="background: var(--bg-primary);" onchange="atualizarAssuntosTempo()">
+                                    <option value="">Selecione a Matéria...</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label>ASSUNTO / TÓPICO</label>
+                                <select id="tempo-select-assunto" class="select-workspace-menu" style="background: var(--bg-primary);">
+                                    <option value="">Selecione o Assunto...</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="input-group-militar" style="border-bottom: none; padding-bottom: 0; margin-bottom: 0;">
+                            <div>
+                                <label>DURAÇÃO (MINUTOS)</label>
+                                <input type="number" id="tempo-minutos" placeholder="Ex: 60">
+                            </div>
+                            <div>
+                                <label>MODO DE ESTUDO</label>
+                                <select id="tempo-modo-estudo" class="select-workspace-menu" style="background: var(--bg-primary);">
+                                    <option value="PDF / Leitura">📄 PDF / LEITURA</option>
+                                    <option value="Vídeo Aula">🎥 VÍDEO AULA</option>
+                                    <option value="Resolução de Questões">🎯 QUESTÕES</option>
+                                    <option value="Revisão">🔄 REVISÃO</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="input-group-militar">
+                            <div>
+                                <label>QTD. QUESTÕES RESOLVIDAS</label>
+                                <input type="number" id="tempo-qtd-questoes" placeholder="Ex: 20" value="0">
+                            </div>
+                            <div>
+                                <label>QTD. DE ACERTOS</label>
+                                <input type="number" id="tempo-qtd-acertos" placeholder="Ex: 17" value="0">
+                            </div>
+                        </div>
+
+                        <button class="btn-militar-add" style="width: 100%; height: 45px; background: #16a34a; border-color: #15803d; color: #fff;" onclick="salvarSessaoDetalhada()">
+                            REGISTRAR SESSÃO OPERACIONAL
+                        </button>
+                    </div>
+                </div>
+
+                <!-- HISTÓRICO DE SESSÕES REGISTRADAS -->
+                <div class="card">
+                    <h2>📋 HISTÓRICO DE SESSÕES</h2>
+                    <div class="materia-table-wrapper">
+                        <table class="materia-table">
+                            <thead>
+                                <tr>
+                                    <th>MATÉRIA / ASSUNTO</th>
+                                    <th>MODO</th>
+                                    <th>TEMPO</th>
+                                    <th>QUESTÕES (A/T)</th>
+                                    <th>APROVEITAMENTO</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historico-sessoes-body">
+                                <!-- Inserção dinâmica via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
             </div>
         </section>
 
@@ -508,7 +593,14 @@
                     <div class="checklist-item">
                         <div class="checklist-checkbox-wrapper">
                             <input type="checkbox" class="checklist-checkbox" onchange="atualizarProgressoEdital()">
-                            <span>Língua Portuguesa - Compreensão de Texto</span>
+                            <span>LÍNGUA PORTUGUESA - Compreensão de Texto</span>
+                        </div>
+                        <button class="btn-delete-item" onclick="removerTopico(this)">✕</button>
+                    </div>
+                    <div class="checklist-item">
+                        <div class="checklist-checkbox-wrapper">
+                            <input type="checkbox" class="checklist-checkbox" onchange="atualizarProgressoEdital()">
+                            <span>DIREITO CONSTITUCIONAL - Artigo 5º</span>
                         </div>
                         <button class="btn-delete-item" onclick="removerTopico(this)">✕</button>
                     </div>
@@ -568,6 +660,17 @@
     </main>
 
     <script>
+        // ESTRUTURA DE DADOS GLOBAL COMPARTILHADA
+        var bancoMaterias = [
+            { materia: "LÍNGUA PORTUGUESA", assuntos: ["Compreensão de Texto", "Sintaxe da Oração", "Crase"] },
+            { materia: "DIREITO CONSTITUCIONAL", assuntos: ["Artigo 5º", "Direitos Políticos", "Organização do Estado"] },
+            { materia: "DIREITO PENAL", assuntos: ["Crimes Contra a Pessoa", "Crimes Contra o Patrimônio"] }
+        ];
+
+        var totalQuestoesAcumuladas = 0;
+        var totalAcertosAcumulados = 0;
+        var minutosAcumulados = 0;
+
         // CONTROLE DO MENU LATERAL (DRAWER)
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
@@ -607,6 +710,130 @@
             closeSidebar();
         }
 
+        // CARREGAR SELECTS DE MATÉRIAS E ASSUNTOS
+        function inicializarSelectsTempo() {
+            const selectMateria = document.getElementById('tempo-select-materia');
+            if (!selectMateria) return;
+
+            selectMateria.innerHTML = '<option value="">Selecione a Matéria...</option>';
+            
+            bancoMaterias.forEach((item, index) => {
+                const opt = document.createElement('option');
+                opt.value = index;
+                opt.innerText = item.materia;
+                selectMateria.appendChild(opt);
+            });
+        }
+
+        function atualizarAssuntosTempo() {
+            const selectMateria = document.getElementById('tempo-select-materia');
+            const selectAssunto = document.getElementById('tempo-select-assunto');
+            const matIndex = selectMateria.value;
+
+            selectAssunto.innerHTML = '<option value="">Selecione o Assunto...</option>';
+
+            if (matIndex !== "") {
+                bancoMaterias[matIndex].assuntos.forEach(assunto => {
+                    const opt = document.createElement('option');
+                    opt.value = assunto;
+                    opt.innerText = assunto;
+                    selectAssunto.appendChild(opt);
+                });
+            }
+        }
+
+        // ADICIONAR NOVA MATÉRIA E ASSUNTO AO EDITAL DIRETO DA ABA TEMPO
+        function cadastrarMateriaAssuntoTempo() {
+            const matInput = document.getElementById('tempo-nova-materia-input').value.trim().toUpperCase();
+            const assInput = document.getElementById('tempo-novo-assunto-input').value.trim();
+
+            if (!matInput || !assInput) {
+                alert("Preencha o nome da matéria e o assunto!");
+                return;
+            }
+
+            let matExistente = bancoMaterias.find(m => m.materia === matInput);
+
+            if (matExistente) {
+                if (!matExistente.assuntos.includes(assInput)) {
+                    matExistente.assuntos.push(assInput);
+                }
+            } else {
+                bancoMaterias.push({
+                    materia: matInput,
+                    assuntos: [assInput]
+                });
+            }
+
+            adicionarTopicoEditalDireto(`${matInput} - ${assInput}`);
+
+            document.getElementById('tempo-nova-materia-input').value = '';
+            document.getElementById('tempo-novo-assunto-input').value = '';
+
+            inicializarSelectsTempo();
+            alert("Matéria e Assunto adicionados ao Edital com sucesso!");
+        }
+
+        // SALVAR SESSÃO COMPLETA COM MÉTRICAS
+        function salvarSessaoDetalhada() {
+            const matIndex = document.getElementById('tempo-select-materia').value;
+            const assunto = document.getElementById('tempo-select-assunto').value;
+            const minutos = parseInt(document.getElementById('tempo-minutos').value) || 0;
+            const modo = document.getElementById('tempo-modo-estudo').value;
+            const questoes = parseInt(document.getElementById('tempo-qtd-questoes').value) || 0;
+            const acertos = parseInt(document.getElementById('tempo-qtd-acertos').value) || 0;
+
+            if (matIndex === "" || minutos <= 0) {
+                alert("Selecione uma matéria e informe a duração do estudo em minutos!");
+                return;
+            }
+
+            if (acertos > questoes) {
+                alert("O número de acertos não pode ser maior que o total de questões!");
+                return;
+            }
+
+            const materiaNome = bancoMaterias[matIndex].materia;
+            const pctAproveitamento = questoes > 0 ? Math.round((acertos / questoes) * 100) : 0;
+
+            // Atualiza acumuladores globais e KPIs
+            minutosAcumulados += minutos;
+            totalQuestoesAcumuladas += questoes;
+            totalAcertosAcumulados += acertos;
+
+            const hrs = Math.floor(minutosAcumulados / 60);
+            const mins = minutosAcumulados % 60;
+            document.getElementById('kpi-tempo-total').innerText = `${hrs}h ${mins}m`;
+
+            const pctGeralQuestoes = totalQuestoesAcumuladas > 0 
+                ? Math.round((totalAcertosAcumulados / totalQuestoesAcumuladas) * 100) 
+                : 0;
+            document.getElementById('kpi-questoes-pct').innerText = `${pctGeralQuestoes}%`;
+
+            const pctMeta = Math.min(100, Math.round((minutosAcumulados / 1200) * 100));
+            document.getElementById('meta-fill-bar').style.width = pctMeta + '%';
+            document.getElementById('meta-texto-progresso').innerText = `${(minutosAcumulados / 60).toFixed(1)}H / 20H`;
+
+            // Registrar no histórico
+            const tbody = document.getElementById('historico-sessoes-body');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><strong>${materiaNome}</strong><br><small style="color:var(--text-muted);">${assunto || 'Geral'}</small></td>
+                <td><span class="badge-pct">${modo}</span></td>
+                <td>${minutos} min</td>
+                <td>${acertos}/${questoes}</td>
+                <td><span class="badge-pct" style="color: ${pctAproveitamento >= 70 ? '#4ade80' : '#f87171'};">${pctAproveitamento}%</span></td>
+            `;
+            tbody.prepend(tr);
+
+            // Limpar campos
+            document.getElementById('tempo-minutos').value = '';
+            document.getElementById('tempo-qtd-questoes').value = '0';
+            document.getElementById('tempo-qtd-acertos').value = '0';
+
+            alert("Sessão registrada com sucesso!");
+        }
+
         // CRONÔMETRO
         var timerInterval = null;
         var segundosDecorridos = 0;
@@ -638,44 +865,30 @@
             atualizarDisplayTimer();
         }
 
-        // SESSÃO MANUAL E METAS
-        var minutosAcumulados = 0;
-        function adicionarTempoManual() {
-            const campo = document.getElementById('input-tempo-manual');
-            const val = parseInt(campo.value);
-            if (val > 0) {
-                minutosAcumulados += val;
-                const hrs = Math.floor(minutosAcumulados / 60);
-                const mins = minutosAcumulados % 60;
-                
-                document.getElementById('kpi-tempo-total').innerText = `${hrs}h ${mins}m`;
-                
-                const pct = Math.min(100, Math.round((minutosAcumulados / 1200) * 100));
-                document.getElementById('meta-fill-bar').style.width = pct + '%';
-                document.getElementById('meta-texto-progresso').innerText = `${(minutosAcumulados / 60).toFixed(1)}H / 20H`;
-
-                campo.value = '';
-                alert("Sessão salva com sucesso!");
-            }
-        }
-
         // EDITAL VERTICALIZADO
         function adicionarTopicoEdital() {
             const input = document.getElementById('input-novo-topico');
             if (input.value.trim() !== "") {
-                const div = document.createElement('div');
-                div.className = 'checklist-item';
-                div.innerHTML = `
-                    <div class="checklist-checkbox-wrapper">
-                        <input type="checkbox" class="checklist-checkbox" onchange="atualizarProgressoEdital()">
-                        <span>${input.value}</span>
-                    </div>
-                    <button class="btn-delete-item" onclick="removerTopico(this)">✕</button>
-                `;
-                document.getElementById('lista-edital').appendChild(div);
+                adicionarTopicoEditalDireto(input.value.trim());
                 input.value = "";
-                atualizarProgressoEdital();
             }
+        }
+
+        function adicionarTopicoEditalDireto(texto) {
+            const lista = document.getElementById('lista-edital');
+            if (!lista) return;
+
+            const div = document.createElement('div');
+            div.className = 'checklist-item';
+            div.innerHTML = `
+                <div class="checklist-checkbox-wrapper">
+                    <input type="checkbox" class="checklist-checkbox" onchange="atualizarProgressoEdital()">
+                    <span>${texto}</span>
+                </div>
+                <button class="btn-delete-item" onclick="removerTopico(this)">✕</button>
+            `;
+            lista.appendChild(div);
+            atualizarProgressoEdital();
         }
 
         function removerTopico(btn) {
@@ -765,8 +978,12 @@
             alert("Dados sincronizados com sucesso!");
         }
 
-        // Inicializar visualização do primeiro Flashcard ao carregar
-        carregarCard();
+        // INICIALIZAÇÃO AUTOMÁTICA
+        window.addEventListener('DOMContentLoaded', () => {
+            inicializarSelectsTempo();
+            carregarCard();
+            atualizarProgressoEdital();
+        });
     </script>
 </body>
 </html>
